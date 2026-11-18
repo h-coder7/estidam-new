@@ -3,14 +3,15 @@
 import { useEffect, useRef } from "react";
 
 /*
- * Hero halftone — a ring of white dots generated in code (no external SVG),
+ * Hero halftone — a ring of brand-colored dots generated in code (no external SVG),
  * redrawn alive on a canvas: a slow diagonal shimmer, wobbly rings pulsing out
  * from behind the headline, a lens under a fine cursor (dots swell, brighten,
  * part; the nearest turn accent) and a ripple on click / tap.
- * Runs only while the hero is on screen; frame-rate independent.
+ * Tuned for the light hero surface; runs only while the hero is on screen.
  */
 
-const ACCENT = "#6dd3ff";
+const DOT = "#295cc7";
+const ACCENT = "#1691d0";
 const LENS = 130;
 const RIPPLE_SPEED = 520;
 const RIPPLE_WIDTH = 36;
@@ -54,8 +55,9 @@ function buildDots(w: number, h: number, mobile: boolean): Dots {
             const inner = Math.exp(-((d / (ringR * 0.55)) ** 2)) * 0.25;
             const noise = 0.75 + 0.5 * hash(gx, gy);
             const p = Math.min(1, (ring + inner) * noise);
-            const r = 0.4 + 2.6 * p;
-            const o = 0.05 + 0.45 * p;
+            const r = 0.4 + 2.45 * p;
+            // Slightly softer base opacity so dark dots sit cleanly on white/gray
+            const o = 0.04 + 0.28 * p;
             if (p < 0.06) continue;
             xs.push(gx);
             ys.push(gy);
@@ -185,10 +187,10 @@ const HeroHalftone = () => {
                 pushX[i] += (tx - pushX[i]) * k;
                 pushY[i] += (ty - pushY[i]) * k;
 
-                const a = Math.min(1, o[i] * shimmer + boost[i] * Math.max(o[i] * 2.2, 0.25));
+                const a = Math.min(0.72, o[i] * shimmer + boost[i] * Math.max(o[i] * 2.4, 0.18));
                 if (a < 0.01) continue;
                 ctx.globalAlpha = a;
-                ctx.fillStyle = accent[i] > 0.5 ? ACCENT : "#fff";
+                ctx.fillStyle = accent[i] > 0.45 ? ACCENT : DOT;
                 ctx.beginPath();
                 ctx.arc(x[i] + pushX[i], y[i] + pushY[i], r[i] * scale[i], 0, Math.PI * 2);
                 ctx.fill();

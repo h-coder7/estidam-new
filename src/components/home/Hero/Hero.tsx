@@ -74,7 +74,7 @@ const Hero = async () => {
                         </HeroLink>
                         <HeroLink href={secondaryUrl} className="butn hero_btn hero_btn--ghost">
                             <span>{secondaryCta}</span>
-                            <img src="/images/icons/arrow-wh.svg" alt="" className="butn-icon" aria-hidden="true" />
+                            <img src="/images/icons/arrow-bl.svg" alt="" className="butn-icon" aria-hidden="true" />
                         </HeroLink>
                     </div>
                 </div>

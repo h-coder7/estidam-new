@@ -1,8 +1,9 @@
 // =========================================================
-// Home Hero — gradient + halftone
+// Home Hero — light brand surface + halftone
 // =========================================================
-$hero-accent: #6dd3ff;
-$hero-ease: cubic-bezier(0.22, 1, 0.36, 1); // calm, no bounce
+$hero-accent: var(--blue, #295cc7);
+$hero-muted: #3f4e56;
+$hero-ease: cubic-bezier(0.22, 1, 0.36, 1);
 $hero-slow: cubic-bezier(0.16, 1, 0.3, 1);
 
 .hero_section {
@@ -15,17 +16,24 @@ $hero-slow: cubic-bezier(0.16, 1, 0.3, 1);
     min-height: 100svh;
     padding-top: 150px;
     padding-bottom: 200px;
-    color: #fff;
-    background: linear-gradient(
-        180deg,
-        #050d1c 0%,
-        var(--dark, #0b1a33) 20%,
-        #173f8f 50%,
-        var(--blue, #295cc7) 72%,
-        var(--secondary, #1691d0) 84%,
-        #a9d6f2 93%,
-        #ffffff 100%
-    );
+    color: var(--dark, #0b1a33);
+    background:
+        radial-gradient(58% 52% at 50% 38%, rgba(22, 145, 208, 0.07), transparent 72%),
+        radial-gradient(42% 40% at 88% 92%, rgba(41, 92, 199, 0.06), transparent 70%),
+        radial-gradient(36% 34% at 8% 18%, rgba(11, 26, 51, 0.035), transparent 68%),
+        linear-gradient(180deg, #ffffff 0%, var(--light-gray, #f7f8fa) 52%, #eef1f5 100%);
+
+    // Soft depth veil so copy stays crisp over the animated dots
+    &::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        pointer-events: none;
+        background:
+            radial-gradient(48% 42% at 50% 42%, rgba(255, 255, 255, 0.72), transparent 78%),
+            linear-gradient(180deg, rgba(255, 255, 255, 0.28) 0%, transparent 38%, rgba(247, 248, 250, 0.45) 100%);
+    }
 
     // ---------- halftone canvas ----------
     .hero_halftone {
@@ -63,14 +71,15 @@ $hero-slow: cubic-bezier(0.16, 1, 0.3, 1);
         gap: 10px;
         margin: 0 0 28px;
         padding: 8px 18px 8px 14px;
-        border: 1px solid rgba(255, 255, 255, 0.18);
+        border: 1px solid rgba(41, 92, 199, 0.16);
         border-radius: 999px;
-        background: rgba(255, 255, 255, 0.08);
+        background: rgba(255, 255, 255, 0.82);
+        box-shadow: 0 10px 28px rgba(11, 26, 51, 0.06);
         backdrop-filter: blur(10px);
         -webkit-backdrop-filter: blur(10px);
-        color: rgba(255, 255, 255, 0.88);
+        color: var(--dark, #0b1a33);
         font-size: 13px;
-        font-weight: 500;
+        font-weight: 600;
         letter-spacing: 0.06em;
 
         i {
@@ -81,12 +90,12 @@ $hero-slow: cubic-bezier(0.16, 1, 0.3, 1);
 
     .hero_title {
         margin: 0 0 24px;
-        color: #fff;
         font-family: var(--font-heading);
-        font-size: clamp(2.4rem, 5.2vw, 4.75rem);
+        font-size: clamp(2rem, 4.2vw, 3.65rem);
         font-weight: 700;
-        line-height: 1.04;
+        line-height: 1.12;
         letter-spacing: -0.03em;
+        text-wrap: balance;
     }
 
     .hero_mask {
@@ -97,17 +106,32 @@ $hero-slow: cubic-bezier(0.16, 1, 0.3, 1);
 
     .hero_line {
         display: block;
+        color: transparent;
+        background-image: linear-gradient(
+            135deg,
+            var(--dark, #0b1a33) 0%,
+            var(--blue, #295cc7) 48%,
+            var(--secondary, #1691d0) 100%
+        );
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
         animation: heroLine 1s $hero-slow both;
     }
 
     .hero_title_accent {
-        color: $hero-accent;
+        background-image: linear-gradient(
+            135deg,
+            var(--blue, #295cc7) 0%,
+            var(--secondary, #1691d0) 55%,
+            #3db4e6 100%
+        );
     }
 
     .hero_description {
         max-width: 640px;
         margin: 0 0 40px;
-        color: rgba(255, 255, 255, 0.78);
+        color: $hero-muted;
         font-size: 18px;
         line-height: 1.7;
     }
@@ -127,27 +151,31 @@ $hero-slow: cubic-bezier(0.16, 1, 0.3, 1);
             background-color: var(--secondary, #1691d0);
             border-color: var(--secondary, #1691d0);
             color: #fff;
+            box-shadow: 0 14px 32px rgba(22, 145, 208, 0.22);
 
             &:hover {
-                background-color: #fff;
-                border-color: #fff;
-                color: var(--dark) !important;
+                background-color: var(--blue, #295cc7);
+                border-color: var(--blue, #295cc7);
+                color: #fff !important;
+                box-shadow: 0 16px 36px rgba(41, 92, 199, 0.26);
 
                 .butn-icon {
-                    filter: var(--filterPrimary);
+                    filter: none;
                 }
             }
         }
 
         &--ghost {
-            background-color: rgba(255, 255, 255, 0.06);
-            border-color: rgba(255, 255, 255, 0.35);
-            color: #fff;
+            background-color: rgba(255, 255, 255, 0.72);
+            border-color: rgba(11, 26, 51, 0.16);
+            color: var(--dark, #0b1a33);
+            box-shadow: 0 10px 24px rgba(11, 26, 51, 0.04);
 
             &:hover {
-                background-color: rgba(255, 255, 255, 0.14);
-                border-color: #fff;
-                color: #fff !important;
+                background-color: #fff;
+                border-color: var(--blue, #295cc7);
+                color: var(--blue, #295cc7) !important;
+                box-shadow: 0 14px 28px rgba(11, 26, 51, 0.08);
             }
         }
     }
