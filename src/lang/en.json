@@ -1,0 +1,1262 @@
+{
+  "navbar": {
+    "home": "Home",
+    "about": "About",
+    "solutions": "Solutions",
+    "products": "Products",
+    "aiReadiness": "AI Readiness",
+    "contact": "Contact"
+  },
+  "hero": {
+    "eyebrow": "Technology / AI / Operations",
+    "title": "Smarter, more efficient operations for",
+    "titleAccent": "hajj companies",
+    "description": "We understand the operational realities of the Hajj sector, improve processes, connect systems and data, and apply AI to build solutions that increase efficiency, improve service quality, and support better decisions.",
+    "primaryCta": "Start with a Data & KPI Assessment",
+    "secondaryCta": "Explore our approach"
+  },
+  "aboutPage": {
+    "hero": {
+      "badge": "Who we are",
+      "titleBefore": "An operations partner that knows the",
+      "titleAccent": "Hajj",
+      "titleAfter": "sector from the inside",
+      "description": "Estidam is a Saudi company working with Hajj companies and related entities to improve operations, connect systems and data, and apply AI where it creates measurable impact.",
+      "cardLabel": "Season readiness",
+      "cardScore": "82%",
+      "metric1": "Systems",
+      "metric1Value": "92%",
+      "metric2": "Data",
+      "metric2Value": "76%",
+      "metric3": "Operations",
+      "metric3Value": "85%",
+      "metric4": "People",
+      "metric4Value": "70%",
+      "statusLabel": "Incident status",
+      "statusValue": "Resolved",
+      "ledBy": "Led by",
+      "ledByValue": "Sector understanding + technical delivery",
+      "imageAlt": "Season readiness overview"
+    },
+    "stats": {
+      "stat1Value": "8+",
+      "stat1Strong": "Operating",
+      "stat1Muted": "seasons",
+      "stat2Value": "+40",
+      "stat2Strong": "Sector",
+      "stat2Muted": "clients",
+      "stat3Value": "3",
+      "stat3Strong": "Digital",
+      "stat3Muted": "products",
+      "highlightTitle": "Saudi company, Makkah based",
+      "highlightNote": "Built inside the sector"
+    },
+    "approach": {
+      "badge": "Our approach",
+      "titleStrong": "Sector understanding. Better operations.",
+      "titleMuted": "Practical intelligence. Measurable impact.",
+      "description": "We combine Hajj-sector understanding, operational transformation, and strong technology and delivery capabilities to build solutions that start from real business needs and continue through operation and improvement.",
+      "item1Title": "We understand the sector",
+      "item1Text": "Solutions designed around the realities of Hajj companies and seasonal operations.",
+      "item1Points": [
+        "Seasonal peaks and fixed timelines",
+        "Many parties working in sync",
+        "Service quality under pressure"
+      ],
+      "item2Title": "We start with operations",
+      "item2Text": "We begin with how the work actually happens, then shape the operating model before adding tools.",
+      "item2Points": [
+        "Current workflows and handoffs",
+        "Bottlenecks during peak seasons",
+        "Processes teams can sustain"
+      ],
+      "item3Title": "We apply AI practically",
+      "item3Text": "AI is used where it removes manual work and supports decisions, without adding complexity.",
+      "item3Points": [
+        "High-value operational use cases",
+        "Human review on critical decisions",
+        "Tools that fit existing systems"
+      ],
+      "item4Title": "We measure and improve",
+      "item4Text": "Every season produces evidence. We track results and improve the operation before the next cycle.",
+      "item4Points": [
+        "KPIs tied to service quality",
+        "Review after each season",
+        "Changes ready for the next peak"
+      ]
+    },
+    "journey": {
+      "index": "03",
+      "badge": "Hajj operations journey",
+      "titleBefore": "Supporting operations",
+      "titleMutedStart": "before,",
+      "titleMutedRest": "during and after",
+      "titleAfter": "the Hajj season",
+      "hint": "Pick a stage of the season to see how we support it.",
+      "timelineStart": "Start",
+      "timelineMid": "Hajj season",
+      "timelineEnd": "Next season",
+      "phase1Label": "Before the season",
+      "phase1Title": "Prepare & Plan",
+      "phase1Text": "Operational and system readiness ahead of the season, built on a clear plan.",
+      "phase1Points": [
+        "Operational and system readiness",
+        "Data preparation",
+        "Workforce and resource planning",
+        "System integrations",
+        "Workflow definition"
+      ],
+      "phase2Label": "During the season",
+      "phase2Title": "Operate & Respond",
+      "phase2Text": "Real-time operational control during peak activity, with fast response and coordinated decisions.",
+      "phase2Points": [
+        "Live operations monitoring",
+        "Incident response workflows",
+        "Field coordination",
+        "Service quality tracking",
+        "Decision support dashboards"
+      ],
+      "phase3Label": "After the season",
+      "phase3Title": "Analyze & Improve",
+      "phase3Text": "Post-season learning that turns performance data into clearer plans for the next cycle.",
+      "phase3Points": [
+        "Performance reviews",
+        "KPI and outcome analysis",
+        "Process improvement",
+        "Lessons learned capture",
+        "Next-season planning"
+      ]
+    },
+    "studio": {
+      "badge": "Estidam solutions studio",
+      "titleStrong": "A studio that designs the solution",
+      "titleMuted": "before writing code",
+      "description": "We combine Hajj-sector understanding, operational transformation, and strong technology and delivery capabilities to build solutions that start from real business needs and continue through operation and improvement.",
+      "stepsLabel": "How we work with you",
+      "step1Title": "Discovery workshops",
+      "step1Text": "With your operations teams",
+      "step2Title": "Process maps and KPIs",
+      "step2Text": "What good looks like, in numbers",
+      "step3Title": "Testable prototypes",
+      "step3Text": "See it before it is built",
+      "step4Title": "A pilot and measurement plan",
+      "step4Text": "Prove it, then scale it",
+      "teamTitle": "One small multidisciplinary team",
+      "teamText": "Four disciplines in the same room from day one.",
+      "discipline1": "Operations",
+      "discipline2": "Data",
+      "discipline3": "UX",
+      "discipline4": "Technology",
+      "workLabel": "What we work on",
+      "topic1": "Business & Process Transformation",
+      "topic2": "Data & Decision Intelligence",
+      "topic3": "AI for Operations",
+      "topic4": "Operational Platforms",
+      "topic5": "Integration & Automation",
+      "topic6": "Pilgrim Experience",
+      "topic7": "Managed Operations",
+      "ctaTitle": "Have a challenge worth solving?",
+      "cta": "Discuss Your Challenge"
+    }
+  },
+  "aiReadinessPage": {
+    "hero": {
+      "badge": "Free Practical Assessment",
+      "titleStrong": "Free practical assessment is your organization truly ready to benefit",
+      "titleMuted": "from AI?",
+      "description": "Before investing in AI tools or projects, discover where the real value lies and what you need to prepare first.",
+      "primaryCta": "Start Assessment",
+      "feature1": "Around 3 minutes",
+      "feature2": "Result across 6 dimensions",
+      "feature3": "No technical knowledge required",
+      "metric1": "Data Infrastructure",
+      "metric2": "Talent & Culture",
+      "metric3": "Governance & Ethics",
+      "metric4": "Use Cases & Value",
+      "metric5": "Technology Stack",
+      "imageAlt": "AI readiness visual"
+    },
+    "whatYouReceive": {
+      "badge": "What you will receive",
+      "titleStrong": "Know where you stand and what",
+      "titleMuted": "to do next",
+      "card1": "Initial readiness score",
+      "card2": "Six-dimension analysis",
+      "card3": "Strengths & readiness gaps",
+      "card4": "Relevant AI opportunities",
+      "card5": "Recommended next step"
+    },
+    "connectedDimensions": {
+      "badge": "Six connected dimensions",
+      "titleStrong": "A complete view of your",
+      "titleMuted": "organization's readiness",
+      "description": "We assess the ability to create real value—not simply access to tools.",
+      "card1Title": "Operations",
+      "card1Text": "Process clarity, manual work and automation potential.",
+      "card2Title": "Data",
+      "card2Text": "Availability, quality, organization and usability.",
+      "card3Title": "Systems & Integration",
+      "card3Text": "Connectivity and data exchange.",
+      "card4Title": "AI Adoption",
+      "card4Text": "Current experiments and operational relevance.",
+      "card5Title": "Governance & Readiness",
+      "card5Text": "Leadership, ownership, privacy and risk.",
+      "card6Title": "Value & Priority",
+      "card6Text": "Business challenges and high-value use cases."
+    },
+    "howItWorks": {
+      "badge": "How it works",
+      "titleStrong": "From short questions to a clear",
+      "titleMuted": "next step",
+      "cardText": "See what's holding you back across infrastructure, governance, and skills.",
+      "card1Title": "Answer short questions",
+      "card2Title": "Answer short questions",
+      "card3Title": "Answer short questions",
+      "card4Title": "Answer short questions",
+      "card5Title": "Answer short questions"
+    },
+    "assessment": {
+      "back": "Back",
+      "continue": "Continue",
+      "hint": "Choose the answer closest to your current situation.",
+      "stage": "Stage {number}",
+      "question": "Question {number}",
+      "loading": "Loading the assessment...",
+      "saving": "Saving...",
+      "error": "Could not save this stage. Try again.",
+      "resultLabel": "Your result",
+      "gaps": "Gaps",
+      "recommendations": "Recommendations",
+      "roadmap": "90-day plan",
+      "completeBadge": "AI Readiness Assessment",
+      "complete": "Complete",
+      "dimensions": "Dimensions",
+      "strengthsStat": "Strengths",
+      "planStat": "Plan",
+      "planValue": "90d",
+      "dimOperations": "Operations",
+      "dimData": "Data",
+      "dimSystems": "Systems & Integration",
+      "dimAdoption": "AI adoption",
+      "dimGovernance": "Governance & Readiness",
+      "dimValue": "Value & Priority",
+      "radarOperations": "Operations",
+      "radarData": "Data",
+      "radarSystems": "Systems",
+      "radarAdoption": "AI adoption",
+      "radarGovernance": "Governance",
+      "radarValue": "Value",
+      "strengths": "Your Strengths",
+      "gapsTitle": "Readiness Gaps",
+      "opportunities": "Recommended Starting Opportunities",
+      "planTitle": "Suggested 90-Day",
+      "planTitleMuted": "Starting Plan",
+      "nextStep": "Next step",
+      "nextStepAction": "Turn insight into action",
+      "ctaLine1": "Turn Your",
+      "ctaLine2": "Result Into a",
+      "ctaLead": "Clearer",
+      "ctaAccent": "Action Plan",
+      "ctaText": "Enter your details to receive your score summary and recommendations, or request a detailed review.",
+      "fullName": "Full Name",
+      "jobTitle": "Job Title",
+      "workEmail": "Work Email",
+      "mobile": "Mobile Number",
+      "emailPlaceholder": "name@company.sa",
+      "mobilePlaceholder": "+966 5X XXX XXXX",
+      "consent": "I consent to receiving the report and assessment follow-up.",
+      "send": "Send Me the Report",
+      "sendingReport": "Sending...",
+      "sent": "Your request was sent.",
+      "formError": "Could not send the report request. Try again.",
+      "formInvalid": "Please complete the required fields."
+    }
+  },
+  "solutionsPage": {
+    "hero": {
+      "number": "01",
+      "titleStrong": "Improve how work gets done before investing",
+      "titleMuted": "in technology",
+      "description": "We assess current operations, identify bottlenecks and opportunities, and build a practical roadmap to improve performance and prioritize initiatives before and during technology implementation.",
+      "primaryCta": "Discuss Your Challenge",
+      "secondaryCta": "Explore Use Cases",
+      "imageAlt": "Operational flow solution overview"
+    },
+    "challenges": {
+      "number": "02",
+      "titleStrong": "Challenges",
+      "titleMuted": "We Address",
+      "description": "Common operational issues that slow down performance.",
+      "impact": "Impact • High Friction",
+      "card1Title": "Long or unclear procedures.",
+      "card2Title": "Repeated tasks and duplicate data entry.",
+      "card3Title": "Heavy reliance on manual follow-up.",
+      "card4Title": "Unclear ownership and approvals.",
+      "card5Title": "Weak alignment between the beneficiary journey and internal operations.",
+      "card6Title": "Technology initiatives without clear prioritization."
+    },
+    "howHelps": {
+      "number": "03",
+      "titleStrong": "How This",
+      "titleMuted": "Solution Helps",
+      "description": "From assessment to an actionable roadmap.",
+      "card1Title": "Current process and procedure assessment",
+      "card1Text": "Map as-is workflows to surface gaps",
+      "card1Badge": "Clarity",
+      "card2Title": "Identification of bottlenecks, waste and duplication",
+      "card2Text": "Pinpoint friction with data",
+      "card2Badge": "Efficiency",
+      "card3Title": "Identification of automation and AI opportunities",
+      "card3Text": "Prioritize high-ROI automation",
+      "card3Badge": "Innovation",
+      "card4Title": "Initiative prioritization and actionable roadmap development",
+      "card4Text": "Sequenced plan for execution",
+      "card4Badge": "Roadmap",
+      "card5Title": "Pilgrim or beneficiary journey mapping",
+      "card5Text": "Connect touchpoints end-to-end",
+      "card5Badge": "Experience",
+      "card6Title": "Process and approval workflow redesign",
+      "card6Text": "Simplify paths and permissions",
+      "card6Badge": "Speed",
+      "card7Title": "Definition of ownership and performance indicators",
+      "card7Text": "Clear RACI and KPIs",
+      "card7Badge": "Accountability"
+    },
+    "useCases": {
+      "number": "04",
+      "title": "Use Cases",
+      "challengeLabel": "Challenge",
+      "solutionLabel": "Solution",
+      "outcomeLabel": "Outcome",
+      "case1Title": "Approval Simplification",
+      "case1Challenge": "Requests pass through too many stages and manual follow-ups.",
+      "case1Solution": "Redesign the workflow with clear permissions and alerts.",
+      "case1Outcome": "Less delay and clearer request status.",
+      "case2Title": "Seasonal Readiness",
+      "case2Challenge": "Readiness activities are tracked across multiple files and channels.",
+      "case2Solution": "Create one readiness workflow with owners and checkpoints.",
+      "case2Outcome": "Clearer visibility into readiness and risk.",
+      "case3Title": "Beneficiary Journey Improvement",
+      "case3Challenge": "Gaps exist between service channels and delivery steps.",
+      "case3Solution": "Map the journey and connect touchpoints to internal processes.",
+      "case3Outcome": "A faster and more consistent experience."
+    },
+    "deliveryApproach": {
+      "number": "05",
+      "titleStrong": "Delivery",
+      "titleMuted": "Approach",
+      "description": "A unified 6-stage framework applied across all solution pages.",
+      "stage1Label": "Stage 01",
+      "stage1Text": "Understand the challenge and desired outcome.",
+      "stage2Label": "Stage 02",
+      "stage2Text": "Assess processes, systems and data.",
+      "stage3Label": "Stage 03",
+      "stage3Text": "Design the solution and define scope.",
+      "stage4Label": "Stage 04",
+      "stage4Text": "Implement and integrate.",
+      "stage5Label": "Stage 05",
+      "stage5Text": "Pilot and measure results.",
+      "stage6Label": "Stage 06",
+      "stage6Text": "Operate and continuously improve."
+    },
+    "systemsIntegrations": {
+      "number": "06",
+      "titleStrong": "Systems &",
+      "titleMuted": "Integrations",
+      "description": "We design the solution to make better use of existing systems and data, integrating them where supported instead of replacing them unnecessarily.",
+      "tag1": "ERP",
+      "tag2": "CRM",
+      "tag3": "Operational systems",
+      "tag4": "Websites & apps",
+      "tag5": "WhatsApp",
+      "tag6": "APIs",
+      "tag7": "Data sources",
+      "tag8": "Supplier systems"
+    },
+    "outcomesIndicators": {
+      "number": "07",
+      "titleStrong": "Outcomes & Performance",
+      "titleMuted": "Indicators",
+      "trend": "Trend • Improving",
+      "card1": "Shorter process completion time.",
+      "card2": "Fewer manual and repeated steps.",
+      "card3": "Clearer ownership and approvals.",
+      "card4": "Improved process & service-level compliance.",
+      "card5": "Clearer investment priorities."
+    },
+    "relatedSolutions": {
+      "number": "08",
+      "titleStrong": "Related",
+      "titleMuted": "Solutions",
+      "cta": "Explore solution",
+      "card1Title": "Systems Platforms and Integration",
+      "card1Text": "Explore how we unify platforms and enable seamless integration.",
+      "card2Title": "Automation and Artificial Intelligence",
+      "card2Text": "Explore how we identify automation opportunities and apply AI responsibly.",
+      "card3Title": "Data and Decision Support",
+      "card3Text": "Explore how we turn operational data into clear decisions."
+    },
+    "callToAction": {
+      "badge": "Call to Action",
+      "title": "Not sure where to start?",
+      "description": "Tell us about the challenge or process you want to improve, and we will help you identify the most suitable solution and the right first step.",
+      "primaryCta": "Discuss Your Challenge",
+      "secondaryCta": "Contact the Estidam Team"
+    }
+  },
+  "whyEstidam": {
+    "badge": "Why Estidam",
+    "titleStrong": "Sector Understanding.",
+    "titleMuted": "Better Operations. Practical Intelligence. Measurable Impact.",
+    "description": "We combine Hajj-sector understanding, operational transformation, and strong technology and delivery capabilities to build solutions that start with real business needs and continue through operation and improvement.",
+    "cta": "Explore Our Approach",
+    "card1Title": "We Understand",
+    "card1TitleRest": "the Sector",
+    "card1Text": "Solutions designed around the realities of Hajj companies and seasonal operations.",
+    "card2Title": "We Start with",
+    "card2TitleRest": "Operations",
+    "card2Text": "Define the challenge and desired outcome first, then select the right technology.",
+    "card3Title": "We Apply AI",
+    "card3TitleRest": "Practically",
+    "card3Text": "Embed AI into processes, data and decision support.",
+    "card4Title": "We Measure and",
+    "card4TitleRest": "Improve",
+    "card4Text": "Track performance, learn from delivery, and continuously improve outcomes.",
+    "conceptLabel": "Concept workflow",
+    "card1Label": "Sector",
+    "card2Label": "Operations",
+    "card3Label": "Practical AI",
+    "card4Label": "Impact"
+  },
+  "hajjJourney": {
+    "badge": "Hajj Operations Journey",
+    "titleStrong": "Supporting Operations Before,",
+    "titleMuted": "During and After the Hajj Season",
+    "description": "We support companies across the full Hajj operating cycle — from preparation and readiness, through peak-season execution, to post-season analysis and continuous improvement.",
+    "cta": "Explore Solutions",
+    "phase1Label": "Before the Season",
+    "phase1Title": "Prepare & Plan",
+    "phase1Text": "Operational and system readiness ahead of the season, built on a clear plan.",
+    "phase1Points": [
+      "Operational and system readiness",
+      "Workforce and resource planning",
+      "Data preparation",
+      "System integrations",
+      "Workflow definition"
+    ],
+    "phase1CardTitle": "Season Readiness Plan",
+    "phase1CardStatus": "Operational readiness ahead of the season",
+    "phase1CardNote": "Turning complexity into a coordinated, ready season.",
+    "phase2Label": "During the Season",
+    "phase2Title": "Operate & Respond",
+    "phase2Text": "Real-time operational control during peak activity, with fast response and coordinated decisions.",
+    "phase2Points": [
+      "Live operations monitoring",
+      "Incident response workflows",
+      "Field coordination",
+      "Service quality tracking",
+      "Decision support dashboards"
+    ],
+    "phase2CardTitle": "Live Operations Desk",
+    "phase2CardStatus": "Peak-season control and rapid response",
+    "phase2CardNote": "Keeping every moving part aligned when demand peaks.",
+    "phase3Label": "After the Season",
+    "phase3Title": "Analyze & Improve",
+    "phase3Text": "Post-season learning that turns performance data into clearer plans for the next cycle.",
+    "phase3Points": [
+      "Performance reviews",
+      "KPI and outcome analysis",
+      "Process improvement",
+      "Lessons learned capture",
+      "Next-season planning"
+    ],
+    "phase3CardTitle": "Season Performance Review",
+    "phase3CardStatus": "Insights ready for the next cycle",
+    "phase3CardNote": "Closing the loop with measurable improvement."
+  },
+  "solutions": {
+    "badge": "Solutions",
+    "titleStrong": "Solutions Built Around",
+    "titleMuted": "Hajj-Sector Challenges",
+    "description": "We do not start with a predefined product or technology. We understand the challenge and the operating process first, then build or integrate the solution best suited to the required outcomes.",
+    "itemLabel": "Solution",
+    "itemTitleStrong": "Business & Process",
+    "itemTitleMuted": "Transformation",
+    "itemText": "Redesign processes, improve workflows and identify automation opportunities.",
+    "itemHighlight": "Clearer operating paths with less friction before peak season.",
+    "prev": "Previous solution",
+    "next": "Next solution",
+    "dotsLabel": "Solutions",
+    "items": [
+      {
+        "label": "Solution",
+        "titleStrong": "Business & Process",
+        "titleMuted": "Transformation",
+        "text": "Redesign processes, improve workflows and identify automation opportunities.",
+        "highlight": "Clearer operating paths with less friction before peak season."
+      },
+      {
+        "label": "Solution",
+        "titleStrong": "Seasonal",
+        "titleMuted": "Readiness",
+        "text": "Bring owners, checkpoints and readiness signals into one operating path before the season peaks.",
+        "highlight": "Clearer visibility into readiness and risk."
+      },
+      {
+        "label": "Solution",
+        "titleStrong": "Beneficiary",
+        "titleMuted": "Journey",
+        "text": "Connect service channels to internal steps so the journey and the operation move together.",
+        "highlight": "A faster and more consistent experience."
+      }
+    ]
+  },
+  "solutionsIndex": {
+    "primaryCta": "Browse solutions",
+    "secondaryCta": "Discuss your challenge",
+    "catalogBadge": "The catalog",
+    "catalogTitleStrong": "Start with the challenge",
+    "catalogTitleMuted": "that matters now",
+    "explore": "Explore solution",
+    "discuss": "Discuss this challenge",
+    "outcome": "Outcome"
+  },
+  "operations": {
+    "badge": "AI Operations + AI Readiness",
+    "titleStrong": "AI Embedded in Operations",
+    "titleMuted": "Not Added Around Them",
+    "description": "We apply AI where it can improve execution speed, information flow, team productivity and decision-making, while first considering the readiness of processes, data and systems.",
+    "card1Alt": "AI Intelligence Layer",
+    "card2Alt": "Readiness Assessment",
+    "input1": "Systems",
+    "input2": "Data",
+    "input3": "Operations",
+    "input4": "People",
+    "aiLabel": "AI",
+    "aiSubLabel": "Intelligence Layer",
+    "output1": "Decisions",
+    "output2": "Alerts",
+    "output3": "Actions",
+    "readinessTitle": "Readiness Assessment",
+    "readinessDescription": "Turn insights into a clear view of your operational and AI readiness.",
+    "readinessLeft1": "Processes",
+    "readinessLeft2": "Data",
+    "readinessLeft3": "Systems",
+    "readinessRight1": "Use cases",
+    "readinessRight2": "Governance",
+    "readinessRight3": "People",
+    "readinessCaption": "Overall readiness",
+    "outcomeLabel": "Outcome:",
+    "outcome1": "Readiness",
+    "outcome2": "High-impact opportunities",
+    "outcome3": "Priorities",
+    "outcome4": "Actionable roadmap"
+  },
+  "products": {
+    "badge": "Products",
+    "titleStrong": "Turning Recurring Challenges",
+    "titleMuted": "into Scalable Products",
+    "description": "Some challenges repeat across the sector. When a problem is validated and a solution proves its value, it can evolve into a reusable and scalable digital product that serves a wider set of organizations.",
+    "cta": "Explore Products",
+    "railLabel": "Product navigation",
+    "problemLabel": "Problem Solved",
+    "usersLabel": "Target Users",
+    "card1Status": "Available",
+    "card1Title": "Mayar",
+    "card1Tagline": "A field coordination product that keeps frontline teams aligned with central operations.",
+    "card1Problem": "Scattered evidence and hard-to-prove compliance across departments and agencies.",
+    "card1Users": "Governance and compliance units in government and semi-government entities.",
+    "card2Status": "Available",
+    "card2Title": "Ops Core",
+    "card2Tagline": "lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.",
+    "card2Problem": "Fragmented seasonal operations with weak visibility across sites, shifts and service partners.",
+    "card2Users": "Operations leaders and control-room teams in Hajj companies.",
+    "card3Status": "Coming Soon",
+    "card3Title": "Insight AI",
+    "card3Tagline": "A field coordination product that keeps frontline teams aligned with central operations.",
+    "card3Problem": "Too many metrics, too little actionable guidance when pressure peaks.",
+    "card3Users": "Planning, analytics and executive teams seeking faster decisions.",
+    "card4Status": "Coming Soon",
+    "card4Title": "Field Sync",
+    "card4Tagline": "A field coordination product that keeps frontline teams aligned with central operations.",
+    "card4Problem": "Delayed updates between field teams and headquarters during peak movement.",
+    "card4Users": "Field supervisors and dispatch teams across seasonal sites."
+  },
+  "howWeDeliver": {
+    "badge": "How We Deliver",
+    "titleStrong": "From Challenge to a Solution",
+    "titleMuted": "That Works and Evolves",
+    "description": "We lead engagements from understanding the challenge and setting priorities through solution design, implementation, operation and continuous improvement combining business understanding with strong technical delivery capabilities.",
+    "cta": "Explore the Delivery Model",
+    "step1": "Discover",
+    "step2": "Diagnose",
+    "step3": "Prioritize & Design",
+    "step4": "Build & Integrate",
+    "step5": "Pilot & Launch",
+    "step6": "Operate & Measure",
+    "step7": "Improve",
+    "engineTitle": "Delivery Engine",
+    "estidamItem1": "Sector Understanding",
+    "estidamItem2": "Business & Solution Leadership",
+    "estidamItem3": "Client Relationship",
+    "inspireItem1": "Engineering",
+    "inspireItem2": "Development",
+    "inspireItem3": "Integration",
+    "inspireItem4": "Technical Delivery",
+    "togetherLabel": "Together",
+    "togetherText": "One Integrated Delivery Model Led by Estidam."
+  },
+  "experienceProof": {
+    "badge": "Experience & Proof",
+    "titleStrong": "Delivery Experience Behind",
+    "titleMuted": "Real Solutions",
+    "description": "Our business, technology and delivery experience enables us to support complex initiatives across platforms, integrations, data, digital solutions and ongoing operations.",
+    "casesLabel": "Featured cases",
+    "verifiedLabel": "Verified Proof",
+    "challengeLabel": "Challenge",
+    "solutionLabel": "Solution",
+    "roleLabel": "Role",
+    "case1Eyebrow": "Featured Case • Public Sector Operations",
+    "case1Title": "Unified operations platform for multi-agency service delivery",
+    "case1Proof": "97.96%",
+    "case1Challenge": "Five operational systems, inconsistent data definitions, and manual handoffs made it impossible to track service SLAs end to end.",
+    "case1Solution": "We designed and delivered a unified operations layer: shared case model, integration bus, realtime dashboards.",
+    "case1Role": "Estidam led discovery, solution architecture, and program delivery. Technical delivery capacity was extended through our partnership with Inspire for platform engineering and data integration.",
+    "case2Eyebrow": "Featured Case • Seasonal Workforce Ops",
+    "case2Title": "Unified operations platform for multi-agency service delivery",
+    "case2Proof": "98.99%",
+    "case2Challenge": "Seasonal workforce peaks created fragmented reporting and delayed operational decisions across agencies.",
+    "case2Solution": "We built a shared operations layer with live workforce visibility, coordinated workflows and verified service evidence.",
+    "case2Role": "Estidam led operating model design and delivery governance, with Inspire supporting platform engineering and integration.",
+    "case3Eyebrow": "Featured Case • Service Assurance",
+    "case3Title": "Unified operations platform for multi-agency service delivery",
+    "case3Proof": "99.97%",
+    "case3Challenge": "Service quality signals were scattered, making end-to-end assurance and escalation hard to manage at scale.",
+    "case3Solution": "We delivered a unified assurance layer with shared KPIs, alerting flows and executive-ready operational dashboards.",
+    "case3Role": "Estidam owned solution leadership and delivery management, while Inspire extended technical build and data pipelines."
+  },
+  "growthEcosystem": {
+    "badge": "Growth Ecosystem",
+    "titleStrong": "An Ecosystem for Ideas,",
+    "titleMuted": "Businesses and Teams to Grow",
+    "description": "Beyond digital and operational solutions, Estidam is developing a wider ecosystem that helps ideas become viable ventures, provides environments for work and collaboration, and connects with partners that bring new capabilities and opportunities.",
+    "card1Title": "Business Incubation",
+    "card1Text": "From ideas to scalable ventures — structured support that turns early concepts into businesses ready to operate and grow.",
+    "card1Cta": "Explore incubation",
+    "card2Title": "Workspaces",
+    "card2Text": "Spaces for work, collaboration and community — where teams, founders and partners operate side by side.",
+    "card2Cta": "Explore Workspaces",
+    "card3Title": "Partnerships",
+    "card3Text": "Creating greater value together, with business, technology and enabling partners who extend what Estidam can deliver.",
+    "card3Cta": "Become a partner"
+  },
+  "contactPage": {
+    "hero": {
+      "badge": "Get in touch",
+      "titleStrong": "Start with the challenge",
+      "titleMuted": "you want to solve",
+      "description": "Three quick steps and the right team will contact you.",
+      "reply": "We reply within one business day"
+    },
+    "help": {
+      "title": "How can we help you?",
+      "requestType": "Request type",
+      "fullName": "Full name",
+      "organization": "Organization",
+      "jobTitle": "Job title",
+      "email": "Work email",
+      "emailPlaceholder": "name@company.sa",
+      "mobile": "Mobile number",
+      "mobilePlaceholder": "+966 5X XXX XXXX",
+      "consent": "I agree to be contacted by the Estidam team about this request.",
+      "submit": "Send request",
+      "privacy": "Your data is used only to answer your request",
+      "sendFailed": "Could not send your request. Please try again.",
+      "types": {
+        "operational": {
+          "label": "Operational challenge",
+          "hint": "Bring us a process that isn't working.",
+          "title": "I have an operational challenge",
+          "text": "Bring us a process that isn't working. We'll map it, diagnose the friction and design a way through it.",
+          "message": "Tell us about the challenge"
+        },
+        "ai": {
+          "label": "Apply AI",
+          "hint": "Put intelligence inside a real workflow.",
+          "title": "I want to apply AI",
+          "text": "Tell us where the work is slow or manual. We'll find a practical use case and what it needs to succeed.",
+          "message": "Tell us where AI could help"
+        },
+        "demo": {
+          "label": "Product demo",
+          "hint": "See a product in the context of your work.",
+          "title": "I want a product demo",
+          "text": "See how an Estidam product fits your operation, with a walkthrough shaped around your team.",
+          "message": "Tell us what you want to see"
+        },
+        "partner": {
+          "label": "Partner with us",
+          "hint": "Build more value together.",
+          "title": "I want to partner with you",
+          "text": "If you bring a capability, a market, or a delivery strength, we'll look at how we can create more value together.",
+          "message": "Tell us about the partnership"
+        }
+      }
+    },
+    "direct": {
+      "title": "Prefer to reach us directly?",
+      "copy": "Copy",
+      "copied": "Copied",
+      "follow": "Follow us",
+      "emailLabel": "Email",
+      "phoneLabel": "Phone",
+      "whatsappLabel": "WhatsApp",
+      "addressLabel": "Address",
+      "email": "hello@estidam.agency",
+      "phone": "+966 12 000 0000",
+      "whatsapp": "+966 50 000 0000",
+      "address": "Makkah, Saudi Arabia",
+      "linkedin": "LinkedIn",
+      "x": "X",
+      "instagram": "Instagram",
+      "facebook": "Facebook"
+    },
+    "faq": {
+      "badge": "FAQ",
+      "titleStrong": "Frequently asked",
+      "titleMuted": "questions",
+      "q1": "When should we expect a reply?",
+      "a1": "Our team contacts you within one business day to book an intro call.",
+      "q2": "Do you work with domestic and international pilgrim companies?",
+      "a2": "Yes. We work with both domestic and international pilgrim companies, and shape each engagement around how your season actually runs.",
+      "q3": "Do we need to know the technology before reaching out?",
+      "a3": "No. Start with the challenge or process you want to improve — we handle the technology side and recommend what fits.",
+      "q4": "Can we start with a limited pilot?",
+      "a4": "Yes. We often start with a focused pilot on one process, measure the results, then scale what proves its value."
+    }
+  },
+
+  "productsPage": {
+    "hero": {
+      "badge": "Products",
+      "titleStrong": "Turning Recurring Challenges into",
+      "titleMuted": "Scalable Products",
+      "description": "Some challenges repeat across the sector. When a problem is validated and a solution proves its value, it can evolve into a reusable and scalable digital product.",
+      "primaryCta": "Explore Products",
+      "secondaryCta": "Request a demo",
+      "imageAlt": "Operational flow solution overview"
+    },
+    "birth": {
+      "badge": "How a product is born",
+      "titleLine1": "From a recurring challenge",
+      "titleLine2": "to a proven product",
+      "step1Number": "01",
+      "step1Title": "A recurring challenge",
+      "step1Text": "We spot a problem that repeats across organizations.",
+      "step2Number": "02",
+      "step2Title": "A tailored solution",
+      "step2Text": "We build for one client and measure impact in a real season.",
+      "step3Number": "03",
+      "step3Title": "Proven value",
+      "step3Text": "We document results and decide what can be generalized.",
+      "step4Number": "04",
+      "step4Title": "A scalable product",
+      "step4Text": "We turn it into a configurable platform for more organizations."
+    },
+    "configure": {
+      "badge": "Configured to you",
+      "titleStrong": "A Ready-to-Configure Product,",
+      "titleMuted": "Not a Fixed Template",
+      "card1Title": "Configured to your operations",
+      "card1Text": "Roles, workflows and reports are set to your structure.",
+      "card2Title": "Integration-ready where interfaces exist",
+      "card2Text": "Connects to your available systems instead of adding another silo.",
+      "card3Title": "AI within approved permissions",
+      "card3Text": "AI works only within the permissions and data you approve."
+    },
+    "demo": {
+      "badge": "Request a demo",
+      "title1": "Want to see how this product",
+      "title2": "can be configured",
+      "title3": "for your operations?",
+      "text": "Tell us about your operations and we will prepare a demo built around your case.",
+      "point1": "A demo on a case close to your operations",
+      "point2": "Configuration and integration discussion",
+      "point3": "An initial timeline estimate",
+      "product": "Product",
+      "products": {
+        "hrh": "HRH",
+        "mayar": "Ma'yar",
+        "maydan": "Maydan"
+      },
+      "fullName": "Full name",
+      "organization": "Organization",
+      "jobTitle": "Job title",
+      "email": "Work email",
+      "mobile": "Mobile number (+966)",
+      "message": "Message (optional)",
+      "consent": "I agree to be contacted by the Estidam team about this request.",
+      "submit": "Send request",
+      "privacy": "Your data is used only to answer this request",
+      "sendFailed": "Could not send your request. Please try again."
+    },
+    "detail": {
+      "hrh": {
+        "badge": "Hajj-season HR platform · Estidam product",
+        "titleStrong": "Smarter Seasonal Workforce Management — From",
+        "titleAccent": "Recruitment to Completion",
+        "description": "An intelligent platform for managing seasonal Hajj workforce—from recruitment and contracts to attendance, shifts, and completion.",
+        "primaryCta": "Request a Product Demo",
+        "secondaryCta": "Discuss Your Requirements",
+        "imageAlt": "HRH seasonal workforce dashboard",
+        "points": [
+          "Configured to your operations",
+          "Integration-ready where interfaces exist",
+          "AI within approved permissions"
+        ]
+      },
+      "mayar": {
+        "badge": "Compliance platform · Estidam product",
+        "titleStrong": "A Trusted Digital Record — From",
+        "titleAccent": "Procedures to Proof",
+        "description": "A compliance and evidence platform that turns manual procedures into a record teams can trust.",
+        "primaryCta": "Request a Product Demo",
+        "secondaryCta": "Discuss Your Requirements",
+        "imageAlt": "Ma'yar product",
+        "points": [
+          "Configured to your operations",
+          "Integration-ready where interfaces exist",
+          "AI within approved permissions"
+        ]
+      },
+      "maydan": {
+        "badge": "Field operations · Estidam product",
+        "titleStrong": "Live Field Follow-up — From",
+        "titleAccent": "Report to Dispatch",
+        "description": "A live view of what happens in the field, so operations teams can follow work as it moves.",
+        "primaryCta": "Discuss Your Requirements",
+        "secondaryCta": "Notify Me at Launch",
+        "imageAlt": "Maydan product",
+        "points": [
+          "Configured to your operations",
+          "Integration-ready where interfaces exist",
+          "AI within approved permissions"
+        ]
+      },
+      "challenges": {
+        "badge": "Challenges addressed",
+        "titleStrong": "The Current",
+        "titleMuted": "Operating Reality",
+        "description": "When a seasonal workforce is run through separate files and channels, small gaps add up to operational pressure within a short window.",
+        "items": [
+          {
+            "number": "01",
+            "title": "Scattered data",
+            "description": "Workforce data scattered across files and communication channels."
+          },
+          {
+            "number": "02",
+            "title": "High volume, short season",
+            "description": "Difficulty managing large numbers of seasonal employees within a short period."
+          },
+          {
+            "number": "03",
+            "title": "Slow candidate screening",
+            "description": "Slow screening and selection of candidates against job requirements."
+          },
+          {
+            "number": "04",
+            "title": "Complex allocation and rosters",
+            "description": "Complex workforce allocation, shift planning and roster management."
+          },
+          {
+            "number": "05",
+            "title": "Limited follow-up visibility",
+            "description": "Limited visibility into contracts, documents, attendance and due actions."
+          },
+          {
+            "number": "06",
+            "title": "Errors and delayed reports",
+            "description": "Higher risk of administrative errors and delayed reporting."
+          }
+        ],
+        "nodes": {
+          "files": "Separate files",
+          "contracts": "Contracts",
+          "shifts": "Shift sheets",
+          "chat": "Chat channels",
+          "attendance": "Attendance"
+        },
+        "hubLine1": "Operational",
+        "hubLine2": "pressure",
+        "caption": "Disconnected HR processes converge into a single point of pressure at peak time."
+      },
+      "capabilities": {
+        "badge": "Product Capabilities",
+        "titleStrong": "The full seasonal employee",
+        "titleMuted": "lifecycle in one environment",
+        "description": "Select an area to see how it appears inside the product and what it adds for HR and operations teams.",
+        "doesLabel": "What it does",
+        "valueLabel": "Value for the team",
+        "items": {
+          "recruitment": {
+            "title": "Recruitment & candidate management"
+          },
+          "contracts": {
+            "title": "Contracts & documents",
+            "does": "Contract and document management with validity tracking.",
+            "value": "Reduce delays and improve administrative compliance.",
+            "interface": "In the interface: document register and validity status",
+            "imageAlt": "Contracts and documents register"
+          },
+          "lifecycle": {
+            "title": "Employee lifecycle"
+          },
+          "attendance": {
+            "title": "Attendance, shifts & rosters"
+          },
+          "alerts": {
+            "title": "Alerts & due actions"
+          },
+          "dashboards": {
+            "title": "Dashboards & reports"
+          }
+        }
+      },
+      "ai": {
+        "badge": "Role of Artificial Intelligence",
+        "titleStrong": "AI that speeds up analysis, while",
+        "titleMuted": "decisions stay with your team",
+        "description": "Artificial intelligence supports teams by accelerating analysis and access to information, while sensitive decisions and actions remain governed by user permissions and approved policies.",
+        "imageAlt": "Illustrative AI example for applicant screening",
+        "pillTitle": "AI layer",
+        "pillText": "Works on product data within permissions",
+        "governanceTitle": "Clear governance",
+        "governanceText": "Sensitive decisions and actions remain governed by user permissions and approved policies: AI suggests and analyzes, the authorized team approves.",
+        "cards": [
+          {
+            "title": "Applicant screening & classification",
+            "text": "Screen and classify applicants against role requirements."
+          },
+          {
+            "title": "Candidate-to-role matching",
+            "text": "Support candidate-to-role matching."
+          },
+          {
+            "title": "Shift-allocation support",
+            "text": "Analyze workforce data to support shift allocation."
+          },
+          {
+            "title": "AI assistant for enquiries & reports",
+            "text": "Provide an AI assistant for employee-data enquiries, information retrieval and reporting."
+          }
+        ]
+      },
+      "cases": {
+        "badge": "Use Cases",
+        "titleStrong": "See the Product in Real",
+        "titleMuted": "Operational Scenarios",
+        "description": "Select the scenario closest to your challenge to understand the problem, how the product responds and the outcome that can be measured.",
+        "chartBefore": "From ",
+        "chartCount": "186",
+        "chartAfter": " applications to a shortlist",
+        "snapshot": "Illustrative interface snapshot",
+        "measureLabel": "What We Measure",
+        "tabs": [
+          { "title": "Accelerate Candidate Screening" },
+          { "title": "Manage Shifts and Workforce Allocation" },
+          { "title": "Track Documents and Due Actions" }
+        ],
+        "bars": [
+          { "label": "Applied", "value": "186" },
+          { "label": "Screened", "value": "186" },
+          { "label": "High match", "value": "48" },
+          { "label": "Team review", "value": "22" }
+        ],
+        "steps": [
+          {
+            "title": "Current Challenge",
+            "text": "HR teams manually review high volumes of applications within limited time."
+          },
+          {
+            "title": "How the Product Helps",
+            "text": "Centralize, screen and classify applications against defined requirements for each role."
+          },
+          {
+            "title": "Expected Value",
+            "text": "Reach a more relevant shortlist faster while keeping final decisions with the HR team."
+          }
+        ],
+        "measures": [
+          "Screening time",
+          "Percentage of applications reviewed"
+        ]
+      },
+      "works": {
+        "badge": "How the Product Works",
+        "titleStrong": "A Ready-to-Configure Product,",
+        "titleMuted": "Not a Fixed Template",
+        "steps": [
+          {
+            "title": "Understand",
+            "text": "Understand processes, users & systems."
+          },
+          {
+            "title": "Define scope",
+            "text": "Define scope, features, roles and integrations."
+          },
+          {
+            "title": "Configure",
+            "text": "Configure the product, data and workflows."
+          },
+          {
+            "title": "Integrate & test",
+            "text": "Implement and test available integrations."
+          },
+          {
+            "title": "Pilot",
+            "text": "Run a controlled pilot and measure results."
+          },
+          {
+            "title": "Launch & improve",
+            "text": "Train users, launch, monitor and improve."
+          }
+        ]
+      },
+      "integrations": {
+        "badge": "Systems and Integrations",
+        "titleStrong": "Part of your existing digital environment,",
+        "titleMuted": "not a replacement",
+        "description": "We design the product to work with existing systems and data wherever the required interfaces and permissions are available, avoiding unnecessary replacement. Integrations may include internal systems, ERP and CRM, websites and applications, notification channels, data sources and APIs.",
+        "noteStrong": "Integration scope is confirmed after review.",
+        "note": "Each integration scope is confirmed after reviewing technical documentation, data and available access.",
+        "chips": [
+          "Data sources",
+          "Permissions-based",
+          "No replacement needed"
+        ],
+        "hub": "Platform",
+        "nodes": [
+          {
+            "title": "Data sources",
+            "text": "Warehouse • Lake"
+          },
+          {
+            "title": "ERP",
+            "text": "SAP • Oracle • NetSuite"
+          },
+          {
+            "title": "CRM",
+            "text": "Salesforce • HubSpot"
+          },
+          {
+            "title": "APIs",
+            "text": "REST • GraphQL"
+          },
+          {
+            "title": "Internal systems",
+            "text": "Core stack"
+          },
+          {
+            "title": "Notification channels",
+            "text": "Email • Push • Slack"
+          },
+          {
+            "title": "Websites & apps",
+            "text": "Frontend • Mobile"
+          }
+        ]
+      },
+      "outcomes": {
+        "badge": "Outcomes and Performance Indicators",
+        "titleStrong": "Outcomes measured against your",
+        "titleMuted": "own operations",
+        "description": "Expected outcomes focus on improved visibility, speed and follow-up quality, with less manual work. Target values are agreed after assessing the current state and establishing an appropriate baseline.",
+        "chips": [
+          "Visibility",
+          "Speed",
+          "Follow-up quality",
+          "Less manual work"
+        ]
+      },
+      "related": {
+        "badge": "Related Products",
+        "titleStrong": "Products that complement",
+        "titleMuted": "Hajj HR",
+        "action": "View Product",
+        "items": [
+          {
+            "title": "Hajj Maydan",
+            "text": "Hajj Maydan for field teams and operational activities"
+          },
+          {
+            "title": "Hajj Ma'yar",
+            "text": "Hajj Ma'yar for service-center quality and compliance"
+          }
+        ]
+      },
+      "next": {
+        "badge": "Next step",
+        "titleStrong": "Want to See How This Product Can Be Configured",
+        "titleMuted": "for Your Operations?",
+        "description": "Tell us about your challenge and current operating model, and we will help define the right scope and first implementation step.",
+        "demo": "Request a Product Demo",
+        "contact": "Contact the Estidam Team",
+        "formTitleStrong": "Request a",
+        "formTitleMuted": "Product Demo",
+        "formNote": "A short form — fields marked * are required.",
+        "fullName": "Full Name",
+        "organization": "Organization",
+        "jobTitle": "Job Title",
+        "email": "Work Email",
+        "emailPlaceholder": "name@company.sa",
+        "mobile": "Mobile Number",
+        "mobilePlaceholder": "+966 5X XXX XXXX",
+        "product": "Product of Interest",
+        "productValue": "Hajj HR",
+        "challenge": "Main Challenge",
+        "challengePlaceholder": "Choose the closest challenge",
+        "channelLabel": "Preferred contact channel",
+        "channels": {
+          "email": "Email",
+          "phone": "Phone",
+          "whatsapp": "WhatsApp"
+        },
+        "consent": "I agree that Estidam may use my details only to contact me about this request, in line with the privacy policy.",
+        "submit": "Send Request",
+        "sendFailed": "Could not send your request. Please try again.",
+        "challenges": [
+          "Scattered data",
+          "High volume, short season",
+          "Slow candidate screening",
+          "Complex allocation and rosters",
+          "Limited follow-up visibility",
+          "Errors and delayed reports"
+        ]
+      }
+    },
+    "list": {
+      "badge": "Our products",
+      "titleStrong": "Products built",
+      "titleMuted": "for season operations",
+      "filterAll": "All",
+      "filterAvailable": "Available",
+      "filterSoon": "Coming soon",
+      "problem": "Problem solved",
+      "users": "Target users",
+      "capabilities": "Key capabilities",
+      "statusAvailable": "Available",
+      "statusSoon": "Coming soon",
+      "items": {
+        "hrh": {
+          "name": "HRH",
+          "kicker": "Hajj-season HR platform",
+          "headline": "The full seasonal employee lifecycle in one environment",
+          "problem": "Workforce data scattered across files and channels, slow screening, and complex roster allocation.",
+          "users": "HR and operations teams at Hajj service companies.",
+          "capabilities": [
+            "Recruitment & candidate management",
+            "Contracts & documents",
+            "Rosters & attendance"
+          ],
+          "primary": "Explore the product",
+          "secondary": "Request a demo",
+          "imageAlt": "HRH dashboard"
+        },
+        "mayar": {
+          "name": "Ma'yar",
+          "kicker": "",
+          "headline": "A compliance and evidence platform that turns manual procedures into a trusted digital record",
+          "problem": "Scattered evidence and hard-to-prove compliance across departments and agencies.",
+          "users": "Governance and compliance units in government and semi-government entities.",
+          "capabilities": [
+            "Digital evidence record",
+            "Compliance tracking",
+            "Ready reports"
+          ],
+          "primary": "Explore Products",
+          "secondary": "Request a demo",
+          "imageAlt": "Ma'yar dashboard"
+        },
+        "maydan": {
+          "name": "Maydan",
+          "kicker": "",
+          "headline": "Live field follow-up for operations teams",
+          "problem": "Limited visibility of what happens in the field during the season.",
+          "users": "Operations and field supervisors.",
+          "capabilities": [
+            "Field reports",
+            "Live board",
+            "Team dispatch"
+          ],
+          "primary": "Discuss your requirements",
+          "secondary": "Notify me at launch",
+          "imageAlt": "Maydan dashboard"
+        }
+      }
+    }
+  },
+
+  "clients": {
+    "badge": "CLIENTS",
+    "titleStrong": "Organisations that",
+    "titleMuted": "trust Estidam",
+    "listLabel": "Estidam clients"
+  },
+  "partners": {
+    "titleStrong": "Partners who",
+    "titleMuted": "extend our reach",
+    "choose": "Choose a partner"
+  },
+  "getInTouch": {
+    "badge": "Get In Touch",
+    "titleStrong": "Start with the Challenge",
+    "titleMuted": "You Want to Solve",
+    "description": "Beyond digital and operational solutions, Estidam is developing a wider ecosystem that helps ideas become viable ventures, provides environments for work and collaboration, and connects with partners that bring new capabilities and opportunities.",
+    "cardText": "Bring us a process that isn't working. We'll map it, diagnose the friction, and design a way through it.",
+    "card1TitleStrong": "I have an operational",
+    "card1TitleMuted": "challenge",
+    "card1Cta": "Discuss your challenge",
+    "card2TitleStrong": "I want",
+    "card2TitleMuted": "to apply AI",
+    "card2Cta": "Explore AI solutions",
+    "card3TitleStrong": "I have an idea",
+    "card3TitleMuted": "or venture",
+    "card3Cta": "Start your venture",
+    "card4TitleStrong": "I need",
+    "card4TitleMuted": "a workspace",
+    "card4Cta": "Find a workspace"
+  },
+  "news": {
+    "badge": "NEWS",
+    "titleStrong": "Latest from",
+    "titleMuted": "Estidam",
+    "featured": "Featured",
+    "readStory": "Read the story",
+    "readMore": "Read more"
+  },
+  "footer": {
+    "resource": "Resource",
+    "topLinks": "Top Links",
+    "location": "Location",
+    "inquiry": "Inquiry",
+    "works": "Works",
+    "studio": "Studio",
+    "home": "Home",
+    "aboutUs": "About Us",
+    "careers": "Careers",
+    "partners": "Partners",
+    "facebook": "Facebook",
+    "twitter": "Twitter",
+    "instagram": "Instagram",
+    "dribbble": "Dribble",
+    "linkedin": "LinkedIn",
+    "whatsapp": "WhatsApp",
+    "whatsappChat": "Chat on WhatsApp",
+    "address": "152 Thatcher Road St, Manhattan, NY 10463, US",
+    "email": "hello@Estidam.agency",
+    "phone": "+0685689696",
+    "copyrightPrefix": "All rights for",
+    "copyrightBrand": "Estidam"
+  }
+}

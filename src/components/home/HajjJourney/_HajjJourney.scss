@@ -1,0 +1,300 @@
+$hj-blue: var(--blue, #295cc7);
+$hj-ink: #171717;
+$hj-ink-2: #5f6570;
+$hj-ink-4: #b5b5b5;
+$hj-hair: #eaeaea;
+$hj-ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+.hajj_journey {
+    position: relative;
+
+    .hj-tabs {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        border-top: 1px solid $hj-hair;
+        border-bottom: 1px solid $hj-hair;
+        background: #fff;
+    }
+
+    .hj-tab {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        padding: 26px 36px;
+        border: 0;
+        border-inline-end: 1px solid $hj-hair;
+        background: none;
+        text-align: start;
+        cursor: pointer;
+
+        &:last-child {
+            border-inline-end: 0;
+        }
+
+        small {
+            color: $hj-ink-4;
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            transition: color 0.3s ease;
+        }
+
+        b {
+            color: $hj-ink-4;
+            font-size: 20px;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            transition: color 0.3s ease;
+        }
+
+        &:hover b {
+            color: $hj-ink;
+        }
+
+        &[aria-selected="true"] {
+            small {
+                color: $hj-blue;
+            }
+
+            b {
+                color: $hj-ink;
+            }
+
+            .hj-tab-bar {
+                transform: scaleX(1);
+            }
+        }
+
+        &:focus-visible {
+            outline: 2px solid $hj-blue;
+            outline-offset: -2px;
+        }
+    }
+
+    .hj-tab-bar {
+        position: absolute;
+        inset-inline: 0;
+        top: -1px;
+        height: 2px;
+        background: $hj-blue;
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform 0.7s $hj-ease;
+
+        [dir="rtl"] & {
+            transform-origin: right;
+        }
+    }
+
+    .hj-body {
+        display: grid;
+        grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+        border-bottom: 1px solid $hj-hair;
+        background: #fff;
+    }
+
+    .hj-info {
+        padding: 56px 44px;
+        border-inline-end: 1px solid $hj-hair;
+
+        > * {
+            animation: hj-in 0.6s $hj-ease both;
+        }
+    }
+
+    .hj-label {
+        color: $hj-blue;
+        font-size: 11px;
+        font-weight: 500;
+        line-height: 1;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+    }
+
+    .hj-stage-title {
+        margin: 14px 0 0;
+        color: $hj-ink;
+        font-size: clamp(28px, 2.6vw, 38px);
+        font-weight: 600;
+        line-height: 1.1;
+        letter-spacing: -0.03em;
+        animation-delay: 0.04s;
+    }
+
+    .hj-stage-text {
+        max-width: 44ch;
+        margin: 14px 0 0;
+        color: $hj-ink-2;
+        font-size: 16px;
+        line-height: 1.65;
+        animation-delay: 0.08s;
+    }
+
+    .hj-points {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px 28px;
+        max-width: 520px;
+        margin: 26px 0 0;
+        padding: 0;
+        list-style: none;
+        animation: none;
+
+        li {
+            display: flex;
+            gap: 10px;
+            color: $hj-ink;
+            font-size: 14.5px;
+            line-height: 1.45;
+            animation: hj-in 0.6s $hj-ease both;
+
+            &::before {
+                flex: none;
+                width: 12px;
+                height: 1px;
+                margin-top: 10px;
+                content: "";
+                background: $hj-ink-4;
+            }
+        }
+    }
+
+    .hj-diagram {
+        display: grid;
+        place-items: center;
+        padding: 40px;
+
+        svg {
+            display: block;
+            width: 100%;
+            max-width: 620px;
+            height: auto;
+            overflow: visible;
+        }
+
+        .jd-card {
+            fill: #fff;
+            stroke: #e3e3e3;
+            filter: drop-shadow(0 1px 1px rgba(11, 26, 51, 0.04)) drop-shadow(0 6px 14px rgba(11, 26, 51, 0.05));
+        }
+
+        .jd-hub {
+            fill: #0b1a33;
+        }
+
+        .jd-ln {
+            fill: none;
+            stroke: #d6d6d6;
+            stroke-width: 1;
+        }
+
+        .jd-bl {
+            fill: none;
+            stroke: $hj-blue;
+            stroke-width: 1.5;
+            stroke-linecap: round;
+        }
+    }
+
+    [dir="rtl"] & .hj-diagram svg {
+        direction: ltr;
+        transform: scaleX(-1);
+
+        text {
+            transform: scaleX(-1);
+            transform-box: fill-box;
+            transform-origin: center;
+            letter-spacing: 0;
+        }
+
+        .jd-t {
+            font-size: 12px;
+        }
+    }
+
+    [dir="rtl"] & {
+        .hj-stage-title,
+        .hj-tab b {
+            letter-spacing: 0;
+        }
+
+        .hj-stage-text {
+            line-height: 1.9;
+        }
+
+        .hj-label,
+        .hj-tab small {
+            letter-spacing: 0;
+            text-transform: none;
+        }
+    }
+}
+
+@keyframes hj-in {
+    from {
+        opacity: 0;
+        transform: translateY(14px);
+    }
+
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+@media screen and (max-width: 991px) {
+    .hajj_journey {
+        .hj-tabs {
+            grid-template-columns: minmax(0, 1fr);
+        }
+
+        .hj-tab {
+            padding: 16px 20px;
+            border-inline-end: 0;
+            border-bottom: 1px solid $hj-hair;
+
+            &:last-child {
+                border-bottom: 0;
+            }
+
+            b {
+                font-size: 17px;
+            }
+        }
+
+        .hj-body {
+            grid-template-columns: minmax(0, 1fr);
+        }
+
+        .hj-info {
+            padding: 32px 20px;
+            border-inline-end: 0;
+            border-bottom: 1px solid $hj-hair;
+        }
+
+        .hj-diagram {
+            padding: 20px 12px;
+        }
+    }
+}
+
+@media screen and (max-width: 575px) {
+    .hajj_journey .hj-points {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .hajj_journey {
+        .hj-info > *,
+        .hj-points li {
+            animation: none;
+        }
+
+        .hj-tab-bar {
+            transition: none;
+        }
+    }
+}

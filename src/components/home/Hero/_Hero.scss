@@ -1,0 +1,243 @@
+// =========================================================
+// Home Hero — gradient + halftone
+// =========================================================
+$hero-accent: #6dd3ff;
+$hero-ease: cubic-bezier(0.22, 1, 0.36, 1); // calm, no bounce
+$hero-slow: cubic-bezier(0.16, 1, 0.3, 1);
+
+.hero_section {
+    position: relative;
+    z-index: 2;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    min-height: 100vh;
+    min-height: 100svh;
+    padding-top: 150px;
+    padding-bottom: 200px;
+    color: #fff;
+    background: linear-gradient(
+        180deg,
+        #050d1c 0%,
+        var(--dark, #0b1a33) 20%,
+        #173f8f 50%,
+        var(--blue, #295cc7) 72%,
+        var(--secondary, #1691d0) 84%,
+        #a9d6f2 93%,
+        #ffffff 100%
+    );
+
+    // ---------- halftone canvas ----------
+    .hero_halftone {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        pointer-events: none;
+
+        canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+    }
+
+    .hero_inner {
+        position: relative;
+        width: 100%;
+        z-index: 2;
+    }
+
+    // ---------- copy ----------
+    .hero_copy {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        max-width: 960px;
+        margin-inline: auto;
+    }
+
+    .hero_pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        margin: 0 0 28px;
+        padding: 8px 18px 8px 14px;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.08);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        color: rgba(255, 255, 255, 0.88);
+        font-size: 13px;
+        font-weight: 500;
+        letter-spacing: 0.06em;
+
+        i {
+            font-size: 15px;
+            color: $hero-accent;
+        }
+    }
+
+    .hero_title {
+        margin: 0 0 24px;
+        color: #fff;
+        font-family: var(--font-heading);
+        font-size: clamp(2.4rem, 5.2vw, 4.75rem);
+        font-weight: 700;
+        line-height: 1.04;
+        letter-spacing: -0.03em;
+    }
+
+    .hero_mask {
+        display: block;
+        overflow: hidden;
+        padding-bottom: 0.08em;
+    }
+
+    .hero_line {
+        display: block;
+        animation: heroLine 1s $hero-slow both;
+    }
+
+    .hero_title_accent {
+        color: $hero-accent;
+    }
+
+    .hero_description {
+        max-width: 640px;
+        margin: 0 0 40px;
+        color: rgba(255, 255, 255, 0.78);
+        font-size: 18px;
+        line-height: 1.7;
+    }
+
+    .hero_actions {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 14px;
+    }
+
+    .hero_btn {
+        min-height: 56px;
+        font-size: 14px;
+
+        &--primary {
+            background-color: var(--secondary, #1691d0);
+            border-color: var(--secondary, #1691d0);
+            color: #fff;
+
+            &:hover {
+                background-color: #fff;
+                border-color: #fff;
+                color: var(--dark) !important;
+
+                .butn-icon {
+                    filter: var(--filterPrimary);
+                }
+            }
+        }
+
+        &--ghost {
+            background-color: rgba(255, 255, 255, 0.06);
+            border-color: rgba(255, 255, 255, 0.35);
+            color: #fff;
+
+            &:hover {
+                background-color: rgba(255, 255, 255, 0.14);
+                border-color: #fff;
+                color: #fff !important;
+            }
+        }
+    }
+
+    // ---------- entrance ----------
+    .hero_in {
+        animation: heroRise 0.8s $hero-ease both;
+    }
+
+    .hero_fade {
+        animation: heroFade 0.9s $hero-ease both;
+    }
+
+}
+
+// Arabic: no negative tracking
+html[dir="rtl"] .hero_section {
+    .hero_title {
+        letter-spacing: 0;
+        line-height: 1.25;
+    }
+
+    .hero_pill {
+        letter-spacing: 0;
+        padding: 8px 14px 8px 18px;
+    }
+}
+
+// ---------- keyframes ----------
+@keyframes heroLine {
+    from {
+        transform: translateY(105%);
+    }
+    to {
+        transform: translateY(0);
+    }
+}
+
+@keyframes heroRise {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes heroFade {
+    from {
+        opacity: 0;
+    }
+}
+
+// ---------- responsive ----------
+@media screen and (max-width: 991px) {
+    .hero_section {
+        padding-top: 130px;
+        padding-bottom: 150px;
+    }
+}
+
+@media screen and (max-width: 575px) {
+    .hero_section {
+        padding-top: 120px;
+        padding-bottom: 120px;
+
+        .hero_description {
+            font-size: 16px;
+        }
+
+        .hero_actions {
+            flex-direction: column;
+            align-self: stretch;
+
+            .hero_btn {
+                width: 100%;
+                justify-content: space-between;
+            }
+        }
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .hero_section {
+        .hero_line,
+        .hero_in,
+        .hero_fade {
+            animation: none !important;
+        }
+    }
+}
