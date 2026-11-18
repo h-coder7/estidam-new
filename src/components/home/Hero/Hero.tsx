@@ -4,6 +4,7 @@ import { getHeroContent } from "@/lib/api/home";
 import { Link } from "@/i18n/routing";
 
 import HeroHalftone from "./HeroHalftone";
+import HeroTitle from "./HeroTitle";
 
 import "./_Hero.scss";
 
@@ -48,26 +49,13 @@ const Hero = async () => {
                         <span>{eyebrow}</span>
                     </p>
 
-                    <h1 className="hero_title">
-                        <span className="hero_mask">
-                            <span className="hero_line" style={{ animationDelay: "60ms" }}>
-                                {title}
-                            </span>
-                        </span>
-                        {titleAccent ? (
-                            <span className="hero_mask">
-                                <span className="hero_line hero_title_accent" style={{ animationDelay: "150ms" }}>
-                                    {titleAccent}
-                                </span>
-                            </span>
-                        ) : null}
-                    </h1>
+                    <HeroTitle title={title} titleAccent={titleAccent} />
 
-                    <p className="hero_description hero_fade" style={{ animationDelay: "420ms" }}>
+                    <p className="hero_description hero_fade" style={{ animationDelay: "780ms" }}>
                         {description}
                     </p>
 
-                    <div className="hero_actions hero_in" style={{ animationDelay: "520ms" }}>
+                    <div className="hero_actions hero_in" style={{ animationDelay: "920ms" }}>
                         <HeroLink href={primaryUrl} className="butn hero_btn hero_btn--primary">
                             <span>{primaryCta}</span>
                             <img src="/images/icons/arrow-wh.svg" alt="" className="butn-icon" aria-hidden="true" />

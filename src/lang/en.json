@@ -404,6 +404,80 @@
       "secondaryCta": "Contact the Estidam Team"
     }
   },
+  "sectorSteps": {
+    "index": "01",
+    "label": "Sector",
+    "eyebrow": "01 / Sector",
+    "title": "From sector complexity to operating clarity.",
+    "description": "We map how Hajj companies actually work across the season board — phases, service lanes, and the handoffs that keep operations moving.",
+    "proofLabel": "Sector readiness",
+    "proofValue": "01",
+    "proofMetric": "Operating clarity",
+    "proofScore": "92",
+    "proofScoreLabel": "Fit",
+    "proofNote": "Designed around seasonal reality",
+    "hint": "Cards arrive row by row — phases keep cycling",
+    "phasesLabel": "Season phases",
+    "lanesLabel": "Service lanes"
+  },
+  "operationsSteps": {
+    "index": "02",
+    "label": "Operations",
+    "eyebrow": "02 / Operations",
+    "title": "Start with the challenge, then choose the fit.",
+    "description": "We define the operational challenge and the desired outcome first, then select the technology that fits — not the other way around.",
+    "proofLabel": "Operating path",
+    "proofValue": "02",
+    "proofMetric": "Outcome first",
+    "proofScore": "Agreed",
+    "proofScoreLabel": "Decision state",
+    "proofNote": "Technology follows the outcome",
+    "hint": "Scroll to climb the operations ladder",
+    "steps": [
+      {
+        "meta": "Challenge",
+        "status": "Defined",
+        "title": "Operational challenge",
+        "text": "Name the friction clearly — where work slows, breaks, or depends on too many manual handoffs.",
+        "tip": "Bottlenecks · Manual loops · Unclear ownership"
+      },
+      {
+        "meta": "Outcome",
+        "status": "Draft",
+        "title": "Desired outcome",
+        "text": "Shape the result the season needs before any platform or integration is chosen.",
+        "tip": "Target state · Success criteria · Season fit"
+      },
+      {
+        "meta": "Outcome",
+        "status": "Agreed",
+        "title": "Agreed operating result",
+        "text": "Align teams on one outcome so delivery choices stay tied to a shared definition of done.",
+        "tip": "Shared definition · Decision lock · Clear owners"
+      },
+      {
+        "meta": "Options",
+        "status": "Scan",
+        "title": "Process change",
+        "text": "Test whether a process redesign alone can remove friction before adding new systems.",
+        "tip": "Workflow rewrite · Handoff cuts · Team rhythm"
+      },
+      {
+        "meta": "Options",
+        "status": "Selected",
+        "title": "Integration",
+        "text": "Connect the systems that already hold the work so data and decisions move together.",
+        "tip": "System links · Data exchange · Live status"
+      },
+      {
+        "meta": "Options",
+        "status": "Fit",
+        "title": "New platform",
+        "text": "Introduce a new platform only when the outcome needs a dedicated operating environment.",
+        "tip": "Purpose-built · Controlled scope · Measurable fit"
+      }
+    ]
+  },
   "whyEstidam": {
     "badge": "Why Estidam",
     "titleStrong": "Sector Understanding.",

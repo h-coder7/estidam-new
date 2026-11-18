@@ -4,7 +4,6 @@
 $hero-accent: var(--blue, #295cc7);
 $hero-muted: #3f4e56;
 $hero-ease: cubic-bezier(0.22, 1, 0.36, 1);
-$hero-slow: cubic-bezier(0.16, 1, 0.3, 1);
 
 .hero_section {
     position: relative;
@@ -93,19 +92,55 @@ $hero-slow: cubic-bezier(0.16, 1, 0.3, 1);
         font-family: var(--font-heading);
         font-size: clamp(2rem, 4.2vw, 3.65rem);
         font-weight: 700;
-        line-height: 1.12;
+        line-height: 1.18;
         letter-spacing: -0.03em;
         text-wrap: balance;
+        // Hidden until SplitText arms the entrance (prevents flash of full title)
+        opacity: 0;
+
+        &.is-ready {
+            opacity: 1;
+        }
+
+        .hero_title_line {
+            display: block;
+        }
+
+        .hero_word {
+            display: inline-block;
+            white-space: nowrap;
+        }
+
+        .hero_char,
+        &--words .hero_word {
+            display: inline-block;
+            will-change: transform, opacity, filter;
+            color: transparent;
+            background-image: linear-gradient(
+                135deg,
+                var(--dark, #0b1a33) 0%,
+                var(--blue, #295cc7) 48%,
+                var(--secondary, #1691d0) 100%
+            );
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero_title_accent .hero_char,
+        &--words .hero_title_accent .hero_word {
+            background-image: linear-gradient(
+                135deg,
+                var(--blue, #295cc7) 0%,
+                var(--secondary, #1691d0) 55%,
+                #3db4e6 100%
+            );
+        }
     }
 
-    .hero_mask {
-        display: block;
-        overflow: hidden;
-        padding-bottom: 0.08em;
-    }
-
-    .hero_line {
-        display: block;
+    // Fallback before SplitText / reduced motion
+    .hero_title_main,
+    .hero_title_accent {
         color: transparent;
         background-image: linear-gradient(
             135deg,
@@ -116,7 +151,6 @@ $hero-slow: cubic-bezier(0.16, 1, 0.3, 1);
         -webkit-background-clip: text;
         background-clip: text;
         -webkit-text-fill-color: transparent;
-        animation: heroLine 1s $hero-slow both;
     }
 
     .hero_title_accent {
@@ -205,15 +239,6 @@ html[dir="rtl"] .hero_section {
 }
 
 // ---------- keyframes ----------
-@keyframes heroLine {
-    from {
-        transform: translateY(105%);
-    }
-    to {
-        transform: translateY(0);
-    }
-}
-
 @keyframes heroRise {
     from {
         opacity: 0;
@@ -262,10 +287,20 @@ html[dir="rtl"] .hero_section {
 
 @media (prefers-reduced-motion: reduce) {
     .hero_section {
-        .hero_line,
         .hero_in,
         .hero_fade {
             animation: none !important;
+        }
+
+        .hero_title {
+            opacity: 1;
+        }
+
+        .hero_char,
+        .hero_title--words .hero_word {
+            opacity: 1 !important;
+            filter: none !important;
+            transform: none !important;
         }
     }
 }

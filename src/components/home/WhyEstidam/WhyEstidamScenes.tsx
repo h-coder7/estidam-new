@@ -51,7 +51,7 @@ export const SEASON_LABELS = {
     } as Record<number, Record<number, string>>,
 };
 
-const SEASON_LABELS_AR: typeof SEASON_LABELS = {
+export const SEASON_LABELS_AR: typeof SEASON_LABELS = {
     phases: ["الوصول", "منى", "عرفات", "مزدلفة", "العودة"],
     lanes: ["النقل", "المخيمات", "الإعاشة", "الرعاية"],
     blocks: {
@@ -138,7 +138,7 @@ export const OPERATIONS_LABELS = {
     selected: "SELECTED TO FIT THE OUTCOME",
 };
 
-const OPERATIONS_LABELS_AR: typeof OPERATIONS_LABELS = {
+export const OPERATIONS_LABELS_AR: typeof OPERATIONS_LABELS = {
     challenge: "التحدي التشغيلي",
     defined: "محدد",
     outcome: "النتيجة المطلوبة",
