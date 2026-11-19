@@ -1,0 +1,138 @@
+// Home — "Estidam in the Media" (lead story + two supporting stories)
+// Card styles live in components/media/_media.scss; this file only lays out the section.
+
+.media_highlights {
+    position: relative;
+    padding: 0 0 110px;
+
+    .media_highlights_head {
+        padding-bottom: 40px;
+    }
+
+    .media_highlights_head_row {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 20px 40px;
+        margin-top: 0.75rem;
+    }
+
+    .media_highlights_head_copy {
+        max-width: 640px;
+    }
+
+    .media_highlights_desc {
+        margin: 14px 0 0;
+        color: #4b5563;
+        font-size: 15px;
+        font-weight: 400;
+    }
+
+    .media_highlights_cta {
+        display: inline-flex;
+        flex: none;
+        align-items: center;
+        gap: 10px;
+        min-height: 48px;
+        padding: 12px 22px;
+        border-radius: 12px;
+        background: var(--dark);
+        color: #fff;
+        font-size: 15px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: background-color 0.3s ease;
+
+        &:hover {
+            background: var(--blue);
+            color: #fff;
+
+            .media_highlights_cta_arrow {
+                transform: translateX(3px);
+            }
+        }
+
+        &:focus-visible {
+            outline: 2px solid var(--blue);
+            outline-offset: 3px;
+        }
+    }
+
+    .media_highlights_cta_arrow {
+        display: inline-flex;
+        transition: transform 0.3s ease;
+    }
+
+    .media_highlights_grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+        grid-template-rows: auto auto;
+        gap: 24px;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+
+        > li {
+            display: flex;
+            min-width: 0;
+        }
+
+        &.has_1 {
+            grid-template-columns: minmax(0, 1fr);
+        }
+
+        &.has_2 .media_highlights_lead {
+            grid-row: auto;
+        }
+    }
+
+    .media_highlights_lead {
+        grid-row: 1 / 3;
+    }
+
+    [dir="rtl"] & {
+        .media_highlights_cta_arrow {
+            transform: scaleX(-1);
+        }
+
+        .media_highlights_cta:hover .media_highlights_cta_arrow {
+            transform: scaleX(-1) translateX(3px);
+        }
+    }
+}
+
+@media screen and (max-width: 991px) {
+    .media_highlights {
+        padding-bottom: 80px;
+
+        .media_highlights_grid {
+            grid-template-columns: 1fr;
+        }
+
+        .media_highlights_lead {
+            grid-row: auto;
+        }
+
+        .media_card.is_lead .media_card_media {
+            flex: none;
+            min-height: 0;
+            aspect-ratio: 16 / 9;
+        }
+    }
+}
+
+@media screen and (max-width: 575px) {
+    .media_highlights {
+        .media_highlights_cta {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .media_highlights .media_highlights_cta_arrow {
+        transition: none;
+    }
+}

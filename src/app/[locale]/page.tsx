@@ -10,6 +10,7 @@ import HowWeDeliver from "@/components/home/HowWeDeliver/HowWeDeliver";
 import ExperienceProof from "@/components/home/ExperienceProof/ExperienceProof";
 import GrowthEcosystem from "@/components/home/GrowthEcosystem/GrowthEcosystem";
 import News from "@/components/home/News/News";
+import MediaHighlightsSection from "@/components/home/MediaHighlights/MediaHighlightsSection";
 import GetInTouch from "@/components/home/GetInTouch/GetInTouch";
 import Footer from "@/components/layout/Footer";
 import Navbar from "@/components/layout/Navbar/Navbar";
@@ -34,6 +35,7 @@ export default function Home() {
                 <GrowthEcosystem />
                 <Partners />
                 <News />
+                <MediaHighlightsSection />
                 <GetInTouch />
             </main>
 

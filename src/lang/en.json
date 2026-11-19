@@ -5,6 +5,7 @@
     "solutions": "Solutions",
     "products": "Products",
     "aiReadiness": "AI Readiness",
+    "media": "Estidam in the Media",
     "contact": "Contact"
   },
   "hero": {
@@ -1357,5 +1358,42 @@
     "phone": "+0685689696",
     "copyrightPrefix": "All rights for",
     "copyrightBrand": "Estidam"
+  },
+  "mediaSection": {
+    "badge": "MEDIA COVERAGE",
+    "title": "Estidam in the Media",
+    "description": "Explore media coverage highlighting Estidam's strategic partnerships, initiatives, and contributions to Hajj services, digital transformation, and operational excellence.",
+    "cta": "Explore All Coverage"
+  },
+  "mediaPage": {
+    "metaTitle": "Estidam in the Media | Estidam",
+    "metaDescription": "Media coverage documenting Estidam's partnerships, initiatives, and contributions to business innovation and serving the Guests of Allah.",
+    "badge": "MEDIA COVERAGE",
+    "title": "Estidam in the Media",
+    "subtitle": "Media coverage documenting Estidam's partnerships, initiatives, and contributions to business innovation and serving the Guests of Allah.",
+    "featuredLabel": "Featured coverage",
+    "filtersLabel": "Filter coverage by type",
+    "all": "All Coverage",
+    "searchLabel": "Search coverage",
+    "searchPlaceholder": "Search by headline or outlet",
+    "resultsCount": "{count, plural, =0 {No articles} one {# article} other {# articles}}",
+    "noResults": "No coverage matches your selection.",
+    "noResultsHint": "Try another category or clear the search.",
+    "reset": "Show all coverage",
+    "empty": "No coverage has been published yet. Check back soon."
+  },
+  "mediaCommon": {
+    "readArticle": "Read Article",
+    "opensNewTab": "(opens in a new tab)",
+    "sourceLanguage": {
+      "ar": "Article in Arabic",
+      "en": "Article in English"
+    },
+    "categories": {
+      "newspapers": "Newspapers & Publications",
+      "official": "Official Coverage",
+      "digital": "Digital & Social Media",
+      "company": "Official Company Update"
+    }
   }
 }
