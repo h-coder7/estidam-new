@@ -1,5 +1,7 @@
 /** Solutions Dial — Era Dial mechanics adapted for Estidam CMS slides. */
 
+import { createDialPhotoGl, type DialGlApi } from "./solutionsDialGl";
+
 export type DialSlide = {
     id: string;
     title: string;
@@ -33,13 +35,10 @@ const PRESETS: Record<string, [number, number]> = {
 
 const CFG = {
     autoplay: 4000,
-    wheelGap: 600,
-    photoMs: 700,
+    photoMs: 900,
     lineOut: 180,
     lineIn: 420,
     lineGap: 80,
-    digitGap: 40,
-    knobHover: 1.08,
 };
 
 export function reelImageSrc(src?: string) {
@@ -58,7 +57,7 @@ export function reelImageSrc(src?: string) {
 
 export function createSolutionsDial(
     root: HTMLElement,
-    opts: { start?: number; rtl?: boolean; solutionWord: string },
+    opts: { start?: number; rtl?: boolean },
 ): DialApi {
     const REDUCED = matchMedia("(prefers-reduced-motion: reduce)").matches;
     const MOUSE = matchMedia("(hover: hover) and (pointer: fine)");
@@ -75,18 +74,13 @@ export function createSolutionsDial(
     let dragging = false;
     let drag: { id: number; a: number; p: number; x: number; y: number; moved: boolean } | null = null;
     let suppress = false;
-    let wheelAt = 0;
-    let hoverKnob = false;
     let z = 1;
     let destroyed = false;
 
     const pause = {
-        hover: false,
-        focus: false,
         drag: false,
         off: true,
         hidden: document.hidden,
-        user: false,
     };
     const playing = () => !REDUCED && !Object.values(pause).some(Boolean);
 
@@ -153,9 +147,9 @@ export function createSolutionsDial(
 
     const dial = root.querySelector<HTMLElement>("[data-dial]")!;
     const ring = root.querySelector<HTMLElement>("[data-ring]")!;
-    const knob = root.querySelector<HTMLElement>("[data-knob]")!;
-    const knobIn = knob.querySelector<HTMLElement>(".knob__in")!;
     const band = root.querySelector<HTMLElement>(".band")!;
+    const photoEl = root.querySelector<HTMLElement>("[data-photo]");
+    const photoCanvas = root.querySelector<HTMLCanvasElement>("[data-photo-gl]");
     const photos = [...root.querySelectorAll<HTMLImageElement>(".photo img")];
     const labels = [...ring.querySelectorAll<HTMLElement>(".label")];
     const segs = [...root.querySelectorAll<HTMLElement>(".seg")];
@@ -164,8 +158,15 @@ export function createSolutionsDial(
     const caps = [...root.querySelectorAll<HTMLElement>('[data-lines="caption"] > span')];
     const counter = root.querySelector<HTMLElement>("[data-counter]");
     const liveEl = root.querySelector<HTMLElement>("[data-live]");
-    const cols = [...root.querySelectorAll<HTMLElement>(".yr")];
     const titles = eras.map((e) => e.querySelector("h3")?.textContent?.trim() || "");
+
+    const imageUrls = photos.map((img) => img.dataset.src || img.currentSrc || img.src || "");
+    let photoGl: DialGlApi | null = null;
+    if (photoCanvas && !REDUCED) {
+        photoGl = createDialPhotoGl(photoCanvas, imageUrls, { start, duration: CFG.photoMs });
+        if (photoGl.ready) photoEl?.classList.add("is-gl");
+        else photoGl = null;
+    }
 
     let G = { a0: 0, dir: 1, step: 14, rem: 16, bandIn: 0, bandOut: 0, mobile: false };
 
@@ -192,46 +193,6 @@ export function createSolutionsDial(
         return [r.left, r.top] as const;
     };
 
-    let widths: number[] = [];
-    function measure() {
-        const probe = cols[0]?.querySelector(".yr__s");
-        if (!probe) return;
-        widths = [...probe.children].map((s) => {
-            const r = document.createRange();
-            r.selectNodeContents(s);
-            return r.getBoundingClientRect().width;
-        });
-    }
-
-    const digitSprings = cols.map((col, j) => {
-        const sEl = col.querySelector<HTMLElement>(".yr__s")!;
-        const startDigit = Number(String(start + 1).padStart(2, "0")[j] || 0);
-        return spring(startDigit, "default", (v) => {
-            sEl.style.setProperty("--d", String(v));
-            if (widths.length) {
-                const a = Math.max(0, Math.min(9, Math.floor(v)));
-                const b = Math.min(9, a + 1);
-                const t = v - a;
-                col.style.width = `${widths[a] + (widths[b] - widths[a]) * t}px`;
-            }
-        });
-    });
-
-    function setIndexDigits(i: number) {
-        const y = String(i + 1).padStart(2, "0");
-        let k = 0;
-        for (let j = cols.length - 1; j >= 0; j--) {
-            const d = Number(y[j] || 0);
-            const s = digitSprings[j];
-            if (!s || s.target === d) continue;
-            if (REDUCED) {
-                s.jump(d);
-                continue;
-            }
-            setTimeout(() => s.to(d), k++ * CFG.digitGap);
-        }
-    }
-
     function swap(list: HTMLElement[], from: number, to: number, order: number) {
         const a = list[from];
         const b = list[to];
@@ -240,12 +201,19 @@ export function createSolutionsDial(
             el.getAnimations({ subtree: true }).forEach((x) => x.cancel());
             el.style.visibility = "";
             el.style.opacity = "";
+            el.style.transform = "";
+            [...el.children].forEach((child) => {
+                const c = child as HTMLElement;
+                c.getAnimations().forEach((x) => x.cancel());
+                c.style.visibility = "";
+                c.style.opacity = "";
+                c.style.transform = "";
+            });
         };
         list.forEach((el) => {
             kill(el);
-            if (el !== b) el.classList.remove("is-on");
+            el.classList.toggle("is-on", el === b);
         });
-        b.classList.add("is-on");
         if (REDUCED || !a) return;
         const partsA = a.matches(".era") ? [...a.children] : [a];
         const partsB = b.matches(".era") ? [...b.children] : [b];
@@ -286,6 +254,10 @@ export function createSolutionsDial(
     }
 
     function photo(from: number, to: number) {
+        if (photoGl?.ready) {
+            photoGl.go(from, to);
+            return;
+        }
         const b = photos[to];
         if (!b) return;
         b.classList.add("is-on");
@@ -311,7 +283,6 @@ export function createSolutionsDial(
         }
         const from = active;
         active = i;
-        setIndexDigits(i);
         photo(from, i);
         if (metas.length) swap(metas, from, i, 3);
         swap(eras, from, i, 0);
@@ -329,8 +300,6 @@ export function createSolutionsDial(
         if (counter) {
             counter.textContent = `${String(i + 1).padStart(2, "0")} / ${String(N).padStart(2, "0")}`;
         }
-        knob.setAttribute("aria-valuenow", String(i + 1));
-        knob.setAttribute("aria-valuetext", `${String(i + 1).padStart(2, "0")} · ${titles[i]}`);
         fill = 0;
     }
 
@@ -358,8 +327,8 @@ export function createSolutionsDial(
 
     const isMouse = (e: PointerEvent) => MOUSE.matches && e.pointerType === "mouse";
 
+    // Restart the autoplay countdown after manual navigation
     const stopAuto = () => {
-        if (!MOUSE.matches) pause.user = true;
         fill = 0;
         wake();
     };
@@ -374,10 +343,9 @@ export function createSolutionsDial(
         if (e.button > 0 || (e.target as HTMLElement).closest?.(".label")) return;
         const [cx, cy] = center();
         const r = Math.hypot(e.clientX - cx, e.clientY - cy);
-        const onKnob = knob.contains(e.target as Node);
         const inRing = r > G.bandIn - 24 && r < G.bandOut + 24;
         const onPhoto = G.mobile && r < G.bandIn;
-        if (!onKnob && !inRing && !onPhoto) return;
+        if (!inRing && !onPhoto) return;
         drag = {
             id: e.pointerId,
             a: angleAt(e.clientX, e.clientY),
@@ -401,7 +369,6 @@ export function createSolutionsDial(
             drag.moved = true;
             dragging = true;
             root.classList.add("is-dragging");
-            knobScale.to(CFG.knobHover, "stiff");
             pause.drag = true;
         }
         let d = angleAt(e.clientX, e.clientY) - drag.a;
@@ -423,42 +390,12 @@ export function createSolutionsDial(
             pause.drag = false;
             const v = pos.value + pos.v * 0.12;
             go(Math.round(Math.max(0, Math.min(N - 1, v))));
-            if (!hoverKnob) knobScale.to(1, "stiff");
             suppress = true;
             setTimeout(() => {
                 suppress = false;
             }, 0);
         }
     }
-
-    const knobScale = spring(1, "stiff", (v) => knobIn.style.setProperty("--ks", String(v)));
-
-    const onWheel = (e: WheelEvent) => {
-        if (G.mobile) return;
-        const d = Math.sign(e.deltaY || e.deltaX);
-        if (!d) return;
-        const next = pos.target + d;
-        if (next < 0 || next > N - 1) return;
-        e.preventDefault();
-        const now = performance.now();
-        if (now - wheelAt < CFG.wheelGap) return;
-        wheelAt = now;
-        go(next);
-        stopAuto();
-    };
-
-    const onKey = (e: KeyboardEvent) => {
-        const k = e.key;
-        let t: number | null = null;
-        if (k === "ArrowRight" || k === "ArrowDown") t = Math.min(N - 1, pos.target + 1);
-        if (k === "ArrowLeft" || k === "ArrowUp") t = Math.max(0, pos.target - 1);
-        if (k === "Home") t = 0;
-        if (k === "End") t = N - 1;
-        if (t === null) return;
-        e.preventDefault();
-        go(t);
-        stopAuto();
-    };
 
     const cleanups: Array<() => void> = [];
 
@@ -476,8 +413,6 @@ export function createSolutionsDial(
         },
         true,
     );
-    dial.addEventListener("wheel", onWheel, { passive: false });
-    knob.addEventListener("keydown", onKey);
 
     labels.forEach((l) => {
         const fn = () => {
@@ -504,26 +439,6 @@ export function createSolutionsDial(
         };
         s.addEventListener("click", fn);
         cleanups.push(() => s.removeEventListener("click", fn));
-    });
-
-    // Hover polish
-    const onKnobEnter = (e: PointerEvent) => {
-        if (!isMouse(e)) return;
-        hoverKnob = true;
-        knobScale.to(CFG.knobHover, "stiff");
-    };
-    const onKnobLeave = (e: PointerEvent) => {
-        if (!isMouse(e)) return;
-        hoverKnob = false;
-        if (!dragging) knobScale.to(1, "stiff");
-    };
-    knob.addEventListener("pointerenter", onKnobEnter);
-    knob.addEventListener("pointerleave", onKnobLeave);
-    knob.addEventListener("focus", () => {
-        if (knob.matches(":focus-visible")) knobScale.to(CFG.knobHover, "stiff");
-    });
-    knob.addEventListener("blur", () => {
-        if (!hoverKnob) knobScale.to(1, "stiff");
     });
 
     labels.forEach((l) => {
@@ -580,33 +495,14 @@ export function createSolutionsDial(
     });
 
     const loop = (dt: number) => {
-        const seg = segs[active];
-        if (!seg) return;
-        if (!playing()) {
-            seg.style.setProperty("--fill", "1");
-            return;
-        }
+        if (!playing()) return;
         fill += dt / CFG.autoplay;
-        seg.style.setProperty("--fill", Math.min(1, fill).toFixed(4));
         if (fill >= 1) {
             fill = 0;
             go(active === N - 1 ? 0 : active + 1, "gentle", true);
         }
     };
     frames.add(loop);
-
-    const onPointerEnter = (e: PointerEvent) => {
-        if (isMouse(e)) setPause("hover", true);
-    };
-    const onPointerLeave = (e: PointerEvent) => {
-        if (isMouse(e)) setPause("hover", false);
-    };
-    root.addEventListener("pointerenter", onPointerEnter);
-    root.addEventListener("pointerleave", onPointerLeave);
-    root.addEventListener("focusin", (e) => {
-        if ((e.target as HTMLElement).matches?.(":focus-visible")) setPause("focus", true);
-    });
-    root.addEventListener("focusout", () => setPause("focus", false));
 
     const io = new IntersectionObserver(([en]) => setPause("off", !en.isIntersecting), {
         threshold: 0.25,
@@ -622,8 +518,7 @@ export function createSolutionsDial(
     const onResize = () => {
         geo();
         pos.onUpdate(pos.value);
-        measure();
-        digitSprings.forEach((s) => s.onUpdate(s.value));
+        photoGl?.resize();
     };
     addEventListener("resize", onResize);
 
@@ -643,18 +538,7 @@ export function createSolutionsDial(
         l.tabIndex = n === start ? -1 : 0;
     });
     if (counter) counter.textContent = `${String(start + 1).padStart(2, "0")} / ${String(N).padStart(2, "0")}`;
-    knob.setAttribute("aria-valuemin", "1");
-    knob.setAttribute("aria-valuemax", String(N));
-    knob.setAttribute("aria-valuenow", String(start + 1));
-    knob.setAttribute("aria-valuetext", `${String(start + 1).padStart(2, "0")} · ${titles[start]}`);
-    knob.setAttribute("aria-label", opts.solutionWord);
 
-    const fontsReady = document.fonts?.ready ?? Promise.resolve();
-    fontsReady.then(() => {
-        if (destroyed) return;
-        measure();
-        digitSprings.forEach((s) => s.onUpdate(s.value));
-    });
     wake();
 
     return {
@@ -669,12 +553,11 @@ export function createSolutionsDial(
             dial.removeEventListener("pointerdown", onDown);
             dial.removeEventListener("pointermove", onMove);
             dial.removeEventListener("pointerup", onUp);
-            dial.removeEventListener("wheel", onWheel);
-            knob.removeEventListener("keydown", onKey);
-            root.removeEventListener("pointerenter", onPointerEnter);
-            root.removeEventListener("pointerleave", onPointerLeave);
             cleanups.forEach((fn) => fn());
             root.classList.remove("is-dragging");
+            photoGl?.destroy();
+            photoGl = null;
+            photoEl?.classList.remove("is-gl");
         },
     };
 }

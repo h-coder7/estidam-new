@@ -14,35 +14,37 @@
     --margin: 2.5rem;
     --pad: 2.5rem;
     --max: 85rem;
-    --text-h2: clamp(2.125rem, 4.2vw, 3.5rem);
+    --text-h2: clamp(2.25rem, 3.4vw, 3.0625rem); // ~36px → 49px
     --text-h3: clamp(1.5rem, 2.6vw, 2.4rem);
     --text-body: 1.125rem;
     --text-s: 0.875rem;
-    --text-year: clamp(5.5rem, 12vw, 12rem);
-    --a0: 0;
+    --head-max: min(38rem, 55vw);
+    --a0: 180;
     --dir: 1;
     --step: 14;
     --cx: -2.5rem;
     --cy: calc(50% + 1.25rem);
-    --photo-r: 38rem;
-    --rim-r: 38.75rem;
-    --lane-r: 40.25rem;
+    --photo-r: 41.8rem;
+    --rim-r: 42.625rem;
+    --lane-r: 44.275rem;
     --lane-w: 0.375rem;
-    --band-in: 39.25rem;
-    --band-out: 45.5rem;
-    --tick-r0: 40.75rem;
-    --era-r0: 39.5rem;
-    --label-r: 47.75rem;
-    --knob-r: 42.25rem;
+    --band-in: 43.175rem;
+    --band-out: 50.05rem;
+    --tick-r0: 44.825rem;
+    --era-r0: 43.45rem;
+    --label-r: 52.525rem;
+    --knob-r: 46.475rem;
     --knob: 5.25rem;
-    --axis-r0: 36rem;
-    --axis-r1: 51rem;
+    --axis-r0: 39.6rem;
+    --axis-r1: 56.1rem;
     --story-w: 27.5rem;
     --seg: 2rem;
     --ctrl-gap: 2rem;
     --caption-w: 22rem;
 
     position: relative;
+    margin: 15px;
+    border-radius: 30px;
     z-index: 2;
     overflow: clip;
     background:
@@ -115,7 +117,8 @@
     // ---- Dial ----
     .dial {
         position: absolute;
-        left: var(--cx);
+        left: auto;
+        right: var(--cx);
         top: var(--cy);
         width: 0;
         height: 0;
@@ -141,6 +144,16 @@
         isolation: isolate;
         background: #0a1628;
 
+        .photo__gl {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            display: block;
+            pointer-events: none;
+            z-index: 1;
+        }
+
         img {
             position: absolute;
             inset: 0;
@@ -150,10 +163,16 @@
             display: block;
             user-select: none;
             -webkit-user-drag: none;
+            z-index: 0;
         }
 
         img:not(.is-on) {
             visibility: hidden;
+        }
+
+        &.is-gl img {
+            visibility: hidden;
+            pointer-events: none;
         }
 
         &::after {
@@ -162,8 +181,9 @@
             inset: 0;
             z-index: 9;
             pointer-events: none;
+            // Darken the outer (right) side so story text stays readable over the dial
             background: linear-gradient(
-                to right,
+                to left,
                 rgba(7, 18, 34, 0.94) 48%,
                 rgba(7, 18, 34, 0) 96%
             );
@@ -173,21 +193,22 @@
     .rim {
         width: calc(2 * var(--rim-r) + 1px);
         height: calc(2 * var(--rim-r) + 1px);
-        border: 1px solid var(--hair);
+        border: 1px solid rgba(244, 246, 250, 0.18);
         pointer-events: none;
     }
 
     .band {
         width: calc(2 * var(--band-out));
         height: calc(2 * var(--band-out));
-        border: calc(var(--band-out) - var(--band-in)) solid color-mix(in srgb, var(--ring) 82%, #0b1a33);
+        // Keep the hit area; strip itself is invisible — ticks/lane carry the look
+        border: calc(var(--band-out) - var(--band-in)) solid transparent;
         cursor: grab;
     }
 
     .lane {
         width: calc(2 * var(--lane-r) + var(--lane-w));
         height: calc(2 * var(--lane-r) + var(--lane-w));
-        border: var(--lane-w) solid rgba(41, 92, 199, 0.45);
+        border: 1px solid rgba(244, 246, 250, 0.22);
         pointer-events: none;
     }
 
@@ -208,18 +229,18 @@
 
     .tick {
         width: calc(var(--band-out) - var(--tick-r0));
-        height: 2px;
-        margin-top: -1px;
-        background: rgba(22, 145, 208, 0.55);
+        height: 1px;
+        margin-top: -0.5px;
+        background: rgba(244, 246, 250, 0.16);
         transform: rotate(calc((var(--a0) + var(--dir) * var(--step) * 2 + var(--k) * 2.5) * 1deg))
             translateX(var(--tick-r0));
     }
 
     .etick {
         width: calc(var(--band-out) - var(--era-r0));
-        height: 2px;
-        margin-top: -1px;
-        background: rgba(244, 246, 250, 0.45);
+        height: 1px;
+        margin-top: -0.5px;
+        background: rgba(244, 246, 250, 0.38);
         transform: rotate(calc((var(--a0) + var(--dir) * var(--step) * var(--i)) * 1deg))
             translateX(var(--era-r0));
     }
@@ -245,7 +266,9 @@
     }
 
     .axis {
-        left: var(--axis-r0);
+        // Point inward (left) toward content when dial sits on the right
+        left: auto;
+        right: var(--axis-r0);
         top: -1px;
         width: calc(var(--axis-r1) - var(--axis-r0));
         height: 2px;
@@ -254,11 +277,12 @@
     }
 
     .knob {
-        left: var(--knob-r);
+        left: auto;
+        right: var(--knob-r);
         top: 0;
         width: var(--knob);
         height: var(--knob);
-        margin: calc(var(--knob) / -2) 0 0 calc(var(--knob) / -2);
+        margin: calc(var(--knob) / -2) calc(var(--knob) / -2) 0 0;
         border-radius: 50%;
         background: var(--accent);
         color: var(--on-accent);
@@ -295,17 +319,29 @@
     }
 
     // ---- Content ----
-    .head {
+    .copy {
         position: absolute;
         top: var(--pad);
-        right: var(--margin);
+        left: var(--margin);
+        right: auto;
         z-index: 2;
         display: flex;
         flex-direction: column;
-        gap: 0.75rem;
-        align-items: flex-end;
-        text-align: right;
-        max-width: min(28rem, 46vw);
+        align-items: flex-start;
+        gap: 1.75rem;
+        width: var(--head-max);
+        max-width: calc(100% - 2 * var(--margin));
+        text-align: left;
+        padding: 50px 0;
+    }
+
+    .head {
+        display: flex;
+        flex-direction: column;
+        align-items: inherit;
+        gap: 0.85rem;
+        width: 100%;
+        text-align: inherit;
     }
 
     .badge {
@@ -324,15 +360,22 @@
 
     .h2 {
         margin: 0;
+        max-width: 100%;
         font-family: var(--font-heading);
         font-weight: 700;
         font-size: var(--text-h2);
         line-height: 1.08;
         letter-spacing: -0.03em;
-        text-wrap: balance;
+        color: var(--ink);
+    }
+
+    .h2__main {
+        display: block;
     }
 
     .h2__accent {
+        display: block;
+        margin-top: 0.06em;
         color: var(--accent);
         font-weight: 600;
     }
@@ -340,6 +383,8 @@
     .meta {
         margin: 0;
         color: var(--muted);
+        font-size: var(--text-s);
+        letter-spacing: 0.06em;
     }
 
     .meta > span,
@@ -347,47 +392,9 @@
         display: block;
     }
 
-    .year {
-        position: absolute;
-        right: calc(var(--margin) - 0.08em);
-        top: var(--cy);
-        margin-top: -0.47em;
-        z-index: 1;
-        display: flex;
-        font-family: var(--font-heading);
-        font-weight: 700;
-        font-size: var(--text-year);
-        line-height: 1;
-        letter-spacing: -0.04em;
-        color: rgba(244, 246, 250, 0.92);
-        user-select: none;
-        pointer-events: none;
-    }
-
-    .yr {
-        position: relative;
-        display: block;
-        height: 1em;
-        clip-path: inset(0 -0.5em);
-    }
-
-    .yr__s {
-        display: block;
-        transform: translateY(calc(var(--d, 0) * -1em));
-    }
-
-    .yr__s > span {
-        display: block;
-        height: 1em;
-        text-align: center;
-    }
-
     .story {
-        position: absolute;
-        left: var(--margin);
-        top: var(--cy);
-        transform: translateY(-50%);
-        width: var(--story-w);
+        position: relative;
+        width: 100%;
         z-index: 2;
     }
 
@@ -449,7 +456,8 @@
 
     .caption {
         position: absolute;
-        left: var(--margin);
+        left: auto;
+        right: var(--margin);
         bottom: var(--pad);
         z-index: 2;
         margin: 0;
@@ -460,7 +468,8 @@
 
     .controls {
         position: absolute;
-        right: var(--margin);
+        left: var(--margin);
+        right: auto;
         bottom: var(--pad);
         z-index: 2;
         display: flex;
@@ -575,80 +584,68 @@
         }
     }
 
-    // ---- RTL ----
+    // ---- RTL: photo on the left, content mirrored ----
     &[data-rtl="1"] {
+        --a0: 0;
+
         .dial {
-            left: auto;
-            right: var(--cx);
+            left: var(--cx);
+            right: auto;
         }
 
         .photo::after {
             background: linear-gradient(
-                to left,
+                to right,
                 rgba(7, 18, 34, 0.94) 48%,
                 rgba(7, 18, 34, 0) 96%
             );
         }
 
-        .head {
-            right: auto;
-            left: var(--margin);
-            align-items: flex-start;
-            text-align: left;
-        }
-
-        .year {
-            right: auto;
-            left: calc(var(--margin) - 0.08em);
-        }
-
-        .story {
+        .copy {
             left: auto;
             right: var(--margin);
+            align-items: flex-end;
+            text-align: right;
         }
 
         .caption {
+            left: var(--margin);
+            right: auto;
+        }
+
+        .controls {
             left: auto;
             right: var(--margin);
         }
 
-        .controls {
-            right: auto;
-            left: var(--margin);
-        }
-
         .axis {
-            left: auto;
-            right: var(--axis-r0);
+            left: var(--axis-r0);
+            right: auto;
         }
 
         .knob {
-            left: auto;
-            right: var(--knob-r);
-            margin: calc(var(--knob) / -2) calc(var(--knob) / -2) 0 0;
-        }
-
-        .ring > * {
-            transform-origin: 0 50%;
+            left: var(--knob-r);
+            right: auto;
+            margin: calc(var(--knob) / -2) 0 0 calc(var(--knob) / -2);
         }
     }
 
     @media (max-width: 1439px) {
         --margin: 1.25rem;
         --cy: 50%;
-        --photo-r: 30rem;
-        --rim-r: 30.625rem;
-        --lane-r: 31.875rem;
+        --photo-r: 33rem;
+        --rim-r: 33.6875rem;
+        --lane-r: 35.0625rem;
         --lane-w: 0.3125rem;
-        --band-in: 31rem;
-        --band-out: 36rem;
-        --tick-r0: 31.625rem;
-        --era-r0: 30.5rem;
-        --label-r: 38rem;
-        --knob-r: 33.5rem;
+        --band-in: 34.1rem;
+        --band-out: 39.6rem;
+        --tick-r0: 34.7875rem;
+        --era-r0: 33.55rem;
+        --label-r: 41.8rem;
+        --knob-r: 36.85rem;
         --knob: 4.75rem;
-        --axis-r0: 28.5rem;
-        --axis-r1: 37.5rem;
+        --axis-r0: 31.35rem;
+        --axis-r1: 41.25rem;
         --story-w: 23rem;
         --seg: 1.25rem;
         --ctrl-gap: 1.5rem;
@@ -661,13 +658,13 @@
         --step: 12;
         --cx: 50%;
         --cy: -10rem;
-        --band-out: 34rem;
-        --tick-r0: 31.25rem;
-        --label-r: 36rem;
-        --knob-r: 32.5rem;
+        --band-out: 37.4rem;
+        --tick-r0: 34.375rem;
+        --label-r: 39.6rem;
+        --knob-r: 35.75rem;
         --knob: 4.25rem;
-        --axis-r0: 30rem;
-        --axis-r1: 36.5rem;
+        --axis-r0: 33rem;
+        --axis-r1: 40.15rem;
         --dial-space: 22rem;
         --gap: 2.5rem;
         --story-w: 100%;
@@ -681,35 +678,25 @@
             padding: var(--pad) var(--margin);
         }
 
-        .head {
+        .copy {
             position: relative;
             top: auto;
             right: auto;
             left: auto;
-            align-items: flex-start;
-            text-align: start;
+            width: 100%;
             max-width: none;
             min-height: var(--dial-space);
+            align-items: flex-start;
+            text-align: start;
+            gap: var(--gap);
             pointer-events: none;
-        }
-
-        .year {
-            position: relative;
-            right: auto;
-            left: auto;
-            top: auto;
-            margin: 0 auto;
         }
 
         .story {
             position: relative;
-            left: auto;
-            right: auto;
-            top: auto;
-            transform: none;
-            margin-top: var(--gap);
             width: auto;
             max-width: 36rem;
+            pointer-events: auto;
         }
 
         .controls {
@@ -727,6 +714,12 @@
             right: auto;
             bottom: auto;
             margin-top: 1.5rem;
+        }
+
+        .dial {
+            left: var(--cx);
+            right: auto;
+            touch-action: pan-y;
         }
 
         .axis {
@@ -757,13 +750,10 @@
             display: block;
         }
 
-        .dial {
-            touch-action: pan-y;
-        }
-
         &[data-rtl="1"] {
-            .head,
-            .story,
+            --a0: 90;
+
+            .copy,
             .caption,
             .controls {
                 left: auto;
@@ -774,6 +764,17 @@
                 left: var(--cx);
                 right: auto;
             }
+
+            .axis {
+                left: -1px;
+                right: auto;
+            }
+
+            .knob {
+                left: 0;
+                right: auto;
+                margin: calc(var(--knob) / -2) 0 0 calc(var(--knob) / -2);
+            }
         }
     }
 
@@ -781,19 +782,19 @@
         --pad: 3.5rem;
         --step: 15;
         --cy: 2.5rem;
-        --photo-r: 14.5rem;
-        --rim-r: 15rem;
-        --lane-r: 15.875rem;
+        --photo-r: 15.95rem;
+        --rim-r: 16.5rem;
+        --lane-r: 17.4625rem;
         --lane-w: 0.25rem;
-        --band-in: 15.25rem;
-        --band-out: 17.5rem;
-        --tick-r0: 15.75rem;
-        --era-r0: 14.875rem;
-        --label-r: 18.875rem;
-        --knob-r: 16.375rem;
+        --band-in: 16.775rem;
+        --band-out: 19.25rem;
+        --tick-r0: 17.325rem;
+        --era-r0: 16.3625rem;
+        --label-r: 20.7625rem;
+        --knob-r: 18.0125rem;
         --knob: 3.75rem;
-        --axis-r0: 13.5rem;
-        --axis-r1: 19.25rem;
+        --axis-r0: 14.85rem;
+        --axis-r1: 21.175rem;
         --dial-space: 18.5rem;
         --gap: 2rem;
         --seg: 0.85rem;

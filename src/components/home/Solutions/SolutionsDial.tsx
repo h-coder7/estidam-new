@@ -52,13 +52,9 @@ export default function SolutionsDial({ slides, badge, titleStrong, titleMuted }
     useEffect(() => {
         const root = rootRef.current;
         if (!root || !N) return;
-        const api = createSolutionsDial(root, {
-            start,
-            rtl,
-            solutionWord: t("itemLabel"),
-        });
+        const api = createSolutionsDial(root, { start, rtl });
         return () => api.destroy();
-    }, [N, start, rtl, t, view]);
+    }, [N, start, rtl, view]);
 
     if (!N) return null;
 
@@ -75,12 +71,14 @@ export default function SolutionsDial({ slides, badge, titleStrong, titleMuted }
         >
             <div className="ed__wrap">
                 <div className="dial" data-dial>
-                    <div className="circ photo" aria-hidden="true">
+                    <div className="circ photo" aria-hidden="true" data-photo>
+                        <canvas className="photo__gl" data-photo-gl />
                         {view.map((slide, i) => (
                             // eslint-disable-next-line @next/next/no-img-element
                             <img
                                 key={slide.id}
                                 data-i={i}
+                                data-src={reelImageSrc(slide.image) || ""}
                                 src={reelImageSrc(slide.image) || undefined}
                                 alt=""
                                 draggable={false}
@@ -112,110 +110,55 @@ export default function SolutionsDial({ slides, badge, titleStrong, titleMuted }
                             </button>
                         ))}
                     </div>
-                    <i className="axis" aria-hidden="true" />
-                    <div
-                        className="knob"
-                        role="slider"
-                        tabIndex={0}
-                        aria-label={t("itemLabel")}
-                        aria-valuemin={1}
-                        aria-valuemax={N}
-                        aria-valuenow={start + 1}
-                        data-knob
-                    >
-                        <span className="knob__in">
-                            <svg className="v" viewBox="0 0 12 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-                                <path d="M0 6L6 0L12 6" />
-                                <path d="M0 18L6 24L12 18" />
-                            </svg>
-                            <svg className="h" viewBox="0 0 24 12" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-                                <path d="M6 0L0 6L6 12" />
-                                <path d="M18 0L24 6L18 12" />
-                            </svg>
-                        </span>
+                </div>
+
+                <div className="copy">
+                    <header className="head">
+                        <p className="badge">{badge}</p>
+                        <h2 className="h2" id="solutions-title">
+                            <span className="h2__main">{mainTitle}</span>
+                            {accentTitle ? <span className="h2__accent">{accentTitle}</span> : null}
+                        </h2>
+                        <p className="meta mono stack" data-lines="meta">
+                            {view.map((_, i) => (
+                                <span key={`m${i}`} className={i === start ? "is-on" : undefined}>
+                                    {t("itemLabel")} {String(i + 1).padStart(2, "0")} / {String(N).padStart(2, "0")}
+                                </span>
+                            ))}
+                        </p>
+                    </header>
+
+                    <div className="story stack" data-story>
+                        {view.map((slide, i) => {
+                            const title =
+                                slide.title || `${slide.titleStrong} ${slide.titleMuted}`.trim() || t("itemLabel");
+                            return (
+                                <article
+                                    className={`era${i === start ? " is-on" : ""}`}
+                                    data-year={String(i + 1).padStart(2, "0")}
+                                    key={slide.id}
+                                >
+                                    <h3 className="h3">{title}</h3>
+                                    {slide.text ? <p className="body">{slide.text}</p> : null}
+                                    {slide.highlight ? (
+                                        <dl className="stats">
+                                            <div className="stat">
+                                                <dd>{slide.highlight}</dd>
+                                                <dt>{t("itemLabel")}</dt>
+                                            </div>
+                                        </dl>
+                                    ) : null}
+                                </article>
+                            );
+                        })}
                     </div>
                 </div>
 
-                <header className="head">
-                    <p className="badge">{badge}</p>
-                    <h2 className="h2" id="solutions-title">
-                        <span className="h2__main">{mainTitle}</span>
-                        {accentTitle ? <span className="h2__accent"> {accentTitle}</span> : null}
-                    </h2>
-                    <p className="meta mono stack" data-lines="meta">
-                        {view.map((_, i) => (
-                            <span key={`m${i}`} className={i === start ? "is-on" : undefined}>
-                                {t("itemLabel")} {String(i + 1).padStart(2, "0")} / {String(N).padStart(2, "0")}
-                            </span>
-                        ))}
-                    </p>
-                </header>
-
-                <div className="year" aria-hidden="true" data-year>
-                    {[0, 1].map((j) => {
-                        const digit = Number(String(start + 1).padStart(2, "0")[j] || 0);
-                        return (
-                            <span className="yr" key={`yr${j}`}>
-                                <span className="yr__s" style={{ ["--d" as string]: digit }}>
-                                    {Array.from({ length: 10 }, (_, d) => (
-                                        <span key={d}>{d}</span>
-                                    ))}
-                                </span>
-                            </span>
-                        );
-                    })}
-                </div>
                 <p className="sr-only" aria-live="polite" data-live>
                     {String(start + 1).padStart(2, "0")}
                 </p>
 
-                <div className="story stack" data-story>
-                    {view.map((slide, i) => {
-                        const title =
-                            slide.title || `${slide.titleStrong} ${slide.titleMuted}`.trim() || t("itemLabel");
-                        return (
-                            <article
-                                className={`era${i === start ? " is-on" : ""}`}
-                                data-year={String(i + 1).padStart(2, "0")}
-                                key={slide.id}
-                            >
-                                <h3 className="h3">{title}</h3>
-                                {slide.text ? <p className="body">{slide.text}</p> : null}
-                                {slide.highlight ? (
-                                    <dl className="stats">
-                                        <div className="stat">
-                                            <dd>{slide.highlight}</dd>
-                                            <dt>{t("itemLabel")}</dt>
-                                        </div>
-                                    </dl>
-                                ) : null}
-                            </article>
-                        );
-                    })}
-                </div>
-
                 <div className="controls">
-                    <div className="progress">
-                        <span className="counter mono" data-counter>
-                            {String(start + 1).padStart(2, "0")} / {String(N).padStart(2, "0")}
-                        </span>
-                        <div className="segs" role="group" aria-label={t("dotsLabel")}>
-                            {view.map((slide, i) => (
-                                <button
-                                    key={`s${slide.id}`}
-                                    type="button"
-                                    className={`seg${i < start ? " is-past" : ""}${i === start ? " is-on" : ""}`}
-                                    data-go={i}
-                                    aria-label={`${t("itemLabel")} ${String(i + 1).padStart(2, "0")}`}
-                                    aria-current={i === start ? "step" : undefined}
-                                >
-                                    <i>
-                                        <b />
-                                    </i>
-                                </button>
-                            ))}
-                        </div>
-                    </div>
                     <div className="arrows">
                         <button type="button" className="arrow" data-step="-1" aria-label={t("prev")}>
                             <span className="arrow__clip">
