@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { Link, usePathname, useRouter } from "@/i18n/routing";
 
+import NavbarGlass from "./NavbarGlass";
+
 import "./_Navbar.scss";
 
 type NavbarProps = {
@@ -44,6 +46,8 @@ export default function Navbar({ className = "" }: NavbarProps) {
         <nav
             className={`navbar navbar-expand-lg homeNav${scrolled ? " scrolled" : ""}${className ? ` ${className}` : ""}`}
         >
+            {!scrolled ? <NavbarGlass light={className.includes("inner-nav")} /> : null}
+
             <div className="container">
 
                 <Link className="navbar-brand logo-wh" href="/">

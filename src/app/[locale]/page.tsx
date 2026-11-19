@@ -1,6 +1,4 @@
 import Hero from "@/components/home/Hero/Hero";
-import SectorSteps from "@/components/home/SectorSteps/SectorSteps";
-import OperationsSteps from "@/components/home/OperationsSteps/OperationsSteps";
 import WhyEstidam from "@/components/home/WhyEstidam/WhyEstidam";
 import HajjJourney from "@/components/home/HajjJourney/HajjJourney";
 import Solutions from "@/components/home/Solutions/Solutions";
@@ -25,8 +23,6 @@ export default function Home() {
 
             <main>
                 <Hero />
-                <SectorSteps />
-                <OperationsSteps />
                 <WhyEstidam />
                 <Solutions />
                 <HajjJourney />

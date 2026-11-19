@@ -13,18 +13,87 @@
     z-index: 2;
     overflow: hidden;
     min-height: 100vh;
-    padding: 110px 0 90px;
+    padding: 100px 0 90px !important;
     color: var(--os-ink);
     background:
         radial-gradient(46% 40% at 82% 38%, rgba(41, 92, 199, 0.07), transparent 70%),
         linear-gradient(180deg, #eef2f7 0%, #ffffff 42%, var(--os-wash) 100%);
+
+    &.is-embedded {
+        overflow: visible;
+        min-height: 0;
+        padding: 28px 0 8px !important;
+        background: transparent;
+
+        .operations_steps_inner {
+            min-height: 0;
+            align-items: start;
+            gap: clamp(20px, 3vw, 40px);
+        }
+
+        .operations_steps_stage {
+            min-height: 0;
+            height: clamp(540px, 64vh, 620px);
+            padding-block: 40px;
+            padding-inline: 8px 36px;
+            overflow-x: visible;
+            overflow-y: hidden;
+            align-items: center;
+            box-sizing: border-box;
+            // Soft fade on top/bottom only — keep right side clear for tips/shadows
+            -webkit-mask-image: linear-gradient(
+                to bottom,
+                transparent 0,
+                #000 44px,
+                #000 calc(100% - 44px),
+                transparent 100%
+            );
+            mask-image: linear-gradient(
+                to bottom,
+                transparent 0,
+                #000 44px,
+                #000 calc(100% - 44px),
+                transparent 100%
+            );
+        }
+
+        .operations_steps_perspective {
+            min-height: 0;
+            width: 100%;
+            max-width: none;
+            overflow: visible;
+        }
+
+        .operations_steps_lane {
+            gap: 16px;
+            // Less yaw so cards don't get shaved on the right
+            transform: rotateX(10deg) rotateY(-10deg) rotateZ(-2deg);
+        }
+
+        .operations_steps_row {
+            grid-template-columns: 72px minmax(0, 1fr);
+            gap: 12px;
+        }
+
+        .operations_steps_number {
+            font-size: clamp(2.1rem, 4vw, 3.2rem);
+        }
+
+        .operations_steps_card {
+            overflow: visible;
+        }
+
+        .operations_steps_tip {
+            inset-inline-end: 10px;
+            max-width: min(220px, 58%);
+        }
+    }
 
     .operations_steps_inner {
         position: relative;
         display: grid;
         grid-template-columns: minmax(280px, 0.9fr) minmax(340px, 1.2fr);
         gap: clamp(28px, 4.5vw, 64px);
-        align-items: center;
         min-height: calc(100vh - 160px);
     }
 
@@ -186,7 +255,7 @@
 
     .operations_steps_card {
         position: relative;
-        padding: 18px 20px 20px;
+        padding: 16px 18px 17px;
         border: 1px solid rgba(11, 26, 51, 0.06);
         border-radius: 16px;
         background: #fff;
@@ -286,10 +355,21 @@
 
     &.is-static {
         min-height: 0;
+        overflow: visible;
 
         .operations_steps_inner {
             min-height: 0;
             align-items: start;
+        }
+
+        .operations_steps_stage {
+            height: auto;
+            overflow: visible;
+        }
+
+        .operations_steps_perspective {
+            height: auto;
+            display: block;
         }
 
         .operations_steps_lane {

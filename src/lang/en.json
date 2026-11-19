@@ -409,7 +409,7 @@
     "label": "Sector",
     "eyebrow": "01 / Sector",
     "title": "From sector complexity to operating clarity.",
-    "description": "We map how Hajj companies actually work across the season board — phases, service lanes, and the handoffs that keep operations moving.",
+    "description": "How Hajj companies move across the season board — phases, lanes, and handoffs.",
     "proofLabel": "Sector readiness",
     "proofValue": "01",
     "proofMetric": "Operating clarity",
@@ -418,16 +418,41 @@
     "proofNote": "Designed around seasonal reality",
     "hint": "Cards arrive row by row — phases keep cycling",
     "phasesLabel": "Season phases",
-    "lanesLabel": "Service lanes"
+    "lanesLabel": "Service lanes",
+    "practicalAi": {
+      "eyebrow": "02 / Practical AI",
+      "description": "Embed AI into processes, data, and decision support.",
+      "status": "In use",
+      "steps": [
+        {
+          "meta": "Sources",
+          "status": "Live",
+          "title": "Ops inputs",
+          "text": "Processes, ops data, and field signals."
+        },
+        {
+          "meta": "Analysis",
+          "status": "Staged",
+          "title": "Pattern review",
+          "text": "Normalise, detect patterns, compare to plan."
+        },
+        {
+          "meta": "Decision",
+          "status": "Reviewed",
+          "title": "Team decision",
+          "text": "Recommendation prepared with supporting context."
+        }
+      ]
+    }
   },
   "operationsSteps": {
-    "index": "02",
+    "index": "03",
     "label": "Operations",
-    "eyebrow": "02 / Operations",
+    "eyebrow": "03 / Operations",
     "title": "Start with the challenge, then choose the fit.",
     "description": "We define the operational challenge and the desired outcome first, then select the technology that fits — not the other way around.",
     "proofLabel": "Operating path",
-    "proofValue": "02",
+    "proofValue": "03",
     "proofMetric": "Outcome first",
     "proofScore": "Agreed",
     "proofScoreLabel": "Decision state",

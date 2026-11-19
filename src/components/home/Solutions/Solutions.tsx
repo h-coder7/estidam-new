@@ -1,6 +1,6 @@
 import { getLocale, getTranslations } from "next-intl/server";
 import { getSolutionCubeSlides, getSolutionsContent, headingFromCms } from "@/lib/api/home";
-import SolutionsJourney from "./SolutionsJourney";
+import SolutionsDial from "./SolutionsDial";
 
 import "./_Solutions.scss";
 
@@ -13,16 +13,12 @@ const Solutions = async () => {
     const badge = content?.eyebrow || t("badge");
 
     return (
-        <section className="solutions_journey" id="solutions" aria-labelledby="solutions-title">
-            <SolutionsJourney
-                slides={slides}
-                badge={badge}
-                titleStrong={heading.titleStrong}
-                titleMuted={heading.titleMuted}
-                itemLabel={t("itemLabel")}
-                stepsLabel={t("dotsLabel")}
-            />
-        </section>
+        <SolutionsDial
+            slides={slides}
+            badge={badge}
+            titleStrong={heading.titleStrong}
+            titleMuted={heading.titleMuted}
+        />
     );
 };
 

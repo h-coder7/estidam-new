@@ -1,5 +1,5 @@
 // =========================================================
-// Sector Steps — season board (phases × service lanes)
+// Sector Steps — season board in a compact white panel
 // =========================================================
 
 .sector_steps {
@@ -13,118 +13,172 @@
     position: relative;
     z-index: 2;
     overflow: hidden;
-    min-height: 0;
-    padding: 110px 0 90px;
+    padding: 88px 0 72px;
     color: var(--ss-ink);
     background:
-        radial-gradient(48% 42% at 78% 42%, rgba(22, 145, 208, 0.07), transparent 72%),
+        radial-gradient(48% 42% at 72% 36%, rgba(22, 145, 208, 0.07), transparent 72%),
         linear-gradient(180deg, #ffffff 0%, var(--ss-wash) 55%, #eef2f7 100%);
 
-    .sector_steps_inner {
+    &.is-embedded {
+        overflow: visible;
+        padding: 36px 0 0;
+        background: transparent;
+    }
+
+    .sector_steps_row {
+        --bs-gutter-x: 1.25rem;
+        --bs-gutter-y: 1.25rem;
+    }
+
+    .sector_steps_panel {
         position: relative;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        padding: clamp(22px, 3vw, 32px);
+        // border: 1px solid rgba(11, 26, 51, 0.06);
+        border-radius: 28px;
+        background: #fff;
+        // box-shadow:
+        //     0 1px 0 rgba(255, 255, 255, 0.95) inset,
+        //     0 22px 56px rgba(11, 26, 51, 0.08),
+        //     0 0 0 1px rgba(41, 92, 199, 0.03);
+    }
+
+    .sector_steps_panel_ai {
+        .sector_steps_copy {
+            max-width: none;
+            margin-bottom: 16px;
+        }
+    }
+
+    .practical_ai_lane {
         display: grid;
-        grid-template-columns: minmax(260px, 0.78fr) minmax(420px, 1.35fr);
-        gap: clamp(28px, 4vw, 56px);
+        gap: 10px;
+        flex: 1 1 auto;
+        align-content: start;
+    }
+
+    .practical_ai_card {
+        position: relative;
+        padding: 14px 14px 15px;
+        border: 1px solid rgba(11, 26, 51, 0.06);
+        border-radius: 14px;
+        background: linear-gradient(180deg, #ffffff 0%, #f7f9fc 100%);
+        box-shadow:
+            0 1px 0 rgba(255, 255, 255, 0.9) inset,
+            0 10px 24px rgba(11, 26, 51, 0.05),
+            8px 10px 0 rgba(41, 92, 199, 0.035);
+        opacity: 0.62;
+        transform: translateY(0);
+        transition:
+            opacity 0.35s ease,
+            border-color 0.35s ease,
+            box-shadow 0.35s ease,
+            transform 0.35s ease;
+
+        &.is-active {
+            opacity: 1;
+            border-color: rgba(41, 92, 199, 0.18);
+            box-shadow:
+                0 1px 0 rgba(255, 255, 255, 0.95) inset,
+                0 16px 32px rgba(11, 26, 51, 0.1),
+                10px 12px 0 rgba(22, 145, 208, 0.07);
+            transform: translateY(-2px);
+        }
+    }
+
+    .practical_ai_card_top {
+        display: flex;
         align-items: center;
-        min-height: 0;
+        justify-content: space-between;
+        gap: 10px;
+        margin-bottom: 8px;
+    }
+
+    .practical_ai_meta {
+        color: var(--ss-cyan);
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+    }
+
+    .practical_ai_status {
+        display: inline-flex;
+        align-items: center;
+        padding: 3px 8px;
+        border-radius: 999px;
+        background: rgba(41, 92, 199, 0.08);
+        color: var(--ss-blue);
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        white-space: nowrap;
+    }
+
+    .practical_ai_title {
+        margin: 0 0 4px;
+        color: var(--ss-blue);
+        font-family: var(--font-heading);
+        font-size: 0.98rem;
+        font-weight: 700;
+        line-height: 1.25;
+        letter-spacing: -0.02em;
+    }
+
+    .practical_ai_text {
+        margin: 0;
+        color: var(--ss-muted);
+        font-size: 12.5px;
+        line-height: 1.45;
     }
 
     .sector_steps_copy {
         position: relative;
         z-index: 2;
-        max-width: 420px;
+        max-width: 42ch;
+        margin-bottom: 22px;
     }
 
     .sector_steps_eyebrow {
         display: inline-flex;
         align-items: center;
-        gap: 10px;
-        margin: 0 0 20px;
+        gap: 8px;
+        margin: 0 0 8px;
         color: var(--ss-blue);
+        font-family: var(--font-heading);
         font-size: 12px;
         font-weight: 700;
         letter-spacing: 0.12em;
         text-transform: uppercase;
+        line-height: 1;
     }
 
     .sector_steps_dot {
-        width: 8px;
-        height: 8px;
+        width: 7px;
+        height: 7px;
         border-radius: 50%;
         background: var(--ss-cyan);
-        box-shadow: 0 0 0 4px rgba(22, 145, 208, 0.16);
-    }
-
-    .sector_steps_title {
-        margin: 0 0 16px;
-        font-family: var(--font-heading);
-        font-size: clamp(1.9rem, 3.2vw, 3rem);
-        font-weight: 700;
-        line-height: 1.1;
-        letter-spacing: -0.035em;
-        text-wrap: balance;
+        box-shadow: 0 0 0 3px rgba(22, 145, 208, 0.14);
     }
 
     .sector_steps_description {
-        margin: 0 0 24px;
-        max-width: 38ch;
+        margin: 0;
         color: var(--ss-muted);
-        font-size: 16px;
-        line-height: 1.7;
+        font-size: 13.5px;
+        line-height: 1.55;
+        max-width: 48ch;
     }
 
-    .sector_steps_proof {
-        display: grid;
-        gap: 12px;
-        max-width: 340px;
-        padding: 14px 16px 16px;
-        border: 1px solid rgba(41, 92, 199, 0.12);
-        border-radius: 16px;
-        background: rgba(255, 255, 255, 0.88);
-        box-shadow: 0 16px 36px rgba(11, 26, 51, 0.08);
-    }
-
-    .sector_steps_proof_top {
-        display: flex;
-        justify-content: space-between;
-        gap: 10px;
-        color: rgba(11, 26, 51, 0.5);
-        font-size: 11px;
-        font-weight: 600;
-        letter-spacing: 0.04em;
-        text-transform: uppercase;
-    }
-
-    .sector_steps_proof_metrics {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 10px;
-
-        strong {
-            display: block;
-            color: var(--ss-blue);
-            font-family: var(--font-heading);
-            font-size: clamp(1.8rem, 2.6vw, 2.35rem);
-            font-weight: 700;
-            line-height: 1;
-            letter-spacing: -0.04em;
-        }
-
-        span {
-            display: block;
-            margin-top: 5px;
-            color: var(--ss-muted);
-            font-size: 12px;
-        }
-    }
-
-    .sector_steps_legend {
-        display: flex;
+    .sector_steps_live {
+        display: inline-flex;
         align-items: baseline;
-        gap: 10px;
-        margin-top: 20px;
-        color: rgba(11, 26, 51, 0.45);
-        font-size: 12px;
+        gap: 8px;
+        margin: 12px 0 0;
+        color: rgba(11, 26, 51, 0.4);
+        font-size: 11px;
         font-weight: 600;
         letter-spacing: 0.06em;
         text-transform: uppercase;
@@ -132,18 +186,11 @@
         strong {
             color: var(--ss-blue);
             font-family: var(--font-heading);
-            font-size: 1.05rem;
+            font-size: 0.95rem;
             font-weight: 700;
             letter-spacing: -0.02em;
             text-transform: none;
         }
-    }
-
-    .sector_steps_hint {
-        margin: 10px 0 0;
-        color: rgba(11, 26, 51, 0.4);
-        font-size: 13px;
-        display: block;
     }
 
     .sector_steps_stage {
@@ -156,23 +203,22 @@
 
     .sector_steps_perspective {
         width: 100%;
-        perspective: 1600px;
+        perspective: 1500px;
         perspective-origin: 50% 45%;
     }
 
     .sector_steps_board {
         position: relative;
         width: 100%;
-        padding: 18px;
-        border: 1px solid rgba(11, 26, 51, 0.08);
-        border-radius: 22px;
-        background: rgba(255, 255, 255, 0.92);
+        padding: 14px;
+        border: 1px solid rgba(11, 26, 51, 0.06);
+        border-radius: 18px;
+        background: linear-gradient(180deg, #fbfcfe 0%, #f4f7fb 100%);
         box-shadow:
             0 1px 0 rgba(255, 255, 255, 0.9) inset,
-            0 24px 60px rgba(11, 26, 51, 0.1),
-            14px 18px 0 rgba(41, 92, 199, 0.045);
+            0 14px 36px rgba(11, 26, 51, 0.06);
         transform-style: preserve-3d;
-        transform: rotateX(8deg) rotateY(-10deg);
+        transform: rotateX(6deg) rotateY(-8deg);
         will-change: transform;
         backface-visibility: hidden;
     }
@@ -180,19 +226,19 @@
     .sector_steps_board_head,
     .sector_steps_lane_row {
         display: grid;
-        grid-template-columns: minmax(92px, 0.85fr) repeat(5, minmax(0, 1fr));
-        gap: 8px;
+        grid-template-columns: minmax(84px, 0.85fr) repeat(5, minmax(0, 1fr));
+        gap: 7px;
         align-items: stretch;
     }
 
     .sector_steps_board_head {
-        margin-bottom: 10px;
+        margin-bottom: 8px;
     }
 
     .sector_steps_corner {
         display: flex;
         align-items: end;
-        padding: 0 4px 10px;
+        padding: 0 4px 8px;
         color: rgba(11, 26, 51, 0.4);
         font-size: 10px;
         font-weight: 700;
@@ -202,11 +248,11 @@
 
     .sector_steps_phase {
         display: grid;
-        gap: 4px;
+        gap: 3px;
         justify-items: center;
-        padding: 10px 6px;
+        padding: 8px 4px;
         border: 0;
-        border-radius: 14px;
+        border-radius: 12px;
         background: transparent;
         color: rgba(11, 26, 51, 0.42);
         pointer-events: none;
@@ -224,14 +270,14 @@
 
     .sector_steps_phase_index {
         font-family: var(--font-heading);
-        font-size: 0.72rem;
+        font-size: 0.68rem;
         font-weight: 700;
         letter-spacing: 0.08em;
         opacity: 0.7;
     }
 
     .sector_steps_phase_name {
-        font-size: clamp(0.68rem, 1.05vw, 0.82rem);
+        font-size: clamp(0.62rem, 1vw, 0.76rem);
         font-weight: 700;
         letter-spacing: 0.04em;
         text-align: center;
@@ -242,14 +288,14 @@
     .sector_steps_board_body {
         position: relative;
         display: grid;
-        gap: 8px;
+        gap: 7px;
     }
 
     .sector_steps_lane_row {
         position: relative;
         z-index: 1;
-        padding: 4px 0;
-        border-bottom: 1px solid rgba(11, 26, 51, 0.06);
+        padding: 3px 0;
+        border-bottom: 1px solid rgba(11, 26, 51, 0.05);
         transform-style: preserve-3d;
 
         &:last-child {
@@ -260,9 +306,9 @@
     .sector_steps_lane_label {
         display: flex;
         align-items: center;
-        padding: 8px 6px;
+        padding: 6px 4px;
         color: var(--ss-ink);
-        font-size: clamp(0.68rem, 1.05vw, 0.78rem);
+        font-size: clamp(0.62rem, 1vw, 0.74rem);
         font-weight: 700;
         letter-spacing: 0.05em;
         text-transform: uppercase;
@@ -270,11 +316,11 @@
     }
 
     .sector_steps_cell {
-        min-height: 54px;
+        min-height: 46px;
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 4px;
+        padding: 3px;
         perspective: 700px;
         transform-style: preserve-3d;
     }
@@ -282,16 +328,16 @@
     .sector_steps_block {
         display: inline-flex;
         align-items: center;
-        gap: 8px;
+        gap: 7px;
         width: 100%;
-        min-height: 42px;
-        padding: 8px 10px;
+        min-height: 36px;
+        padding: 7px 9px;
         border: 1px solid #e2e2e2;
         border-radius: 10px;
         background: #fff;
         box-shadow: 0 8px 18px rgba(11, 26, 51, 0.04);
         color: var(--ss-ink);
-        font-size: clamp(0.72rem, 1.1vw, 0.84rem);
+        font-size: clamp(0.68rem, 1vw, 0.78rem);
         font-weight: 600;
         line-height: 1.2;
         opacity: 0.55;
@@ -321,8 +367,8 @@
     }
 
     .sector_steps_block_dot {
-        width: 7px;
-        height: 7px;
+        width: 6px;
+        height: 6px;
         flex: 0 0 auto;
         border-radius: 50%;
         background: #bccdf3;
@@ -336,94 +382,88 @@
 
     .sector_steps_empty {
         display: block;
-        width: 18px;
+        width: 16px;
         height: 2px;
         border-radius: 2px;
         background: rgba(11, 26, 51, 0.08);
     }
-
-    &.is-static {
-        .sector_steps_board {
-            transform: none;
-        }
-    }
 }
 
 html[dir="rtl"] .sector_steps {
-    .sector_steps_title {
-        letter-spacing: 0;
-        line-height: 1.3;
-    }
-
     .sector_steps_eyebrow,
     .sector_steps_corner,
     .sector_steps_phase_name,
     .sector_steps_lane_label,
-    .sector_steps_legend,
-    .sector_steps_proof_top {
+    .sector_steps_live,
+    .practical_ai_meta,
+    .practical_ai_status {
         letter-spacing: 0;
     }
 
     .sector_steps_board {
-        transform: rotateX(10deg) rotateY(12deg);
+        transform: rotateX(6deg) rotateY(8deg);
+    }
+
+    .practical_ai_title {
+        letter-spacing: 0;
+        line-height: 1.35;
     }
 }
 
 @media screen and (max-width: 1199px) {
     .sector_steps {
-        .sector_steps_phase_name {
-            font-size: 0.66rem;
-        }
-
+        .sector_steps_phase_name,
         .sector_steps_lane_label {
-            font-size: 0.66rem;
+            font-size: 0.62rem;
         }
     }
 }
 
 @media screen and (max-width: 991px) {
     .sector_steps {
-        padding: 80px 0 64px;
-        min-height: 0;
+        padding: 64px 0 52px;
 
-        .sector_steps_inner {
-            grid-template-columns: 1fr;
-            gap: 28px;
-            min-height: 0;
-        }
-
-        .sector_steps_copy {
-            max-width: none;
+        .sector_steps_panel {
+            padding: 18px;
+            border-radius: 22px;
         }
 
         .sector_steps_stage {
-            min-height: 0;
             overflow-x: auto;
-            padding-bottom: 8px;
+            padding-bottom: 6px;
         }
 
         .sector_steps_perspective {
             perspective: none;
-            min-width: 720px;
+            min-width: 640px;
         }
 
         .sector_steps_board {
             transform: none;
+        }
+
+        .practical_ai_lane {
+            margin-top: 4px;
         }
     }
 }
 
 @media screen and (max-width: 575px) {
     .sector_steps {
-        padding: 68px 0 52px;
+        padding: 52px 0 40px;
+
+        .sector_steps_panel {
+            padding: 14px;
+            border-radius: 18px;
+        }
 
         .sector_steps_perspective {
-            min-width: 640px;
+            min-width: 580px;
         }
 
         .sector_steps_board {
-            padding: 12px;
-            border-radius: 16px;
+            padding: 10px;
+            border-radius: 14px;
         }
     }
 }

@@ -4,12 +4,17 @@ import OperationsStepsView, { type OperationsStep } from "./OperationsStepsView"
 
 import "./_OperationsSteps.scss";
 
-const OperationsSteps = async () => {
+type Props = {
+    embedded?: boolean;
+};
+
+const OperationsSteps = async ({ embedded = false }: Props) => {
     const t = await getTranslations("operationsSteps");
     const steps = (t.raw("steps") as OperationsStep[]) || [];
 
     return (
         <OperationsStepsView
+            embedded={embedded}
             eyebrow={t("eyebrow")}
             title={t("title")}
             description={t("description")}
