@@ -7,7 +7,7 @@ const CONFIG = {
     background: "#e8eef8",
     gridColor: "#8aa7c9",
     accentColor: "#295cc7",
-    frameColor: "#1691d0",
+    frameColor: "#9bb4d4",
     speed: 0.0075,
     gridIntensity: 0.42,
     mouseAmp: 0.12,
@@ -27,7 +27,14 @@ export type TunnelGalleryItem = {
     id: string;
     src: string;
     title: string;
-    meta: string;
+    tagline: string;
+    status: string;
+    statusTone: "available" | "soon";
+    logo: string;
+    problemLabel: string;
+    problem: string;
+    usersLabel: string;
+    users: string;
 };
 
 type Panel = {
@@ -62,9 +69,31 @@ export function mountTunnelGallery(root: HTMLElement, items: TunnelGalleryItem[]
     const counterEl = root.querySelector<HTMLElement>(".tunnel_gallery_counter .n");
     const totalEl = root.querySelector<HTMLElement>(".tunnel_gallery_counter .tot");
     const cardEl = root.querySelector<HTMLElement>(".tunnel_gallery_card");
-    const cardTitle = root.querySelector<HTMLElement>(".tunnel_gallery_card .t");
-    const cardMeta = root.querySelector<HTMLElement>(".tunnel_gallery_card .m");
-    if (!canvas || !counterEl || !totalEl || !cardEl || !cardTitle || !cardMeta || !items.length) {
+    const cardImg = root.querySelector<HTMLImageElement>(".tunnel_gallery_card_img");
+    const cardStatus = root.querySelector<HTMLElement>(".tunnel_gallery_card_status");
+    const cardStatusText = root.querySelector<HTMLElement>(".tunnel_gallery_card_status_text");
+    const cardTitle = root.querySelector<HTMLElement>(".tunnel_gallery_card_title");
+    const cardTagline = root.querySelector<HTMLElement>(".tunnel_gallery_card_tagline");
+    const cardLogo = root.querySelector<HTMLImageElement>(".tunnel_gallery_card_logo img");
+    const cardLogoWrap = root.querySelector<HTMLElement>(".tunnel_gallery_card_logo");
+    const problemItem = root.querySelector<HTMLElement>(".tunnel_gallery_card_meta_item.is_problem");
+    const usersItem = root.querySelector<HTMLElement>(".tunnel_gallery_card_meta_item.is_users");
+    if (
+        !canvas ||
+        !counterEl ||
+        !totalEl ||
+        !cardEl ||
+        !cardImg ||
+        !cardStatus ||
+        !cardStatusText ||
+        !cardTitle ||
+        !cardTagline ||
+        !cardLogo ||
+        !cardLogoWrap ||
+        !problemItem ||
+        !usersItem ||
+        !items.length
+    ) {
         return () => {};
     }
 
@@ -236,28 +265,210 @@ export function mountTunnelGallery(root: HTMLElement, items: TunnelGalleryItem[]
     tunnel.frustumCulled = false;
     scene.add(tunnel);
 
-    const textureLoader = new THREE.TextureLoader();
-    textureLoader.setCrossOrigin("anonymous");
     const maxAniso = renderer.capabilities.getMaxAnisotropy();
-    const imageSlots = new Map<
+    const CARD_W = 1024;
+    const CARD_H = 492;
+    const CARD_ASPECT = CARD_W / CARD_H;
+    const cardSlots = new Map<
         string,
-        { aspect: number; ready: boolean; waiting: Array<(a: number) => void>; texture: THREE.Texture }
+        {
+            aspect: number;
+            ready: boolean;
+            waiting: Array<(a: number) => void>;
+            texture: THREE.CanvasTexture;
+            canvas: HTMLCanvasElement;
+        }
     >();
 
-    function loadImage(src: string, onAspect: (a: number) => void) {
-        const url = resolveTextureSrc(src);
-        let slot = imageSlots.get(url);
+    function loadHtmlImage(src: string) {
+        return new Promise<HTMLImageElement | null>((resolve) => {
+            if (!src) {
+                resolve(null);
+                return;
+            }
+            const img = new Image();
+            img.crossOrigin = "anonymous";
+            img.onload = () => resolve(img);
+            img.onerror = () => resolve(null);
+            img.src = resolveTextureSrc(src);
+        });
+    }
+
+    function roundRect(
+        ctx: CanvasRenderingContext2D,
+        x: number,
+        y: number,
+        w: number,
+        h: number,
+        r: number,
+    ) {
+        const radius = Math.min(r, w / 2, h / 2);
+        ctx.beginPath();
+        ctx.moveTo(x + radius, y);
+        ctx.arcTo(x + w, y, x + w, y + h, radius);
+        ctx.arcTo(x + w, y + h, x, y + h, radius);
+        ctx.arcTo(x, y + h, x, y, radius);
+        ctx.arcTo(x, y, x + w, y, radius);
+        ctx.closePath();
+    }
+
+    function wrapText(
+        ctx: CanvasRenderingContext2D,
+        text: string,
+        x: number,
+        y: number,
+        maxWidth: number,
+        lineHeight: number,
+        maxLines: number,
+    ) {
+        const words = text.split(/\s+/).filter(Boolean);
+        if (!words.length) return y;
+        let line = "";
+        let cy = y;
+        let lines = 0;
+        for (let i = 0; i < words.length; i += 1) {
+            const test = line ? `${line} ${words[i]}` : words[i];
+            if (ctx.measureText(test).width > maxWidth && line) {
+                ctx.fillText(line, x, cy);
+                lines += 1;
+                if (lines >= maxLines) return cy + lineHeight;
+                line = words[i];
+                cy += lineHeight;
+            } else {
+                line = test;
+            }
+        }
+        if (line && lines < maxLines) ctx.fillText(line, x, cy);
+        return cy + lineHeight;
+    }
+
+    function paintProductCard(
+        ctx: CanvasRenderingContext2D,
+        item: TunnelGalleryItem,
+        photo: HTMLImageElement | null,
+        logo: HTMLImageElement | null,
+    ) {
+        const w = CARD_W;
+        const h = CARD_H;
+        ctx.clearRect(0, 0, w, h);
+
+        // Soft drop shadow
+        ctx.save();
+        ctx.shadowColor = "rgba(11, 26, 51, 0.12)";
+        ctx.shadowBlur = 28;
+        ctx.shadowOffsetY = 10;
+        roundRect(ctx, 18, 18, w - 36, h - 36, 36);
+        ctx.fillStyle = "#ffffff";
+        ctx.fill();
+        ctx.restore();
+
+        roundRect(ctx, 18, 18, w - 36, h - 36, 36);
+        ctx.fillStyle = "#ffffff";
+        ctx.fill();
+        ctx.strokeStyle = "rgba(17, 24, 39, 0.06)";
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        // Media panel
+        const mediaX = 34;
+        const mediaY = 34;
+        const mediaW = (w - 36) * 0.48;
+        const mediaH = h - 68;
+        ctx.save();
+        roundRect(ctx, mediaX, mediaY, mediaW, mediaH, 24);
+        ctx.clip();
+        ctx.fillStyle = "#e8eef8";
+        ctx.fillRect(mediaX, mediaY, mediaW, mediaH);
+        if (photo) {
+            const scale = Math.max(mediaW / photo.width, mediaH / photo.height);
+            const dw = photo.width * scale;
+            const dh = photo.height * scale;
+            ctx.drawImage(photo, mediaX + (mediaW - dw) / 2, mediaY + (mediaH - dh) / 2, dw, dh);
+        }
+        ctx.restore();
+
+        // Body copy
+        const bodyX = mediaX + mediaW + 36;
+        const bodyW = w - bodyX - 48;
+        let cy = 78;
+
+        if (item.status) {
+            const tone = item.statusTone === "soon" ? { bg: "#eef2ff", fg: "#3b5bdb" } : { bg: "#eefdf5", fg: "#00d95b" };
+            ctx.font = "700 18px ui-sans-serif, system-ui, sans-serif";
+            const label = item.status.toUpperCase();
+            const tw = ctx.measureText(label).width;
+            const pw = tw + 36;
+            const ph = 34;
+            roundRect(ctx, bodyX, cy, pw, ph, 17);
+            ctx.fillStyle = tone.bg;
+            ctx.fill();
+            ctx.fillStyle = tone.fg;
+            ctx.beginPath();
+            ctx.arc(bodyX + 16, cy + ph / 2, 5, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillText(label, bodyX + 28, cy + 23);
+            cy += 56;
+        }
+
+        ctx.fillStyle = "#111827";
+        ctx.font = "700 42px ui-sans-serif, system-ui, sans-serif";
+        cy = wrapText(ctx, item.title || "Product", bodyX, cy + 10, bodyW - (logo ? 110 : 0), 48, 2);
+
+        if (item.tagline) {
+            ctx.fillStyle = "#6b7280";
+            ctx.font = "500 22px ui-sans-serif, system-ui, sans-serif";
+            wrapText(ctx, item.tagline, bodyX, cy + 8, bodyW - (logo ? 110 : 0), 30, 3);
+        }
+
+        if (logo) {
+            const lw = 96;
+            const lh = (logo.height / logo.width) * lw;
+            const lx = w - 48 - lw;
+            const ly = 70;
+            ctx.drawImage(logo, lx, ly, lw, Math.min(lh, 90));
+        }
+
+        // Bottom meta hints
+        let metaY = h - 110;
+        if (item.problem) {
+            ctx.fillStyle = "#9aa3b2";
+            ctx.font = "700 16px ui-sans-serif, system-ui, sans-serif";
+            ctx.fillText((item.problemLabel || "Problem").toUpperCase(), bodyX, metaY);
+            ctx.fillStyle = "#374151";
+            ctx.font = "500 20px ui-sans-serif, system-ui, sans-serif";
+            wrapText(ctx, item.problem, bodyX, metaY + 26, bodyW, 26, 2);
+            metaY += 70;
+        }
+    }
+
+    function loadProductCard(item: TunnelGalleryItem, onAspect: (a: number) => void) {
+        let slot = cardSlots.get(item.id);
         if (!slot) {
-            slot = { aspect: 1, ready: false, waiting: [], texture: null as unknown as THREE.Texture };
-            slot.texture = textureLoader.load(url, (t) => {
-                slot!.aspect = t.image.width / t.image.height;
+            const cnv = document.createElement("canvas");
+            cnv.width = CARD_W;
+            cnv.height = CARD_H;
+            const ctx = cnv.getContext("2d")!;
+            paintProductCard(ctx, item, null, null);
+            const texture = new THREE.CanvasTexture(cnv);
+            texture.colorSpace = THREE.SRGBColorSpace;
+            texture.anisotropy = maxAniso;
+            texture.needsUpdate = true;
+            slot = {
+                aspect: CARD_ASPECT,
+                ready: false,
+                waiting: [],
+                texture,
+                canvas: cnv,
+            };
+            cardSlots.set(item.id, slot);
+
+            Promise.all([loadHtmlImage(item.src), loadHtmlImage(item.logo)]).then(([photo, logo]) => {
+                paintProductCard(ctx, item, photo, logo);
+                texture.needsUpdate = true;
                 slot!.ready = true;
-                slot!.waiting.forEach((fn) => fn(slot!.aspect));
+                slot!.waiting.forEach((fn) => fn(CARD_ASPECT));
                 slot!.waiting.length = 0;
             });
-            slot.texture.colorSpace = THREE.SRGBColorSpace;
-            slot.texture.anisotropy = maxAniso;
-            imageSlots.set(url, slot);
         }
         if (slot.ready) onAspect(slot.aspect);
         else slot.waiting.push(onAspect);
@@ -288,11 +499,11 @@ export function mountTunnelGallery(root: HTMLElement, items: TunnelGalleryItem[]
             vec2 uv = 0.5 + (vUv - 0.5) * uCrop;
             vec3 col = texture2D(uMap, uv).rgb;
             vec2 d = min(vUv, 1.0 - vUv);
-            float edge = 1.0 - smoothstep(0.0, 0.012, min(d.x, d.y));
-            float halo = 1.0 - smoothstep(0.012, 0.06, min(d.x, d.y));
-            col *= mix(1.0, 1.16, uHover);
-            col += uFrame * edge * mix(0.22, 0.85, uHover);
-            col += uFrame * halo * mix(0.03, 0.16, uHover);
+            float edge = 1.0 - smoothstep(0.0, 0.01, min(d.x, d.y));
+            float halo = 1.0 - smoothstep(0.01, 0.045, min(d.x, d.y));
+            col *= mix(1.0, 1.05, uHover);
+            col += uFrame * edge * mix(0.08, 0.28, uHover);
+            col += uFrame * halo * mix(0.02, 0.08, uHover);
             float fade = 1.0 - smoothstep(uFar * 0.55, uFar, vDist);
             if (uReflect > 0.5) {
                 float a = uOpacity * fade * (1.0 - smoothstep(0.0, 0.8, vUv.y));
@@ -306,20 +517,20 @@ export function mountTunnelGallery(root: HTMLElement, items: TunnelGalleryItem[]
 
     const raycaster = new THREE.Raycaster();
     const panels: Panel[] = [];
+    // Prefer wide footprints so panels match product-card proportions.
     const WALL_FOOTPRINTS = [
-        [3, 5],
-        [4, 6],
-        [6, 4],
-        [2, 3],
-        [5, 5],
-        [3, 4],
+        [6, 3],
         [7, 4],
+        [5, 3],
+        [8, 4],
+        [6, 4],
+        [7, 3],
     ];
     const CAP_FOOTPRINTS = [
+        [6, 3],
         [5, 3],
-        [4, 4],
-        [6, 4],
-        [3, 2],
+        [7, 3],
+        [8, 4],
     ];
     const FACE_ORDER = [0, 1, 2, 0, 1, 3, 0, 1, 2, 0, 1, 0, 1, 3, 0, 1, 2, 0, 1, 0, 3, 1, 0, 2, 1, 0];
     const mediaFor = (i: number) => items[i % productCount];
@@ -478,7 +689,7 @@ export function mountTunnelGallery(root: HTMLElement, items: TunnelGalleryItem[]
             },
         };
 
-        material.uniforms.uMap.value = loadImage(media.src, (a) => panel.setAspect(a));
+        material.uniforms.uMap.value = loadProductCard(media, (a) => panel.setAspect(a));
         mesh.userData.panel = panel;
         panels.push(panel);
     }
@@ -553,16 +764,56 @@ export function mountTunnelGallery(root: HTMLElement, items: TunnelGalleryItem[]
         focusQuat.setFromRotationMatrix(lookMatrix);
     }
 
+    function fillMetaItem(
+        itemEl: HTMLElement,
+        label: string,
+        text: string,
+    ) {
+        const labelEl = itemEl.querySelector<HTMLElement>(".tunnel_gallery_card_meta_label");
+        const textEl = itemEl.querySelector<HTMLElement>(".tunnel_gallery_card_meta_text");
+        if (!labelEl || !textEl) return;
+        if (!text) {
+            itemEl.classList.remove("is_on");
+            labelEl.textContent = "";
+            textEl.textContent = "";
+            return;
+        }
+        labelEl.textContent = label;
+        textEl.textContent = text;
+        itemEl.classList.add("is_on");
+    }
+
     function openPanel(panel: Panel) {
+        const media = panel.media;
         state.focus = panel;
         gsap.to(state, { focusMix: 1, duration: 1.9, ease: "sine.inOut" });
         gsap.to(state, { speedMul: 0, duration: 1.3, ease: "sine.out" });
-        cardTitle.textContent = panel.media.title;
-        cardMeta.textContent =
-            panel.media.meta ||
-            `${String(panel.productIndex + 1).padStart(2, "0")} / ${String(productCount).padStart(2, "0")}`;
+
+        cardImg.src = media.src;
+        cardImg.alt = media.title;
+        cardTitle.textContent = media.title;
+        cardTagline.textContent = media.tagline || "";
+        cardStatusText.textContent = media.status || "";
+        cardStatus.classList.toggle("is_available", media.statusTone !== "soon");
+        cardStatus.classList.toggle("is_soon", media.statusTone === "soon");
+        cardStatus.style.display = media.status ? "" : "none";
+
+        if (media.logo) {
+            cardLogo.src = media.logo;
+            cardLogoWrap.style.display = "";
+        } else {
+            cardLogo.removeAttribute("src");
+            cardLogoWrap.style.display = "none";
+        }
+
+        fillMetaItem(problemItem, media.problemLabel, media.problem);
+        fillMetaItem(usersItem, media.usersLabel, media.users);
+
         gsap.delayedCall(0.9, () => {
-            if (state.focus === panel) cardEl.classList.add("is_on");
+            if (state.focus === panel) {
+                cardEl.classList.add("is_on");
+                cardEl.setAttribute("aria-hidden", "false");
+            }
         });
     }
 
@@ -578,6 +829,7 @@ export function mountTunnelGallery(root: HTMLElement, items: TunnelGalleryItem[]
         });
         gsap.to(state, { speedMul: 1, duration: 1.8, ease: "sine.inOut", delay: 0.5 });
         cardEl.classList.remove("is_on");
+        cardEl.setAttribute("aria-hidden", "true");
     }
 
     function setHover(panel: Panel | null) {
@@ -749,7 +1001,7 @@ export function mountTunnelGallery(root: HTMLElement, items: TunnelGalleryItem[]
         });
         tunnel.geometry.dispose();
         gridMaterial.dispose();
-        imageSlots.forEach((s) => s.texture.dispose());
+        cardSlots.forEach((s) => s.texture.dispose());
         renderer.dispose();
         root.style.cursor = "";
     };

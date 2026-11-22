@@ -62,10 +62,38 @@ export default function TunnelGalleryClient({ items }: Props) {
                     : "drag to look · click a product to focus · esc to exit"}
             </div>
 
-            <div className="tunnel_gallery_card">
-                <div className="t" />
-                <div className="m" />
-            </div>
+            <article className="tunnel_gallery_card" aria-hidden="true">
+                <div className="tunnel_gallery_card_media">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img className="tunnel_gallery_card_img" src="" alt="" />
+                </div>
+                <div className="tunnel_gallery_card_body">
+                    <span className="tunnel_gallery_card_status is_available">
+                        <i />
+                        <span className="tunnel_gallery_card_status_text" />
+                    </span>
+                    <div className="tunnel_gallery_card_title_row">
+                        <div className="tunnel_gallery_card_copy">
+                            <h3 className="tunnel_gallery_card_title" />
+                            <p className="tunnel_gallery_card_tagline" />
+                        </div>
+                        <div className="tunnel_gallery_card_logo" aria-hidden="true">
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img src="" alt="" />
+                        </div>
+                    </div>
+                    <div className="tunnel_gallery_card_meta">
+                        <div className="tunnel_gallery_card_meta_item is_problem">
+                            <span className="tunnel_gallery_card_meta_label" />
+                            <p className="tunnel_gallery_card_meta_text" />
+                        </div>
+                        <div className="tunnel_gallery_card_meta_item is_users">
+                            <span className="tunnel_gallery_card_meta_label" />
+                            <p className="tunnel_gallery_card_meta_text" />
+                        </div>
+                    </div>
+                </div>
+            </article>
         </section>
     );
 }

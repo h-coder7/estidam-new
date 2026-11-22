@@ -9,7 +9,14 @@ function fallbackItems(t: (key: string) => string): TunnelGalleryItem[] {
         id: card.id,
         src: card.img,
         title: t(card.titleKey),
-        meta: `${t(card.statusKey)} · ${t(card.taglineKey)}`,
+        tagline: t(card.taglineKey),
+        status: t(card.statusKey),
+        statusTone: card.statusTone,
+        logo: card.logo,
+        problemLabel: t(card.problemLabelKey),
+        problem: t(card.problemKey),
+        usersLabel: t(card.usersLabelKey),
+        users: t(card.usersKey),
     }));
 }
 
@@ -37,7 +44,14 @@ export default async function TunnelGallery() {
                   id: card.id,
                   src: card.img,
                   title: card.title,
-                  meta: [card.status, card.tagline].filter(Boolean).join(" · "),
+                  tagline: card.tagline,
+                  status: card.status,
+                  statusTone: card.statusTone,
+                  logo: card.logo,
+                  problemLabel: card.problemLabel,
+                  problem: card.problem,
+                  usersLabel: card.usersLabel,
+                  users: card.users,
               }))
             : fallbackItems(t);
 
