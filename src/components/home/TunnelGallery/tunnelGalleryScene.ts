@@ -8,7 +8,7 @@ gsap.registerPlugin(ScrollTrigger);
 /* Estidam Tunnel Gallery — product catalog media only */
 
 const CONFIG = {
-    background: "#e8eef8",
+    background: null as string | null,
     gridColor: "#8aa7c9",
     accentColor: "#295cc7",
     frameColor: "#9bb4d4",
@@ -111,7 +111,8 @@ export function mountTunnelGallery(root: HTMLElement, items: TunnelGalleryItem[]
     // Compact path — first card close, short even gaps between products.
     const FIRST_CARD_T = 0.07;
     const CARD_GAP = 0.075;
-    const TRAVEL_SPAN = FIRST_CARD_T + Math.max(0, STATIONS - 1) * CARD_GAP + 0.14;
+    // Short tail after the last card so the section doesn't keep scrolling into empty tunnel.
+    const TRAVEL_SPAN = FIRST_CARD_T + Math.max(0, STATIONS - 1) * CARD_GAP + 0.05;
 
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const useScroll = !reduced;
@@ -127,10 +128,12 @@ export function mountTunnelGallery(root: HTMLElement, items: TunnelGalleryItem[]
     };
 
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(CONFIG.background);
+    // Transparent clear so the section CSS light blue→white gradient shows through.
+    scene.background = null;
 
     const camera = new THREE.PerspectiveCamera(70, 1, 0.1, 55);
-    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+    renderer.setClearColor(0x000000, 0);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.05;
@@ -896,7 +899,7 @@ export function mountTunnelGallery(root: HTMLElement, items: TunnelGalleryItem[]
             trigger: section,
             // Keep 15px inset from the viewport while pinned (matches section padding).
             start: `top top+=${FRAME_INSET}`,
-            end: () => `+=${Math.max(window.innerHeight * 2.4, STATIONS * 140)}`,
+            end: () => `+=${Math.max(window.innerHeight * 1.65, STATIONS * 95)}`,
             pin: root,
             scrub: 1.1,
             anticipatePin: 1,

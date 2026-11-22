@@ -63,21 +63,6 @@
             inset 0 1px 0 rgba(255, 255, 255, 0.9),
             inset 0 -1px 0 rgba(255, 255, 255, 0.28);
 
-        &.scrolled {
-            top: 0;
-            left: 0;
-            right: 0;
-            width: 100%;
-            overflow: visible;
-            isolation: auto;
-            border: 0;
-            border-radius: 0;
-            background: #fff;
-            box-shadow: 0 0 30px 0 #00000007;
-            backdrop-filter: none;
-            -webkit-backdrop-filter: none;
-        }
-
         .logo-dr {
             display: block;
         }
@@ -111,26 +96,6 @@
             }
         }
 
-    }
-
-    &.homeNav {
-        &.scrolled {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            width: 100%;
-            border-radius: 0;
-            box-shadow: none;
-            background-color: var(--dark);
-
-            &.inner-nav {
-                background-color: #fff;
-                box-shadow: 0 0 30px 0 #00000007;
-                backdrop-filter: none;
-                -webkit-backdrop-filter: none;
-            }
-        }
     }
 
     .navbar-brand {
@@ -329,13 +294,5 @@
 @media screen and (max-width: 991px) {
     .navbar.homeNav {
         position: relative;
-
-        // Below 992px the nav is in-flow. Switching it to `fixed` on scroll pulls
-        // it out of flow, shifts the whole page up by the nav height and leaves
-        // every ScrollTrigger start/pin position off by that amount. `sticky`
-        // keeps it in flow and pinned to the top without the layout jump.
-        &.scrolled {
-            position: sticky;
-        }
     }
 }

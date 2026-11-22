@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { Link, usePathname, useRouter } from "@/i18n/routing";
 
@@ -27,15 +26,6 @@ export default function Navbar({ className = "" }: NavbarProps) {
     const locale = useLocale();
     const pathname = usePathname();
     const router = useRouter();
-    const [scrolled, setScrolled] = useState(false);
-
-    useEffect(() => {
-        const onScroll = () => setScrolled(window.scrollY > 40);
-        onScroll();
-        window.addEventListener("scroll", onScroll);
-        return () => window.removeEventListener("scroll", onScroll);
-    }, []);
-
     const currentPath = pathname.endsWith("/") && pathname !== "/" ? pathname.slice(0, -1) : pathname;
 
     const changeLanguage = (nextLocale: "en" | "ar") => {
@@ -45,9 +35,9 @@ export default function Navbar({ className = "" }: NavbarProps) {
 
     return (
         <nav
-            className={`navbar navbar-expand-lg homeNav${scrolled ? " scrolled" : ""}${className ? ` ${className}` : ""}`}
+            className={`navbar navbar-expand-lg homeNav${className ? ` ${className}` : ""}`}
         >
-            {!scrolled ? <NavbarGlass light={className.includes("inner-nav")} /> : null}
+            <NavbarGlass light={className.includes("inner-nav")} />
 
             <div className="container">
 

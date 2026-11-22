@@ -17,7 +17,16 @@
     height: calc(100svh - 30px);
     overflow: hidden;
     border-radius: 20px;
-    background: #e8eef8;
+    background:
+        linear-gradient(
+            180deg,
+            rgba(41, 92, 199, 0.1) 0%,
+            rgba(22, 145, 208, 0.06) 18%,
+            #ffffff 42%,
+            var(--light-gray, #f7f8fa) 68%,
+            rgba(22, 145, 208, 0.07) 88%,
+            rgba(41, 92, 199, 0.09) 100%
+        );
     color: var(--dark, #0b1a33);
     cursor: crosshair;
     isolation: isolate;
