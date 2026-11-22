@@ -4,15 +4,16 @@ import * as THREE from "three";
 /* Estidam Tunnel Gallery — product catalog media only */
 
 const CONFIG = {
-    gridColor: "#7aa8d4",
-    accentColor: "#1691d0",
-    frameColor: "#295cc7",
+    background: "#e8eef8",
+    gridColor: "#8aa7c9",
+    accentColor: "#295cc7",
+    frameColor: "#1691d0",
     speed: 0.0075,
-    gridIntensity: 0.5,
+    gridIntensity: 0.42,
     mouseAmp: 0.12,
     fadeFar: 58,
     panelFar: 64,
-    floorReflect: 0.32,
+    floorReflect: 0.18,
     cell: 0.8,
 };
 
@@ -83,13 +84,13 @@ export function mountTunnelGallery(root: HTMLElement, items: TunnelGalleryItem[]
     };
 
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x050b16);
+    scene.background = new THREE.Color(CONFIG.background);
 
     const camera = new THREE.PerspectiveCamera(70, 1, 0.1, 160);
     const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.0;
+    renderer.toneMappingExposure = 1.05;
 
     let seed = 20260725;
     const rand = () => {
@@ -218,17 +219,17 @@ export function mountTunnelGallery(root: HTMLElement, items: TunnelGalleryItem[]
                 float win = smoothstep(-16.0, -7.0, dv) * (1.0 - smoothstep(uFar * 0.3, uFar, dv));
                 float fadeNear = smoothstep(0.6, 7.0, vDist);
                 float fade = win * fadeNear;
-                float a = (line * 0.8 + rim * 0.95) * uIntensity * fade;
-                a *= mix(0.78, 1.12, wave);
-                if (a < 0.002) discard;
-                vec3 col = mix(uColor, uAccent, rim * 0.5 + wave * 0.12);
-                gl_FragColor = vec4(col, a);
+                float a = (line * 0.72 + rim * 0.9) * uIntensity * fade;
+                a *= mix(0.7, 1.05, wave);
+                if (a < 0.01) discard;
+                vec3 col = mix(uColor, uAccent, rim * 0.55 + wave * 0.1);
+                gl_FragColor = vec4(col, a * 0.85);
             }
         `,
         transparent: true,
         depthWrite: false,
         side: THREE.DoubleSide,
-        blending: THREE.AdditiveBlending,
+        blending: THREE.NormalBlending,
     });
 
     const tunnel = new THREE.Mesh(buildTunnel(), gridMaterial);
