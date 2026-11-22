@@ -4,6 +4,7 @@ import { getHeroContent } from "@/lib/api/home";
 import { Link } from "@/i18n/routing";
 
 import HeroHalftone from "./HeroHalftone";
+import HeroBrandMark from "./HeroBrandMark";
 import HeroTitle from "./HeroTitle";
 
 import "./_Hero.scss";
@@ -66,8 +67,9 @@ const Hero = async () => {
                         </HeroLink>
                     </div>
                 </div>
-
             </div>
+
+            <HeroBrandMark />
         </section>
     );
 };

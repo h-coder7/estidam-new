@@ -3,6 +3,7 @@ import WhyEstidam from "@/components/home/WhyEstidam/WhyEstidam";
 import HajjJourney from "@/components/home/HajjJourney/HajjJourney";
 import Solutions from "@/components/home/Solutions/Solutions";
 import AiOperations from "@/components/home/AiOperations/AiOperations";
+import TunnelGallery from "@/components/home/TunnelGallery/TunnelGallery";
 import Products from "@/components/home/Products/Products";
 import Clients from "@/components/home/Clients/Clients";
 import Partners from "@/components/home/Partners/Partners";
@@ -28,6 +29,7 @@ export default function Home() {
                 <Solutions />
                 <HajjJourney />
                 <AiOperations />
+                <TunnelGallery />
                 <Products />
                 <Clients />
                 {/* <HowWeDeliver /> */}

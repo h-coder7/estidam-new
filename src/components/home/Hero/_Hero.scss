@@ -14,7 +14,7 @@ $hero-ease: cubic-bezier(0.22, 1, 0.36, 1);
     min-height: 100vh;
     min-height: 100svh;
     padding-top: 150px;
-    padding-bottom: 200px;
+    padding-bottom: clamp(220px, 34vh, 380px);
     color: var(--dark, #0b1a33);
     background:
         radial-gradient(58% 52% at 50% 38%, rgba(22, 145, 208, 0.07), transparent 72%),
@@ -223,6 +223,95 @@ $hero-ease: cubic-bezier(0.22, 1, 0.36, 1);
         animation: heroFade 0.9s $hero-ease both;
     }
 
+    // ---------- giant brand wordmark + local neon flicker ----------
+    .hero_brand_mark {
+        position: absolute;
+        inset-inline: 0;
+        bottom: 0;
+        z-index: 1;
+        height: clamp(200px, 36vh, 420px);
+        pointer-events: none;
+        overflow: hidden;
+        isolation: isolate;
+    }
+
+    .hero_brand_mark_word {
+        position: absolute;
+        inset-inline: 0;
+        bottom: 0;
+        display: flex;
+        justify-content: center;
+        align-items: flex-end;
+        transform: translateY(28%);
+        user-select: none;
+
+        &[data-locale="ar"] .hero_neon_signal {
+            letter-spacing: 0;
+            font-weight: 700;
+            line-height: 0.9;
+        }
+    }
+
+    .hero_neon_signal {
+        display: inline-flex;
+        font-family: var(--font-heading);
+        font-weight: 800;
+        font-size: clamp(8.25rem, 27vw, 21rem);
+        line-height: 0.82;
+        letter-spacing: -0.04em;
+        white-space: nowrap;
+        color: var(--blue, #295cc7);
+        opacity: 0.6;
+    }
+
+    .hero_neon_letter {
+        position: relative;
+        display: inline-block;
+
+        .hero_neon_letter_ghost,
+        .hero_neon_letter_lit {
+            display: block;
+            font: inherit;
+            line-height: inherit;
+            letter-spacing: inherit;
+        }
+
+        .hero_neon_letter_ghost {
+            color: transparent;
+            -webkit-text-stroke: 1.5px rgba(41, 92, 199, 0.22);
+            opacity: 0.55;
+        }
+
+        .hero_neon_letter_lit {
+            position: absolute;
+            inset: 0;
+            color: #ffffff;
+            opacity: 0;
+            text-shadow: none;
+            transition: opacity 0.08s linear;
+        }
+
+        &.is-flash .hero_neon_letter_lit {
+            opacity: 1;
+            color: #ffffff;
+            text-shadow:
+                0 0 4px rgba(255, 255, 255, 0.45),
+                0 0 14px rgba(22, 145, 208, 0.35);
+        }
+
+        &.is-lit .hero_neon_letter_lit {
+            opacity: 0.92;
+            text-shadow:
+                0 0 1px rgba(255, 255, 255, 0.4),
+                0 0 12px rgba(22, 145, 208, 0.22);
+        }
+
+        &.is-dim .hero_neon_letter_lit {
+            opacity: 0.28;
+            text-shadow: 0 0 6px rgba(22, 145, 208, 0.12);
+        }
+    }
+
 }
 
 // Arabic: no negative tracking
@@ -260,14 +349,22 @@ html[dir="rtl"] .hero_section {
 @media screen and (max-width: 991px) {
     .hero_section {
         padding-top: 130px;
-        padding-bottom: 150px;
+        padding-bottom: clamp(180px, 32vh, 300px);
+
+        .hero_brand_mark {
+            height: clamp(170px, 32vh, 320px);
+        }
+
+        .hero_neon_signal {
+            font-size: clamp(6.3rem, 30vw, 13.5rem);
+        }
     }
 }
 
 @media screen and (max-width: 575px) {
     .hero_section {
         padding-top: 120px;
-        padding-bottom: 120px;
+        padding-bottom: clamp(150px, 30vh, 240px);
 
         .hero_description {
             font-size: 16px;
@@ -282,6 +379,18 @@ html[dir="rtl"] .hero_section {
                 justify-content: space-between;
             }
         }
+
+        .hero_brand_mark {
+            height: clamp(140px, 28vh, 220px);
+        }
+
+        .hero_brand_mark_word {
+            transform: translateY(34%);
+        }
+
+        .hero_neon_signal {
+            font-size: clamp(5.1rem, 33vw, 8.25rem);
+        }
     }
 }
 
@@ -290,6 +399,19 @@ html[dir="rtl"] .hero_section {
         .hero_in,
         .hero_fade {
             animation: none !important;
+        }
+
+        .hero_neon_signal {
+            opacity: 0.6;
+        }
+
+        .hero_neon_letter .hero_neon_letter_lit {
+            opacity: 0.92 !important;
+            transition: none !important;
+            color: #ffffff !important;
+            text-shadow:
+                0 0 1px rgba(255, 255, 255, 0.4),
+                0 0 12px rgba(22, 145, 208, 0.22) !important;
         }
 
         .hero_title {

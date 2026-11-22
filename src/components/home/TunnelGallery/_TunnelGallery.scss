@@ -1,0 +1,148 @@
+// Homepage Tunnel Gallery — scoped chrome only (Estidam colors)
+
+.tunnel_gallery {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    height: 100vh;
+    height: 100svh;
+    overflow: hidden;
+    background: #050b16;
+    color: #dfe8f5;
+    cursor: crosshair;
+    isolation: isolate;
+
+    .tunnel_gallery_canvas {
+        display: block;
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+    }
+
+    .tunnel_gallery_brand {
+        position: absolute;
+        inset-inline-start: 22px;
+        top: 20px;
+        z-index: 10;
+        text-transform: uppercase;
+        font: 600 11px/1.4 ui-monospace, "SF Mono", Menlo, monospace;
+        letter-spacing: 0.24em;
+        color: #7aa8d4;
+        user-select: none;
+        pointer-events: none;
+    }
+
+    .tunnel_gallery_counter {
+        position: absolute;
+        inset-inline-start: 22px;
+        bottom: 20px;
+        z-index: 10;
+        font: 600 12px/1 ui-monospace, "SF Mono", Menlo, monospace;
+        letter-spacing: 0.18em;
+        color: #7aa8d4;
+        user-select: none;
+        pointer-events: none;
+
+        .n {
+            color: var(--secondary, #1691d0);
+            font-size: 15px;
+        }
+
+        .sep {
+            opacity: 0.4;
+            margin: 0 0.4em;
+        }
+    }
+
+    .tunnel_gallery_hint {
+        position: absolute;
+        inset-inline-end: 22px;
+        bottom: 20px;
+        z-index: 10;
+        max-width: min(52vw, 360px);
+        text-transform: uppercase;
+        text-align: end;
+        font: 500 10px/1.5 ui-monospace, Menlo, monospace;
+        letter-spacing: 0.14em;
+        color: rgba(122, 163, 212, 0.72);
+        user-select: none;
+        pointer-events: none;
+    }
+
+    .tunnel_gallery_card {
+        position: absolute;
+        left: 50%;
+        bottom: 56px;
+        z-index: 20;
+        min-width: 260px;
+        max-width: min(80vw, 420px);
+        padding: 16px 20px;
+        text-align: center;
+        border: 1px solid rgba(22, 145, 208, 0.28);
+        border-radius: 10px;
+        background: rgba(11, 26, 51, 0.78);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+        opacity: 0;
+        pointer-events: none;
+        transform: translate(-50%, 18px);
+        transition:
+            opacity 0.6s ease,
+            transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+
+        &.is_on {
+            opacity: 1;
+            transform: translate(-50%, 0);
+            pointer-events: auto;
+            cursor: pointer;
+        }
+
+        .t {
+            margin-bottom: 6px;
+            font-family: var(--font-heading);
+            font-size: 20px;
+            font-weight: 600;
+            line-height: 1.15;
+            letter-spacing: 0.02em;
+            color: #eaf3ff;
+        }
+
+        .m {
+            text-transform: uppercase;
+            font: 500 10px/1.4 ui-monospace, Menlo, monospace;
+            letter-spacing: 0.2em;
+            color: var(--secondary, #1691d0);
+        }
+    }
+}
+
+html[dir="rtl"] .tunnel_gallery {
+    .tunnel_gallery_brand {
+        letter-spacing: 0.08em;
+    }
+
+    .tunnel_gallery_hint {
+        letter-spacing: 0.04em;
+    }
+}
+
+@media screen and (max-width: 575px) {
+    .tunnel_gallery {
+        .tunnel_gallery_brand,
+        .tunnel_gallery_counter,
+        .tunnel_gallery_hint {
+            font-size: 9px;
+        }
+
+        .tunnel_gallery_card {
+            bottom: 40px;
+            min-width: 0;
+            width: calc(100% - 32px);
+
+            .t {
+                font-size: 17px;
+            }
+        }
+    }
+}
