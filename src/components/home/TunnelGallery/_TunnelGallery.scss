@@ -1,16 +1,28 @@
-// Homepage Tunnel Gallery — light chrome + product-card focus panel
+// Homepage Tunnel Gallery — scroll-pinned light chrome + product cards
+
+.tunnel_gallery_section {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    // Inset lives on the pinned viewport so radius/margin survive ScrollTrigger pin.
+    padding: 15px;
+    box-sizing: border-box;
+}
 
 .tunnel_gallery {
     position: relative;
     z-index: 2;
     width: 100%;
-    height: 100vh;
-    height: 100svh;
+    height: calc(100vh - 30px);
+    height: calc(100svh - 30px);
     overflow: hidden;
+    border-radius: 20px;
     background: #e8eef8;
     color: var(--dark, #0b1a33);
     cursor: crosshair;
     isolation: isolate;
+    // Keep the rounded frame while GSAP sets position:fixed during pin.
+    transform: translateZ(0);
 
     .tunnel_gallery_canvas {
         display: block;
@@ -55,45 +67,30 @@
         }
     }
 
-    .tunnel_gallery_hint {
-        position: absolute;
-        inset-inline-end: 22px;
-        bottom: 20px;
-        z-index: 10;
-        max-width: min(52vw, 360px);
-        text-transform: uppercase;
-        text-align: end;
-        font: 500 10px/1.5 ui-monospace, Menlo, monospace;
-        letter-spacing: 0.14em;
-        color: rgba(11, 26, 51, 0.42);
-        user-select: none;
-        pointer-events: none;
-    }
-
     .tunnel_gallery_card {
         position: absolute;
         left: 50%;
-        bottom: 40px;
+        top: 50%;
         z-index: 20;
         display: grid;
         grid-template-columns: 0.95fr 1.05fr;
-        width: min(92vw, 720px);
-        min-height: 220px;
+        width: min(92vw, 760px);
+        min-height: 240px;
         overflow: hidden;
         border: 1px solid rgba(17, 24, 39, 0.06);
-        border-radius: 24px;
+        border-radius: 28px;
         background: #fff;
-        box-shadow: 10px 18px 40px rgba(11, 26, 51, 0.1);
+        box-shadow: 10px 22px 48px rgba(11, 26, 51, 0.1);
         opacity: 0;
         pointer-events: none;
-        transform: translate(-50%, 22px) scale(0.98);
+        transform: translate(-50%, -46%) scale(0.96);
         transition:
-            opacity 0.55s ease,
-            transform 0.55s cubic-bezier(0.2, 0.8, 0.2, 1);
+            opacity 0.4s ease,
+            transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
 
         &.is_on {
             opacity: 1;
-            transform: translate(-50%, 0) scale(1);
+            transform: translate(-50%, -50%) scale(1);
             pointer-events: auto;
             cursor: pointer;
         }
@@ -110,7 +107,8 @@
         height: 100%;
         min-height: 200px;
         object-fit: cover;
-        border-radius: 16px;
+        object-position: center;
+        border-radius: 20px;
         background: #e8eef8;
     }
 
@@ -233,10 +231,6 @@ html[dir="rtl"] .tunnel_gallery {
         letter-spacing: 0.08em;
     }
 
-    .tunnel_gallery_hint {
-        letter-spacing: 0.04em;
-    }
-
     .tunnel_gallery_card_status {
         letter-spacing: 0.04em;
     }
@@ -247,7 +241,7 @@ html[dir="rtl"] .tunnel_gallery {
         .tunnel_gallery_card {
             grid-template-columns: 1fr;
             width: calc(100% - 28px);
-            bottom: 28px;
+            top: 50%;
             min-height: 0;
         }
 
@@ -264,8 +258,7 @@ html[dir="rtl"] .tunnel_gallery {
         }
 
         .tunnel_gallery_brand,
-        .tunnel_gallery_counter,
-        .tunnel_gallery_hint {
+        .tunnel_gallery_counter {
             font-size: 9px;
         }
     }

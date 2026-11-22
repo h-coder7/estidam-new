@@ -1,5 +1,9 @@
 import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import * as THREE from "three";
+import { getLenis } from "@/components/LenisProvider";
+
+gsap.registerPlugin(ScrollTrigger);
 
 /* Estidam Tunnel Gallery — product catalog media only */
 
@@ -8,20 +12,22 @@ const CONFIG = {
     gridColor: "#8aa7c9",
     accentColor: "#295cc7",
     frameColor: "#9bb4d4",
-    speed: 0.0075,
-    gridIntensity: 0.42,
-    mouseAmp: 0.12,
-    fadeFar: 58,
-    panelFar: 64,
-    floorReflect: 0.18,
+    speed: 0.0042,
+    gridIntensity: 0.34,
+    mouseAmp: 0.06,
+    fadeFar: 22,
+    panelFar: 26,
+    floorReflect: 0,
     cell: 0.8,
+    cardFloat: 0.55,
+    cardDepth: 0.09,
 };
 
-const SEG = 420;
-const HW = 3.2;
-const HH = 3.2;
+const SEG = 200;
+const HW = 2.8;
+const HH = 2.8;
 const GAP = 0;
-const RING_RADIUS = 92;
+const RING_RADIUS = 16;
 
 export type TunnelGalleryItem = {
     id: string;
@@ -40,6 +46,7 @@ export type TunnelGalleryItem = {
 type Panel = {
     index: number;
     productIndex: number;
+    group: THREE.Group;
     mesh: THREE.Mesh;
     reflection: THREE.Mesh | null;
     material: THREE.ShaderMaterial;
@@ -65,6 +72,7 @@ function resolveTextureSrc(src: string) {
 }
 
 export function mountTunnelGallery(root: HTMLElement, items: TunnelGalleryItem[]) {
+    const section = root.closest<HTMLElement>(".tunnel_gallery_section") ?? root;
     const canvas = root.querySelector<HTMLCanvasElement>(".tunnel_gallery_canvas");
     const counterEl = root.querySelector<HTMLElement>(".tunnel_gallery_counter .n");
     const totalEl = root.querySelector<HTMLElement>(".tunnel_gallery_counter .tot");
@@ -98,9 +106,15 @@ export function mountTunnelGallery(root: HTMLElement, items: TunnelGalleryItem[]
     }
 
     const productCount = items.length;
-    const STATIONS = Math.min(72, Math.max(productCount * 12, productCount));
+    // One panel per product — no repeats.
+    const STATIONS = productCount;
+    // Compact path — first card close, short even gaps between products.
+    const FIRST_CARD_T = 0.07;
+    const CARD_GAP = 0.075;
+    const TRAVEL_SPAN = FIRST_CARD_T + Math.max(0, STATIONS - 1) * CARD_GAP + 0.14;
 
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const useScroll = !reduced;
 
     const params = {
         speed: reduced ? 0 : CONFIG.speed,
@@ -115,7 +129,7 @@ export function mountTunnelGallery(root: HTMLElement, items: TunnelGalleryItem[]
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(CONFIG.background);
 
-    const camera = new THREE.PerspectiveCamera(70, 1, 0.1, 160);
+    const camera = new THREE.PerspectiveCamera(70, 1, 0.1, 55);
     const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -128,14 +142,14 @@ export function mountTunnelGallery(root: HTMLElement, items: TunnelGalleryItem[]
     };
 
     const pathPoints: THREE.Vector3[] = [];
-    const RING_POINTS = 24;
+    const RING_POINTS = 18;
     for (let i = 0; i < RING_POINTS; i += 1) {
         const a = (i / RING_POINTS) * Math.PI * 2;
-        const r = RING_RADIUS * (1 + Math.sin(a * 3) * 0.14 + (rand() - 0.5) * 0.06);
+        const r = RING_RADIUS * (1 + Math.sin(a * 3) * 0.08 + (rand() - 0.5) * 0.03);
         pathPoints.push(
             new THREE.Vector3(
                 Math.cos(a) * r,
-                Math.sin(a * 2) * 7 + Math.sin(a * 5) * 2.5,
+                Math.sin(a * 2) * 1.1 + Math.sin(a * 5) * 0.35,
                 Math.sin(a) * r,
             ),
         );
@@ -350,36 +364,25 @@ export function mountTunnelGallery(root: HTMLElement, items: TunnelGalleryItem[]
     ) {
         const w = CARD_W;
         const h = CARD_H;
+        const radius = 44;
         ctx.clearRect(0, 0, w, h);
 
-        // Soft drop shadow
-        ctx.save();
-        ctx.shadowColor = "rgba(11, 26, 51, 0.12)";
-        ctx.shadowBlur = 28;
-        ctx.shadowOffsetY = 10;
-        roundRect(ctx, 18, 18, w - 36, h - 36, 36);
+        // Rounded opaque card body (corners stay transparent → discarded in shader).
+        roundRect(ctx, 0, 0, w, h, radius);
         ctx.fillStyle = "#ffffff";
         ctx.fill();
-        ctx.restore();
 
-        roundRect(ctx, 18, 18, w - 36, h - 36, 36);
-        ctx.fillStyle = "#ffffff";
-        ctx.fill();
-        ctx.strokeStyle = "rgba(17, 24, 39, 0.06)";
-        ctx.lineWidth = 2;
-        ctx.stroke();
-
-        // Media panel
-        const mediaX = 34;
-        const mediaY = 34;
-        const mediaW = (w - 36) * 0.48;
-        const mediaH = h - 68;
+        // Media panel — object-fit: cover inside rounded frame
+        const mediaX = 16;
+        const mediaY = 16;
+        const mediaW = w * 0.48;
+        const mediaH = h - 32;
         ctx.save();
-        roundRect(ctx, mediaX, mediaY, mediaW, mediaH, 24);
+        roundRect(ctx, mediaX, mediaY, mediaW, mediaH, 28);
         ctx.clip();
         ctx.fillStyle = "#e8eef8";
         ctx.fillRect(mediaX, mediaY, mediaW, mediaH);
-        if (photo) {
+        if (photo && photo.width > 0 && photo.height > 0) {
             const scale = Math.max(mediaW / photo.width, mediaH / photo.height);
             const dw = photo.width * scale;
             const dh = photo.height * scale;
@@ -388,9 +391,9 @@ export function mountTunnelGallery(root: HTMLElement, items: TunnelGalleryItem[]
         ctx.restore();
 
         // Body copy
-        const bodyX = mediaX + mediaW + 36;
-        const bodyW = w - bodyX - 48;
-        let cy = 78;
+        const bodyX = mediaX + mediaW + 28;
+        const bodyW = w - bodyX - 36;
+        let cy = 56;
 
         if (item.status) {
             const tone = item.statusTone === "soon" ? { bg: "#eef2ff", fg: "#3b5bdb" } : { bg: "#eefdf5", fg: "#00d95b" };
@@ -423,13 +426,13 @@ export function mountTunnelGallery(root: HTMLElement, items: TunnelGalleryItem[]
         if (logo) {
             const lw = 96;
             const lh = (logo.height / logo.width) * lw;
-            const lx = w - 48 - lw;
-            const ly = 70;
+            const lx = w - 36 - lw;
+            const ly = 48;
             ctx.drawImage(logo, lx, ly, lw, Math.min(lh, 90));
         }
 
         // Bottom meta hints
-        let metaY = h - 110;
+        let metaY = h - 96;
         if (item.problem) {
             ctx.fillStyle = "#9aa3b2";
             ctx.font = "700 16px ui-sans-serif, system-ui, sans-serif";
@@ -497,14 +500,12 @@ export function mountTunnelGallery(root: HTMLElement, items: TunnelGalleryItem[]
         varying float vDist;
         void main() {
             vec2 uv = 0.5 + (vUv - 0.5) * uCrop;
-            vec3 col = texture2D(uMap, uv).rgb;
-            vec2 d = min(vUv, 1.0 - vUv);
-            float edge = 1.0 - smoothstep(0.0, 0.01, min(d.x, d.y));
-            float halo = 1.0 - smoothstep(0.01, 0.045, min(d.x, d.y));
-            col *= mix(1.0, 1.05, uHover);
-            col += uFrame * edge * mix(0.08, 0.28, uHover);
-            col += uFrame * halo * mix(0.02, 0.08, uHover);
-            float fade = 1.0 - smoothstep(uFar * 0.55, uFar, vDist);
+            vec4 tex = texture2D(uMap, uv);
+            if (tex.a < 0.5) discard;
+            vec3 col = tex.rgb;
+            col *= mix(1.0, 1.04, uHover);
+            float fade = 1.0 - smoothstep(uFar * 0.75, uFar, vDist);
+            fade = max(fade, 0.4);
             if (uReflect > 0.5) {
                 float a = uOpacity * fade * (1.0 - smoothstep(0.0, 0.8, vUv.y));
                 if (a < 0.004) discard;
@@ -517,30 +518,13 @@ export function mountTunnelGallery(root: HTMLElement, items: TunnelGalleryItem[]
 
     const raycaster = new THREE.Raycaster();
     const panels: Panel[] = [];
-    // Prefer wide footprints so panels match product-card proportions.
-    const WALL_FOOTPRINTS = [
-        [6, 3],
-        [7, 4],
-        [5, 3],
-        [8, 4],
-        [6, 4],
-        [7, 3],
-    ];
-    const CAP_FOOTPRINTS = [
-        [6, 3],
-        [5, 3],
-        [7, 3],
-        [8, 4],
-    ];
-    const FACE_ORDER = [0, 1, 2, 0, 1, 3, 0, 1, 2, 0, 1, 0, 1, 3, 0, 1, 2, 0, 1, 0, 3, 1, 0, 2, 1, 0];
-    const mediaFor = (i: number) => items[i % productCount];
-
-    const CELLS_ACROSS = Math.round((2 * HW) / params.cell);
-    let vSlot = 0;
     const _p = new THREE.Vector3();
     const _n = new THREE.Vector3();
     const _b = new THREE.Vector3();
-    const _v = new THREE.Vector3();
+    const _tangent = new THREE.Vector3();
+    const _look = new THREE.Vector3();
+    const _orientMat = new THREE.Matrix4();
+    const _orientQuat = new THREE.Quaternion();
 
     function frameAt(t: number, outP: THREE.Vector3, outN: THREE.Vector3, outB: THREE.Vector3) {
         const tt = ((t % 1) + 1) % 1;
@@ -553,73 +537,35 @@ export function mountTunnelGallery(root: HTMLElement, items: TunnelGalleryItem[]
         outB.copy(frames.binormals[i0]).lerp(frames.binormals[i1], k).normalize();
     }
 
-    function surfacePoint(faceId: number, v: number, across: number, out: THREE.Vector3) {
-        frameAt(v / totalLength, _p, _n, _b);
-        out.copy(_p);
-        if (faceId === 0) out.addScaledVector(_b, HW - 0.03).addScaledVector(_n, across);
-        else if (faceId === 1) out.addScaledVector(_b, -(HW - 0.03)).addScaledVector(_n, across);
-        else if (faceId === 2) out.addScaledVector(_n, HH - 0.03).addScaledVector(_b, across);
-        else out.addScaledVector(_n, -(HH - 0.03)).addScaledVector(_b, across);
-        return out;
-    }
-
-    function buildPanelGeometry(faceId: number, v0: number, v1: number, a0: number, a1: number) {
-        const wall = faceId < 2;
-        const steps = Math.max(2, Math.ceil(Math.abs(v1 - v0) / (cellV * 0.34)));
-        const pos: number[] = [];
-        const uv: number[] = [];
-        const idx: number[] = [];
-        for (let j = 0; j <= steps; j += 1) {
-            const s = j / steps;
-            const v = v0 + (v1 - v0) * s;
-            for (let k = 0; k < 2; k += 1) {
-                const a = k === 0 ? a0 : a1;
-                surfacePoint(faceId, v, a, _v);
-                pos.push(_v.x, _v.y, _v.z);
-                if (wall) uv.push(faceId === 0 ? 1 - s : s, k);
-                else uv.push(faceId === 2 ? 1 - k : k, s);
-            }
-        }
-        for (let j = 0; j < steps; j += 1) {
-            const b = j * 2;
-            idx.push(b, b + 1, b + 2, b + 1, b + 3, b + 2);
-        }
-        const geo = new THREE.BufferGeometry();
-        geo.setAttribute("position", new THREE.Float32BufferAttribute(pos, 3));
-        geo.setAttribute("uv", new THREE.Float32BufferAttribute(uv, 2));
-        geo.setIndex(idx);
-        geo.computeBoundingSphere();
-        return geo;
-    }
-
     function makePanel(i: number) {
-        const productIndex = i % productCount;
-        const media = mediaFor(i);
-        const faceId = FACE_ORDER[i % FACE_ORDER.length];
-        const wall = faceId < 2;
-        const fp = wall
-            ? WALL_FOOTPRINTS[Math.floor(rand() * WALL_FOOTPRINTS.length)]
-            : CAP_FOOTPRINTS[Math.floor(rand() * CAP_FOOTPRINTS.length)];
-        const cellsX = fp[0];
-        const cellsY = fp[1];
-        const cellsAlong = wall ? cellsX : cellsY;
-        const cellsAcross = wall ? cellsY : cellsX;
-        const totalSlots = Math.round(totalLength / cellV);
-        const stride = Math.floor(totalSlots / STATIONS);
-        vSlot = Math.max(vSlot, i * stride);
-        const kStart = vSlot % totalSlots;
-        vSlot += cellsAlong + 2 + Math.floor(rand() * 3);
-        const vA = kStart * cellV + 0.01;
-        const vB = (kStart + cellsAlong) * cellV - 0.01;
-        const vCenter = (vA + vB) * 0.5;
-        const t = (vCenter / totalLength) % 1;
-        const mMax = CELLS_ACROSS - cellsAcross;
-        const m = Math.max(0, Math.min(mMax, 1 + Math.floor(rand() * Math.max(1, mMax - 1))));
-        const aA = m * params.cell - HW + 0.01;
-        const aB = (m + cellsAcross) * params.cell - HW - 0.01;
-        const across = (aA + aB) * 0.5;
-        const w = wall ? vB - vA : aB - aA;
-        const h = wall ? aB - aA : vB - vA;
+        const productIndex = i;
+        const media = items[i];
+        const faceId = i % 2; // alternate left / right lane
+        // Even spacing — each product once.
+        const t = FIRST_CARD_T + i * CARD_GAP;
+
+        frameAt(t, _p, _n, _b);
+        const iTan = Math.floor((((t % 1) + 1) % 1) * SEG) % SEG;
+        _tangent.copy(frames.tangents[iTan]).normalize();
+
+        const w = 2.65 + rand() * 0.15;
+        const h = w / CARD_ASPECT;
+        const depth = CONFIG.cardDepth;
+
+        const side = faceId === 0 ? 1 : -1;
+        // Floating again, but closer to center (not pushed to the tunnel sides).
+        const lateral = side * (CONFIG.cardFloat + 0.04 * (i % 2));
+        const elev = 0.05 + (i % 3) * 0.1;
+
+        const center = new THREE.Vector3()
+            .copy(_p)
+            .addScaledVector(_b, lateral)
+            .addScaledVector(_n, elev);
+
+        // Face the oncoming traveler with a light roadside yaw.
+        _look.copy(_p).addScaledVector(_tangent, -1.2).addScaledVector(_n, elev * 0.35);
+        _orientMat.lookAt(center, _look, _n);
+        _orientQuat.setFromRotationMatrix(_orientMat);
 
         const material = new THREE.ShaderMaterial({
             uniforms: {
@@ -633,43 +579,48 @@ export function mountTunnelGallery(root: HTMLElement, items: TunnelGalleryItem[]
             },
             vertexShader: panelVertex,
             fragmentShader: panelFragment,
-            side: THREE.DoubleSide,
+            side: THREE.FrontSide,
+            transparent: true,
+            depthWrite: true,
+            alphaTest: 0.5,
+            polygonOffset: true,
+            polygonOffsetFactor: -1,
+            polygonOffsetUnits: -1,
         });
 
-        const mesh = new THREE.Mesh(buildPanelGeometry(faceId, vA, vB, aA, aB), material);
-        mesh.frustumCulled = false;
-        scene.add(mesh);
+        const group = new THREE.Group();
+        group.position.copy(center);
+        group.quaternion.copy(_orientQuat);
+        // PlaneGeometry faces +Z; lookAt orients -Z toward target — flip to face traveler.
+        group.rotateY(Math.PI);
+        group.rotateY(side * 0.08);
+        group.rotateX((rand() - 0.5) * 0.03);
 
-        const center = surfacePoint(faceId, vCenter, across, new THREE.Vector3());
-        frameAt(t, _p, _n, _b);
-        const inward = new THREE.Vector3();
-        if (faceId === 0) inward.copy(_b).multiplyScalar(-1);
-        else if (faceId === 1) inward.copy(_b);
-        else if (faceId === 2) inward.copy(_n).multiplyScalar(-1);
-        else inward.copy(_n);
-        const up = wall
-            ? _n.clone()
-            : _p.clone().sub(curve.getPointAt((((t - 0.004) % 1) + 1) % 1)).normalize();
+        const front = new THREE.Mesh(new THREE.PlaneGeometry(w, h), material);
+        front.position.z = depth * 0.5;
+        front.frustumCulled = false;
+        group.add(front);
 
-        let reflection: THREE.Mesh | null = null;
-        if (wall && params.floorReflect > 0) {
-            const refMat = material.clone();
-            refMat.uniforms.uMap = material.uniforms.uMap;
-            refMat.uniforms.uCrop = material.uniforms.uCrop;
-            refMat.uniforms.uHover = material.uniforms.uHover;
-            refMat.uniforms.uReflect.value = 1;
-            refMat.uniforms.uOpacity.value = params.floorReflect;
-            refMat.transparent = true;
-            refMat.depthWrite = false;
-            reflection = new THREE.Mesh(buildPanelGeometry(faceId, vA, vB, -2 * HH - aA, -2 * HH - aB), refMat);
-            reflection.frustumCulled = false;
-            scene.add(reflection);
-        }
+        // Slightly inset back so square mesh doesn't stick past the rounded front.
+        const backMat = new THREE.MeshBasicMaterial({ color: 0xf3f6fb });
+        const back = new THREE.Mesh(new THREE.PlaneGeometry(w * 0.97, h * 0.97), backMat);
+        back.position.z = -(depth * 0.5);
+        back.rotateY(Math.PI);
+        back.frustumCulled = false;
+        group.add(back);
+
+        scene.add(group);
+
+        const inward = new THREE.Vector3(0, 0, 1).applyQuaternion(group.quaternion).normalize();
+        const cardUp = new THREE.Vector3(0, 1, 0).applyQuaternion(group.quaternion).normalize();
+
+        const reflection: THREE.Mesh | null = null;
 
         const panel: Panel = {
             index: i,
             productIndex,
-            mesh,
+            group,
+            mesh: front,
             reflection,
             material,
             media,
@@ -679,18 +630,22 @@ export function mountTunnelGallery(root: HTMLElement, items: TunnelGalleryItem[]
             h,
             center,
             inward,
-            up,
+            up: cardUp,
             aspect: w / h,
             setAspect(a: number) {
                 const panelAspect = w / h;
                 const crop = material.uniforms.uCrop.value as THREE.Vector2;
+                if (Math.abs(a - panelAspect) < 0.02) {
+                    crop.set(1, 1);
+                    return;
+                }
                 if (a > panelAspect) crop.set(panelAspect / a, 1);
                 else crop.set(1, a / panelAspect);
             },
         };
 
         material.uniforms.uMap.value = loadProductCard(media, (a) => panel.setAspect(a));
-        mesh.userData.panel = panel;
+        front.userData.panel = panel;
         panels.push(panel);
     }
 
@@ -699,6 +654,7 @@ export function mountTunnelGallery(root: HTMLElement, items: TunnelGalleryItem[]
 
     const state = {
         t: 0,
+        scrollProgress: 0,
         speedMul: 1,
         focus: null as Panel | null,
         focusMix: 0,
@@ -734,7 +690,14 @@ export function mountTunnelGallery(root: HTMLElement, items: TunnelGalleryItem[]
     }
 
     function updateTravel(dt: number) {
-        if (!state.focus) state.t = (state.t + params.speed * state.speedMul * dt) % 1;
+        if (!state.focus) {
+            if (useScroll) {
+                const targetT = state.scrollProgress * TRAVEL_SPAN;
+                state.t += (targetT - state.t) * (1 - Math.exp(-dt * 2.6));
+            } else {
+                state.t = (state.t + params.speed * state.speedMul * dt) % 1;
+            }
+        }
         const t = state.t;
         travelPos.copy(curve.getPointAt(t));
         lookTarget.copy(curve.getPointAt((t + 0.022) % 1));
@@ -745,7 +708,7 @@ export function mountTunnelGallery(root: HTMLElement, items: TunnelGalleryItem[]
             smoothQuat.copy(rawQuat);
             quatReady = true;
         } else {
-            smoothQuat.slerp(rawQuat, 1 - Math.exp(-2.6 * dt));
+            smoothQuat.slerp(rawQuat, 1 - Math.exp(-1.6 * dt));
         }
         travelQuat.copy(smoothQuat);
         mAxis.copy(frames.tangents[frameIndexAt(t)]).cross(frames.tangents[frameIndexAt((t + 0.02) % 1)]);
@@ -757,7 +720,7 @@ export function mountTunnelGallery(root: HTMLElement, items: TunnelGalleryItem[]
     }
 
     function focusTargets(panel: Panel) {
-        const dist = Math.max(panel.w / camera.aspect, panel.h) * 1.25;
+        const dist = Math.max(panel.w / camera.aspect, panel.h) * 1.55;
         focusPos.copy(panel.center).addScaledVector(panel.inward, dist);
         mUp.copy(panel.up);
         lookMatrix.lookAt(focusPos, panel.center, mUp);
@@ -785,9 +748,17 @@ export function mountTunnelGallery(root: HTMLElement, items: TunnelGalleryItem[]
 
     function openPanel(panel: Panel) {
         const media = panel.media;
+        // One card only: hide the 3D mesh and show the HTML detail card.
+        if (state.focus && state.focus !== panel) {
+            state.focus.group.visible = true;
+            if (state.focus.reflection) state.focus.reflection.visible = true;
+        }
         state.focus = panel;
-        gsap.to(state, { focusMix: 1, duration: 1.9, ease: "sine.inOut" });
-        gsap.to(state, { speedMul: 0, duration: 1.3, ease: "sine.out" });
+        panel.group.visible = false;
+        if (panel.reflection) panel.reflection.visible = false;
+        gsap.killTweensOf(state);
+        state.focusMix = 0;
+        gsap.to(state, { speedMul: 0, duration: 0.7, ease: "sine.out" });
 
         cardImg.src = media.src;
         cardImg.alt = media.title;
@@ -809,25 +780,19 @@ export function mountTunnelGallery(root: HTMLElement, items: TunnelGalleryItem[]
         fillMetaItem(problemItem, media.problemLabel, media.problem);
         fillMetaItem(usersItem, media.usersLabel, media.users);
 
-        gsap.delayedCall(0.9, () => {
-            if (state.focus === panel) {
-                cardEl.classList.add("is_on");
-                cardEl.setAttribute("aria-hidden", "false");
-            }
-        });
+        cardEl.classList.add("is_on");
+        cardEl.setAttribute("aria-hidden", "false");
     }
 
     function closePanel() {
         if (!state.focus) return;
-        gsap.to(state, {
-            focusMix: 0,
-            duration: 1.7,
-            ease: "sine.inOut",
-            onComplete: () => {
-                state.focus = null;
-            },
-        });
-        gsap.to(state, { speedMul: 1, duration: 1.8, ease: "sine.inOut", delay: 0.5 });
+        const panel = state.focus;
+        panel.group.visible = true;
+        if (panel.reflection) panel.reflection.visible = true;
+        state.focus = null;
+        state.focusMix = 0;
+        gsap.killTweensOf(state);
+        gsap.to(state, { speedMul: 1, duration: 1.1, ease: "sine.inOut" });
         cardEl.classList.remove("is_on");
         cardEl.setAttribute("aria-hidden", "true");
     }
@@ -898,15 +863,69 @@ export function mountTunnelGallery(root: HTMLElement, items: TunnelGalleryItem[]
     let running = true;
     let visible = true;
 
-    const AHEAD = 0.085;
-    const BEHIND = 0.012;
+    // Keep cards visible ahead (and briefly behind) — no close-range hide.
+    const AHEAD = 0.28;
+    const BEHIND = 0.04;
+    const MAX_CAM_DIST = 24;
+
+    let scrollTrigger: ScrollTrigger | null = null;
+    const lenis = useScroll ? getLenis() : null;
+    const onLenisScroll = () => ScrollTrigger.update();
+
+    if (useScroll) {
+        const FRAME_INSET = 15;
+
+        const applyFrameStyle = () => {
+            const frameW = Math.max(1, window.innerWidth - FRAME_INSET * 2);
+            const frameH = Math.max(1, window.innerHeight - FRAME_INSET * 2);
+            root.style.borderRadius = "20px";
+            root.style.overflow = "hidden";
+            root.style.boxSizing = "border-box";
+            root.style.width = `${frameW}px`;
+            root.style.maxWidth = `${frameW}px`;
+            root.style.height = `${frameH}px`;
+            if (root.style.position === "fixed") {
+                root.style.left = `${FRAME_INSET}px`;
+                root.style.top = `${FRAME_INSET}px`;
+                root.style.right = "auto";
+            }
+            fit();
+        };
+
+        scrollTrigger = ScrollTrigger.create({
+            trigger: section,
+            // Keep 15px inset from the viewport while pinned (matches section padding).
+            start: `top top+=${FRAME_INSET}`,
+            end: () => `+=${Math.max(window.innerHeight * 2.4, STATIONS * 140)}`,
+            pin: root,
+            scrub: 1.1,
+            anticipatePin: 1,
+            invalidateOnRefresh: true,
+            onUpdate: (self) => {
+                state.scrollProgress = self.progress;
+            },
+            onRefresh: (self) => {
+                state.scrollProgress = self.progress;
+                applyFrameStyle();
+            },
+            onToggle: applyFrameStyle,
+            onEnter: applyFrameStyle,
+            onEnterBack: applyFrameStyle,
+            onLeave: applyFrameStyle,
+            onLeaveBack: applyFrameStyle,
+        });
+        applyFrameStyle();
+        state.scrollProgress = scrollTrigger.progress;
+        lenis?.on("scroll", onLenisScroll);
+        requestAnimationFrame(() => ScrollTrigger.refresh());
+    }
 
     function updateHover() {
         if (state.focus) return;
         raycaster.setFromCamera(state.mouse, camera);
         const near: THREE.Object3D[] = [];
         panels.forEach((p) => {
-            if (p.mesh.visible && p.center.distanceToSquared(camera.position) < 45 * 45) near.push(p.mesh);
+            if (p.group.visible && p.center.distanceToSquared(camera.position) < 55 * 55) near.push(p.mesh);
         });
         const hits = raycaster.intersectObjects(near, false);
         setHover(hits.length ? (hits[0].object.userData.panel as Panel) : null);
@@ -915,12 +934,17 @@ export function mountTunnelGallery(root: HTMLElement, items: TunnelGalleryItem[]
     function updatePanelVisibility() {
         let bestPanel: Panel | null = null;
         let bestD = Infinity;
+        const maxDistSq = MAX_CAM_DIST * MAX_CAM_DIST;
         panels.forEach((p) => {
             let d = p.t - state.t;
             if (d < 0) d += 1;
-            const near = d < AHEAD || d > 1 - BEHIND;
-            p.mesh.visible = near;
-            if (p.reflection) p.reflection.visible = near;
+            const distSq = p.center.distanceToSquared(camera.position);
+            const alongOk = d < AHEAD || d > 1 - BEHIND;
+            const show = alongOk && distSq <= maxDistSq && state.focus !== p;
+            if (p.group.visible !== show) {
+                p.group.visible = show;
+                if (p.reflection) p.reflection.visible = show;
+            }
             if (d < bestD) {
                 bestD = d;
                 bestPanel = p;
@@ -928,7 +952,7 @@ export function mountTunnelGallery(root: HTMLElement, items: TunnelGalleryItem[]
         });
         if (state.focus) bestPanel = state.focus;
         const productIndex = bestPanel ? bestPanel.productIndex : -1;
-        if (productIndex !== state.currentProduct) {
+        if (productIndex !== state.currentProduct && bestD < 0.12) {
             state.currentProduct = productIndex;
             if (productIndex >= 0) {
                 counterEl.textContent = String(productIndex + 1).padStart(2, "0");
@@ -943,7 +967,7 @@ export function mountTunnelGallery(root: HTMLElement, items: TunnelGalleryItem[]
 
         const dt = Math.min(clock.getDelta(), 0.05);
         const elapsed = clock.getElapsedTime();
-        const ka = 1 - Math.exp(-dt * 1.2);
+        const ka = 1 - Math.exp(-dt * 0.85);
         state.aimS1.lerp(state.aimTarget, ka);
         state.aim.lerp(state.aimS1, ka);
         updateTravel(dt);
@@ -983,6 +1007,8 @@ export function mountTunnelGallery(root: HTMLElement, items: TunnelGalleryItem[]
         cancelAnimationFrame(raf);
         io.disconnect();
         ro.disconnect();
+        lenis?.off("scroll", onLenisScroll);
+        scrollTrigger?.kill();
         root.removeEventListener("pointermove", onPointerMove);
         root.removeEventListener("pointerdown", onPointerDown);
         root.removeEventListener("pointerup", onPointerUp);
@@ -993,10 +1019,20 @@ export function mountTunnelGallery(root: HTMLElement, items: TunnelGalleryItem[]
         panels.forEach((p) => {
             gsap.killTweensOf(p.material.uniforms.uHover);
             p.material.dispose();
-            p.mesh.geometry.dispose();
+            p.group.traverse((obj) => {
+                if (!(obj instanceof THREE.Mesh)) return;
+                obj.geometry.dispose();
+                const mat = obj.material;
+                if (mat && mat !== p.material) {
+                    if (Array.isArray(mat)) mat.forEach((m) => m.dispose());
+                    else mat.dispose();
+                }
+            });
+            scene.remove(p.group);
             if (p.reflection) {
                 (p.reflection.material as THREE.Material).dispose();
                 p.reflection.geometry.dispose();
+                scene.remove(p.reflection);
             }
         });
         tunnel.geometry.dispose();
