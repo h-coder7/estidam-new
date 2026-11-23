@@ -6,6 +6,7 @@ import AiOperations from "@/components/home/AiOperations/AiOperations";
 import TunnelGallery from "@/components/home/TunnelGallery/TunnelGallery";
 // import Products from "@/components/home/Products/Products";
 import Clients from "@/components/home/Clients/Clients";
+import SpectralTiles from "@/components/home/SpectralTiles/SpectralTiles";
 import Partners from "@/components/home/Partners/Partners";
 import HowWeDeliver from "@/components/home/HowWeDeliver/HowWeDeliver";
 import ExperienceProof from "@/components/home/ExperienceProof/ExperienceProof";
@@ -35,7 +36,8 @@ export default function Home() {
                 {/* <HowWeDeliver /> */}
                 {/* <ExperienceProof /> */}
                 <GrowthEcosystem />
-                <Partners />
+                <SpectralTiles />
+                {/* <Partners /> */}
                 <News />
                 <MediaHighlightsSection />
                 <GetInTouch />

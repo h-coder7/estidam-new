@@ -1,0 +1,112 @@
+// Homepage Spectral Tiles — light frosted floor + Estidam identity colors
+
+.spectral_tiles_section {
+    position: relative;
+    z-index: 2;
+    padding: 0;
+    background-color: #fff;
+    // margin: 15px;
+    // border-radius: 20px;
+    // overflow: hidden;
+}
+
+.spectral_tiles {
+    position: relative;
+    width: 100%;
+    height: min(92vh, 860px);
+    min-height: 520px;
+    overflow: hidden;
+    color: var(--dark, #0b1a33);
+    isolation: isolate;
+    cursor: crosshair;
+
+    .spectral_tiles_canvas {
+        display: block;
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+    }
+
+    &::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        pointer-events: none;
+        background: linear-gradient(
+            180deg,
+            rgba(247, 248, 250, 0.18) 0%,
+            transparent 22%,
+            transparent 70%,
+            rgba(247, 248, 250, 0.45) 100%
+        );
+    }
+
+    .spectral_tiles_copy {
+        position: absolute;
+        z-index: 2;
+        inset-inline: clamp(20px, 5vw, 64px);
+        top: clamp(48px, 8vh, 88px);
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: clamp(24px, 4vw, 64px);
+        pointer-events: none;
+    }
+
+    .spectral_tiles_title {
+        margin: 0;
+        flex: 1 1 auto;
+        max-width: min(520px, 52vw);
+        color: var(--dark, #0b1a33);
+        font-size: clamp(32px, 4.6vw, 56px);
+        font-weight: 700;
+        line-height: 1.08;
+        letter-spacing: -0.03em;
+        text-align: start;
+
+        span {
+            color: var(--blue, #295cc7);
+        }
+    }
+
+    .spectral_tiles_desc {
+        margin: 0.35em 0 0;
+        flex: 0 1 min(360px, 38vw);
+        max-width: 36ch;
+        color: rgba(11, 26, 51, 0.62);
+        font-size: clamp(14px, 1.2vw, 17px);
+        font-weight: 400;
+        line-height: 1.55;
+        text-align: end;
+    }
+}
+
+[dir="rtl"] .spectral_tiles {
+    .spectral_tiles_title {
+        letter-spacing: 0;
+        line-height: 1.25;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .spectral_tiles {
+        height: min(78vh, 640px);
+        min-height: 440px;
+
+        .spectral_tiles_copy {
+            top: 40px;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .spectral_tiles_title,
+        .spectral_tiles_desc {
+            max-width: none;
+            flex: none;
+            width: 100%;
+            text-align: start;
+        }
+    }
+}

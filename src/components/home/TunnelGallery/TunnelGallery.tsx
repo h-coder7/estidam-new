@@ -1,13 +1,12 @@
 import { getLocale, getTranslations } from "next-intl/server";
-import { getCatalogProducts } from "@/lib/api/home";
+import { getCatalogProducts, type CatalogProduct } from "@/lib/api/home";
 import { PRODUCTS_CASCADE_CONFIG } from "@/components/home/Products/productsCascadeConfig";
 import TunnelGalleryClient from "./TunnelGalleryClient";
-import type { TunnelGalleryItem } from "./tunnelGalleryScene";
 
-function fallbackItems(t: (key: string) => string): TunnelGalleryItem[] {
+function fallbackItems(t: (key: string) => string): CatalogProduct[] {
     return PRODUCTS_CASCADE_CONFIG.cards.map((card) => ({
         id: card.id,
-        src: card.img,
+        img: card.img,
         title: t(card.titleKey),
         tagline: t(card.taglineKey),
         status: t(card.statusKey),
@@ -22,7 +21,6 @@ function fallbackItems(t: (key: string) => string): TunnelGalleryItem[] {
 
 /**
  * Server wrapper — feeds Tunnel Gallery with the same product catalog as Products.
- * Does not replace or remove the Products section.
  */
 export default async function TunnelGallery() {
     const locale = await getLocale();
@@ -38,22 +36,7 @@ export default async function TunnelGallery() {
         false,
     );
 
-    const items: TunnelGalleryItem[] =
-        catalog.length > 0
-            ? catalog.map((card) => ({
-                  id: card.id,
-                  src: card.img,
-                  title: card.title,
-                  tagline: card.tagline,
-                  status: card.status,
-                  statusTone: card.statusTone,
-                  logo: card.logo,
-                  problemLabel: card.problemLabel,
-                  problem: card.problem,
-                  usersLabel: card.usersLabel,
-                  users: card.users,
-              }))
-            : fallbackItems(t);
+    const items: CatalogProduct[] = catalog.length > 0 ? catalog : fallbackItems(t);
 
     return <TunnelGalleryClient items={items} />;
 }

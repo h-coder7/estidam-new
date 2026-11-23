@@ -2,6 +2,7 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import * as THREE from "three";
 import { getLenis } from "@/components/LenisProvider";
+import type { CatalogProduct } from "@/lib/api/home";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -29,18 +30,11 @@ const HH = 2.8;
 const GAP = 0;
 const RING_RADIUS = 16;
 
-export type TunnelGalleryItem = {
-    id: string;
-    src: string;
-    title: string;
-    tagline: string;
-    status: string;
-    statusTone: "available" | "soon";
-    logo: string;
-    problemLabel: string;
-    problem: string;
-    usersLabel: string;
-    users: string;
+export type TunnelGalleryItem = CatalogProduct;
+
+export type TunnelGalleryHandlers = {
+    onFocus?: (item: CatalogProduct) => void;
+    onBlur?: () => void;
 };
 
 type Panel = {
@@ -50,7 +44,7 @@ type Panel = {
     mesh: THREE.Mesh;
     reflection: THREE.Mesh | null;
     material: THREE.ShaderMaterial;
-    media: TunnelGalleryItem;
+    media: CatalogProduct;
     faceId: number;
     t: number;
     w: number;
@@ -71,37 +65,17 @@ function resolveTextureSrc(src: string) {
     return src;
 }
 
-export function mountTunnelGallery(root: HTMLElement, items: TunnelGalleryItem[]) {
+export function mountTunnelGallery(
+    root: HTMLElement,
+    items: CatalogProduct[],
+    handlers: TunnelGalleryHandlers = {},
+) {
     const section = root.closest<HTMLElement>(".tunnel_gallery_section") ?? root;
     const canvas = root.querySelector<HTMLCanvasElement>(".tunnel_gallery_canvas");
     const counterEl = root.querySelector<HTMLElement>(".tunnel_gallery_counter .n");
     const totalEl = root.querySelector<HTMLElement>(".tunnel_gallery_counter .tot");
     const cardEl = root.querySelector<HTMLElement>(".tunnel_gallery_card");
-    const cardImg = root.querySelector<HTMLImageElement>(".tunnel_gallery_card_img");
-    const cardStatus = root.querySelector<HTMLElement>(".tunnel_gallery_card_status");
-    const cardStatusText = root.querySelector<HTMLElement>(".tunnel_gallery_card_status_text");
-    const cardTitle = root.querySelector<HTMLElement>(".tunnel_gallery_card_title");
-    const cardTagline = root.querySelector<HTMLElement>(".tunnel_gallery_card_tagline");
-    const cardLogo = root.querySelector<HTMLImageElement>(".tunnel_gallery_card_logo img");
-    const cardLogoWrap = root.querySelector<HTMLElement>(".tunnel_gallery_card_logo");
-    const problemItem = root.querySelector<HTMLElement>(".tunnel_gallery_card_meta_item.is_problem");
-    const usersItem = root.querySelector<HTMLElement>(".tunnel_gallery_card_meta_item.is_users");
-    if (
-        !canvas ||
-        !counterEl ||
-        !totalEl ||
-        !cardEl ||
-        !cardImg ||
-        !cardStatus ||
-        !cardStatusText ||
-        !cardTitle ||
-        !cardTagline ||
-        !cardLogo ||
-        !cardLogoWrap ||
-        !problemItem ||
-        !usersItem ||
-        !items.length
-    ) {
+    if (!canvas || !counterEl || !totalEl || !cardEl || !items.length) {
         return () => {};
     }
 
@@ -283,9 +257,8 @@ export function mountTunnelGallery(root: HTMLElement, items: TunnelGalleryItem[]
     scene.add(tunnel);
 
     const maxAniso = renderer.capabilities.getMaxAnisotropy();
-    const CARD_W = 1024;
-    const CARD_H = 492;
-    const CARD_ASPECT = CARD_W / CARD_H;
+    // Match products_card_inner proportions (≈920×425).
+    const CARD_ASPECT = 920 / 425;
     const cardSlots = new Map<
         string,
         {
@@ -296,20 +269,6 @@ export function mountTunnelGallery(root: HTMLElement, items: TunnelGalleryItem[]
             canvas: HTMLCanvasElement;
         }
     >();
-
-    function loadHtmlImage(src: string) {
-        return new Promise<HTMLImageElement | null>((resolve) => {
-            if (!src) {
-                resolve(null);
-                return;
-            }
-            const img = new Image();
-            img.crossOrigin = "anonymous";
-            img.onload = () => resolve(img);
-            img.onerror = () => resolve(null);
-            img.src = resolveTextureSrc(src);
-        });
-    }
 
     function roundRect(
         ctx: CanvasRenderingContext2D,
@@ -361,27 +320,27 @@ export function mountTunnelGallery(root: HTMLElement, items: TunnelGalleryItem[]
 
     function paintProductCard(
         ctx: CanvasRenderingContext2D,
-        item: TunnelGalleryItem,
+        item: CatalogProduct,
         photo: HTMLImageElement | null,
         logo: HTMLImageElement | null,
+        w: number,
+        h: number,
     ) {
-        const w = CARD_W;
-        const h = CARD_H;
-        const radius = 44;
+        // Match ProductCardFace outer radius (~28px on 920-wide card).
+        const cardRadius = 28;
         ctx.clearRect(0, 0, w, h);
-
-        // Rounded opaque card body (corners stay transparent → discarded in shader).
-        roundRect(ctx, 0, 0, w, h, radius);
+        ctx.save();
+        roundRect(ctx, 0, 0, w, h, cardRadius);
+        ctx.clip();
         ctx.fillStyle = "#ffffff";
-        ctx.fill();
+        ctx.fillRect(0, 0, w, h);
 
-        // Media panel — object-fit: cover inside rounded frame
         const mediaX = 16;
         const mediaY = 16;
         const mediaW = w * 0.48;
         const mediaH = h - 32;
         ctx.save();
-        roundRect(ctx, mediaX, mediaY, mediaW, mediaH, 28);
+        roundRect(ctx, mediaX, mediaY, mediaW, mediaH, 20);
         ctx.clip();
         ctx.fillStyle = "#e8eef8";
         ctx.fillRect(mediaX, mediaY, mediaW, mediaH);
@@ -393,91 +352,126 @@ export function mountTunnelGallery(root: HTMLElement, items: TunnelGalleryItem[]
         }
         ctx.restore();
 
-        // Body copy
-        const bodyX = mediaX + mediaW + 28;
-        const bodyW = w - bodyX - 36;
-        let cy = 56;
+        // Head box (matches ProductCardFace)
+        const bodyX = mediaX + mediaW + 24;
+        const bodyW = w - bodyX - 28;
+        const headX = bodyX;
+        const headY = 36;
+        const headW = bodyW;
+        const headH = 150;
+        roundRect(ctx, headX, headY, headW, headH, 15);
+        ctx.strokeStyle = "rgba(17, 24, 39, 0.08)";
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        let cy = headY + 28;
 
         if (item.status) {
-            const tone = item.statusTone === "soon" ? { bg: "#eef2ff", fg: "#3b5bdb" } : { bg: "#eefdf5", fg: "#00d95b" };
-            ctx.font = "700 18px ui-sans-serif, system-ui, sans-serif";
+            const tone =
+                item.statusTone === "soon" ? { bg: "#eef2ff", fg: "#3b5bdb" } : { bg: "#eefdf5", fg: "#00d95b" };
+            ctx.font = "700 15px ui-sans-serif, system-ui, sans-serif";
             const label = item.status.toUpperCase();
             const tw = ctx.measureText(label).width;
-            const pw = tw + 36;
-            const ph = 34;
-            roundRect(ctx, bodyX, cy, pw, ph, 17);
+            const badgeY = headY - 12;
+            roundRect(ctx, headX + 18, badgeY, tw + 32, 28, 14);
             ctx.fillStyle = tone.bg;
             ctx.fill();
             ctx.fillStyle = tone.fg;
             ctx.beginPath();
-            ctx.arc(bodyX + 16, cy + ph / 2, 5, 0, Math.PI * 2);
+            ctx.arc(headX + 30, badgeY + 14, 4, 0, Math.PI * 2);
             ctx.fill();
-            ctx.fillText(label, bodyX + 28, cy + 23);
-            cy += 56;
+            ctx.fillText(label, headX + 40, badgeY + 19);
+            cy = headY + 36;
         }
 
+        const textMax = bodyW - (logo ? 110 : 24);
         ctx.fillStyle = "#111827";
-        ctx.font = "700 42px ui-sans-serif, system-ui, sans-serif";
-        cy = wrapText(ctx, item.title || "Product", bodyX, cy + 10, bodyW - (logo ? 110 : 0), 48, 2);
+        ctx.font = "700 34px ui-sans-serif, system-ui, sans-serif";
+        cy = wrapText(ctx, item.title || "Product", headX + 20, cy + 10, textMax, 40, 2);
 
         if (item.tagline) {
             ctx.fillStyle = "#6b7280";
-            ctx.font = "500 22px ui-sans-serif, system-ui, sans-serif";
-            wrapText(ctx, item.tagline, bodyX, cy + 8, bodyW - (logo ? 110 : 0), 30, 3);
+            ctx.font = "500 17px ui-sans-serif, system-ui, sans-serif";
+            wrapText(ctx, item.tagline, headX + 20, cy + 6, textMax, 24, 3);
         }
 
-        if (logo) {
-            const lw = 96;
-            const lh = (logo.height / logo.width) * lw;
-            const lx = w - 36 - lw;
-            const ly = 48;
-            ctx.drawImage(logo, lx, ly, lw, Math.min(lh, 90));
+        if (logo && logo.width > 0) {
+            const lw = 84;
+            const lh = (logo.height / Math.max(1, logo.width)) * lw;
+            ctx.drawImage(logo, headX + headW - 20 - lw, headY + 28, lw, Math.min(lh, 76));
         }
 
-        // Bottom meta hints
-        let metaY = h - 96;
+        let metaY = headY + headH + 28;
         if (item.problem) {
             ctx.fillStyle = "#9aa3b2";
-            ctx.font = "700 16px ui-sans-serif, system-ui, sans-serif";
-            ctx.fillText((item.problemLabel || "Problem").toUpperCase(), bodyX, metaY);
+            ctx.font = "700 13px ui-sans-serif, system-ui, sans-serif";
+            ctx.fillText((item.problemLabel || "Problem").toUpperCase(), bodyX + 8, metaY);
             ctx.fillStyle = "#374151";
-            ctx.font = "500 20px ui-sans-serif, system-ui, sans-serif";
-            wrapText(ctx, item.problem, bodyX, metaY + 26, bodyW, 26, 2);
-            metaY += 70;
+            ctx.font = "500 16px ui-sans-serif, system-ui, sans-serif";
+            wrapText(ctx, item.problem, bodyX + 8, metaY + 22, bodyW - 16, 22, 2);
+            metaY += 64;
         }
+        if (item.users) {
+            ctx.fillStyle = "#9aa3b2";
+            ctx.font = "700 13px ui-sans-serif, system-ui, sans-serif";
+            ctx.fillText((item.usersLabel || "Users").toUpperCase(), bodyX + 8, metaY);
+            ctx.fillStyle = "#374151";
+            ctx.font = "500 16px ui-sans-serif, system-ui, sans-serif";
+            wrapText(ctx, item.users, bodyX + 8, metaY + 22, bodyW - 16, 22, 2);
+        }
+        ctx.restore();
     }
 
-    function loadProductCard(item: TunnelGalleryItem, onAspect: (a: number) => void) {
+    function loadHtmlImage(src: string) {
+        return new Promise<HTMLImageElement | null>((resolve) => {
+            if (!src) {
+                resolve(null);
+                return;
+            }
+            const img = new Image();
+            img.crossOrigin = "anonymous";
+            const timer = window.setTimeout(() => resolve(null), 6000);
+            img.onload = () => {
+                window.clearTimeout(timer);
+                resolve(img);
+            };
+            img.onerror = () => {
+                window.clearTimeout(timer);
+                resolve(null);
+            };
+            img.src = resolveTextureSrc(src);
+        });
+    }
+
+    function loadProductCard(item: CatalogProduct, onAspect: (a: number) => void) {
         let slot = cardSlots.get(item.id);
         if (!slot) {
             const cnv = document.createElement("canvas");
-            cnv.width = CARD_W;
-            cnv.height = CARD_H;
+            cnv.width = 920;
+            cnv.height = 425;
             const ctx = cnv.getContext("2d")!;
-            paintProductCard(ctx, item, null, null);
+            // Paint text immediately so cards are never blank while images load.
+            paintProductCard(ctx, item, null, null, cnv.width, cnv.height);
+
             const texture = new THREE.CanvasTexture(cnv);
             texture.colorSpace = THREE.SRGBColorSpace;
             texture.anisotropy = maxAniso;
             texture.needsUpdate = true;
             slot = {
                 aspect: CARD_ASPECT,
-                ready: false,
+                ready: true,
                 waiting: [],
                 texture,
                 canvas: cnv,
             };
             cardSlots.set(item.id, slot);
 
-            Promise.all([loadHtmlImage(item.src), loadHtmlImage(item.logo)]).then(([photo, logo]) => {
-                paintProductCard(ctx, item, photo, logo);
+            void Promise.all([loadHtmlImage(item.img), loadHtmlImage(item.logo)]).then(([photo, logo]) => {
+                paintProductCard(ctx, item, photo, logo, cnv.width, cnv.height);
                 texture.needsUpdate = true;
-                slot!.ready = true;
-                slot!.waiting.forEach((fn) => fn(CARD_ASPECT));
-                slot!.waiting.length = 0;
             });
         }
-        if (slot.ready) onAspect(slot.aspect);
-        else slot.waiting.push(onAspect);
+        onAspect(slot.aspect);
         return slot.texture;
     }
 
@@ -508,7 +502,7 @@ export function mountTunnelGallery(root: HTMLElement, items: TunnelGalleryItem[]
             vec3 col = tex.rgb;
             col *= mix(1.0, 1.04, uHover);
             float fade = 1.0 - smoothstep(uFar * 0.75, uFar, vDist);
-            fade = max(fade, 0.4);
+            fade = max(fade, 0.55);
             if (uReflect > 0.5) {
                 float a = uOpacity * fade * (1.0 - smoothstep(0.0, 0.8, vUv.y));
                 if (a < 0.004) discard;
@@ -604,9 +598,25 @@ export function mountTunnelGallery(root: HTMLElement, items: TunnelGalleryItem[]
         front.frustumCulled = false;
         group.add(front);
 
-        // Slightly inset back so square mesh doesn't stick past the rounded front.
-        const backMat = new THREE.MeshBasicMaterial({ color: 0xf3f6fb });
-        const back = new THREE.Mesh(new THREE.PlaneGeometry(w * 0.97, h * 0.97), backMat);
+        // Rounded back plane so corners match the front card radius.
+        const backCnv = document.createElement("canvas");
+        backCnv.width = 128;
+        backCnv.height = 64;
+        const backCtx = backCnv.getContext("2d")!;
+        backCtx.clearRect(0, 0, backCnv.width, backCnv.height);
+        roundRect(backCtx, 0, 0, backCnv.width, backCnv.height, 8);
+        backCtx.fillStyle = "#f3f6fb";
+        backCtx.fill();
+        const backTex = new THREE.CanvasTexture(backCnv);
+        backTex.colorSpace = THREE.SRGBColorSpace;
+        backTex.needsUpdate = true;
+        const backMat = new THREE.MeshBasicMaterial({
+            map: backTex,
+            transparent: true,
+            alphaTest: 0.5,
+            depthWrite: true,
+        });
+        const back = new THREE.Mesh(new THREE.PlaneGeometry(w, h), backMat);
         back.position.z = -(depth * 0.5);
         back.rotateY(Math.PI);
         back.frustumCulled = false;
@@ -730,28 +740,8 @@ export function mountTunnelGallery(root: HTMLElement, items: TunnelGalleryItem[]
         focusQuat.setFromRotationMatrix(lookMatrix);
     }
 
-    function fillMetaItem(
-        itemEl: HTMLElement,
-        label: string,
-        text: string,
-    ) {
-        const labelEl = itemEl.querySelector<HTMLElement>(".tunnel_gallery_card_meta_label");
-        const textEl = itemEl.querySelector<HTMLElement>(".tunnel_gallery_card_meta_text");
-        if (!labelEl || !textEl) return;
-        if (!text) {
-            itemEl.classList.remove("is_on");
-            labelEl.textContent = "";
-            textEl.textContent = "";
-            return;
-        }
-        labelEl.textContent = label;
-        textEl.textContent = text;
-        itemEl.classList.add("is_on");
-    }
-
     function openPanel(panel: Panel) {
-        const media = panel.media;
-        // One card only: hide the 3D mesh and show the HTML detail card.
+        // One card only: hide the 3D mesh and show the shared ProductCardFace overlay.
         if (state.focus && state.focus !== panel) {
             state.focus.group.visible = true;
             if (state.focus.reflection) state.focus.reflection.visible = true;
@@ -762,29 +752,7 @@ export function mountTunnelGallery(root: HTMLElement, items: TunnelGalleryItem[]
         gsap.killTweensOf(state);
         state.focusMix = 0;
         gsap.to(state, { speedMul: 0, duration: 0.7, ease: "sine.out" });
-
-        cardImg.src = media.src;
-        cardImg.alt = media.title;
-        cardTitle.textContent = media.title;
-        cardTagline.textContent = media.tagline || "";
-        cardStatusText.textContent = media.status || "";
-        cardStatus.classList.toggle("is_available", media.statusTone !== "soon");
-        cardStatus.classList.toggle("is_soon", media.statusTone === "soon");
-        cardStatus.style.display = media.status ? "" : "none";
-
-        if (media.logo) {
-            cardLogo.src = media.logo;
-            cardLogoWrap.style.display = "";
-        } else {
-            cardLogo.removeAttribute("src");
-            cardLogoWrap.style.display = "none";
-        }
-
-        fillMetaItem(problemItem, media.problemLabel, media.problem);
-        fillMetaItem(usersItem, media.usersLabel, media.users);
-
-        cardEl.classList.add("is_on");
-        cardEl.setAttribute("aria-hidden", "false");
+        handlers.onFocus?.(panel.media);
     }
 
     function closePanel() {
@@ -796,8 +764,7 @@ export function mountTunnelGallery(root: HTMLElement, items: TunnelGalleryItem[]
         state.focusMix = 0;
         gsap.killTweensOf(state);
         gsap.to(state, { speedMul: 1, duration: 1.1, ease: "sine.inOut" });
-        cardEl.classList.remove("is_on");
-        cardEl.setAttribute("aria-hidden", "true");
+        handlers.onBlur?.();
     }
 
     function setHover(panel: Panel | null) {

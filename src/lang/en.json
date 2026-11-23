@@ -1303,6 +1303,11 @@
     "titleMuted": "trust Estidam",
     "listLabel": "Estidam clients"
   },
+  "spectralTiles": {
+    "titleStrong": "Partners who",
+    "titleMuted": "extend our reach",
+    "description": "Partnerships and shared capability that keep Estidam’s delivery network strong — so every program stands on more than one set of shoulders."
+  },
   "partners": {
     "titleStrong": "Partners who",
     "titleMuted": "extend our reach",
