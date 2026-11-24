@@ -74,7 +74,12 @@ function buildDots(w: number, h: number, mobile: boolean): Dots {
     };
 }
 
-const HeroHalftone = () => {
+type HeroHalftoneProps = {
+    /** Scroll lag for hero; turn off inside pinned stages */
+    parallax?: boolean;
+};
+
+const HeroHalftone = ({ parallax = true }: HeroHalftoneProps) => {
     const wrapRef = useRef<HTMLDivElement>(null);
     const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -239,18 +244,20 @@ const HeroHalftone = () => {
         }
         if (!reduced) section.addEventListener("pointerdown", onDown);
 
-        // parallax — lags behind the scroll, saturating smoothly
+        // parallax — lags behind the scroll, saturating smoothly (hero only)
         let lastY = -1;
         const onScroll = () => {
-            if (reduced) return;
+            if (reduced || !parallax) return;
             const raw = Math.max(0, window.scrollY) * PARALLAX;
             const y = Math.round(PARALLAX_MAX * (1 - Math.exp(-raw / PARALLAX_MAX)) * 100) / 100;
             if (y === lastY) return;
             lastY = y;
             wrap.style.translate = y > 0 ? `0 ${y}px` : "";
         };
-        window.addEventListener("scroll", onScroll, { passive: true });
-        onScroll();
+        if (parallax) {
+            window.addEventListener("scroll", onScroll, { passive: true });
+            onScroll();
+        }
 
         const io = new IntersectionObserver(([entry]) => run(entry.isIntersecting));
         io.observe(section);
@@ -262,12 +269,12 @@ const HeroHalftone = () => {
             run(false);
             io.disconnect();
             ro.disconnect();
-            window.removeEventListener("scroll", onScroll);
+            if (parallax) window.removeEventListener("scroll", onScroll);
             section.removeEventListener("pointermove", onMove);
             section.removeEventListener("pointerleave", onLeave);
             section.removeEventListener("pointerdown", onDown);
         };
-    }, []);
+    }, [parallax]);
 
     return (
         <div className="hero_halftone" ref={wrapRef} aria-hidden="true">

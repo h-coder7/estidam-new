@@ -3,8 +3,8 @@ import WhyEstidam from "@/components/home/WhyEstidam/WhyEstidam";
 import HajjJourney from "@/components/home/HajjJourney/HajjJourney";
 import Solutions from "@/components/home/Solutions/Solutions";
 import AiOperations from "@/components/home/AiOperations/AiOperations";
-import TunnelGallery from "@/components/home/TunnelGallery/TunnelGallery";
-// import Products from "@/components/home/Products/Products";
+// import TunnelGallery from "@/components/home/TunnelGallery/TunnelGallery";
+import Products from "@/components/home/Products/Products";
 import Clients from "@/components/home/Clients/Clients";
 import SpectralTiles from "@/components/home/SpectralTiles/SpectralTiles";
 import Partners from "@/components/home/Partners/Partners";
@@ -30,8 +30,8 @@ export default function Home() {
                 <Solutions />
                 <HajjJourney />
                 <AiOperations />
-                <TunnelGallery />
-                {/* <Products /> */}
+                {/* <TunnelGallery /> */}
+                <Products />
                 <Clients />
                 {/* <HowWeDeliver /> */}
                 {/* <ExperienceProof /> */}

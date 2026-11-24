@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import type { SolutionCubeSlide } from "@/lib/api/home";
-import { createSolutionsDial, reelImageSrc } from "./solutionsDial";
+import { createSolutionsDial, reelImageSrc } from "./solutionsDial.ts";
 
 type Props = {
     slides: SolutionCubeSlide[];
