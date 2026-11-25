@@ -156,7 +156,10 @@ export function mountSpectralTiles(root: HTMLElement, options: SpectralTilesOpti
     const scene = new THREE.Scene();
     // Light mode: keep WebGL clear transparent so the CSS identity gradient shows through.
     scene.background = isLight ? null : backgroundColor.clone();
-    scene.fog = new THREE.FogExp2(backgroundColor.getHex(), (isLight ? 0.006 : 0.018) + fogAmt * (isLight ? 0.01 : 0.028));
+    // Fog greys-out white tiles — keep it off in light/card mode.
+    scene.fog = isLight
+        ? null
+        : new THREE.FogExp2(backgroundColor.getHex(), 0.018 + fogAmt * 0.028);
 
     const camera = new THREE.PerspectiveCamera(perspective, 1, 0.05, 120);
 
@@ -166,11 +169,12 @@ export function mountSpectralTiles(root: HTMLElement, options: SpectralTilesOpti
         alpha: isLight,
         powerPreference: "high-performance",
     });
-    renderer.setClearColor(backgroundColor, isLight ? 0 : 1);
+    renderer.setClearColor(isLight ? 0xffffff : backgroundColor.getHex(), isLight ? 0 : 1);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
     renderer.outputColorSpace = THREE.SRGBColorSpace;
-    renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = isLight ? 1.22 : 1.25;
+    // ACES crush midtones → grey tiles; use linear in light mode for true white cards.
+    renderer.toneMapping = isLight ? THREE.NoToneMapping : THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = isLight ? 1 : 1.25;
 
     const floor = new THREE.Group();
     floor.rotation.y = THREE.MathUtils.degToRad(angleDeg);
@@ -189,16 +193,14 @@ export function mountSpectralTiles(root: HTMLElement, options: SpectralTilesOpti
         Math.min(cornerRadius * tileSize, tileSize * 0.26),
     );
 
-    // Frosted slabs — essentially white in light mode (tiny cool tint only so edges still read).
-    const tileColor = isLight
-        ? new THREE.Color("#ffffff").lerp(new THREE.Color("#f7f8fb"), 0.06)
-        : color.clone().multiplyScalar(0.32);
+    // Light mode = Operations card: pure #fff matte. Dark mode keeps spectral glass look.
+    const tileColor = isLight ? new THREE.Color(0xffffff) : color.clone().multiplyScalar(0.32);
     const baseMat = new THREE.MeshStandardMaterial({
         color: tileColor,
-        metalness: isLight ? 0.02 : 0.15,
-        roughness: (isLight ? 0.34 : 0.35) + frost * 0.32,
-        emissive: isLight ? new THREE.Color("#ffffff") : glowColor.clone().lerp(color, 0.4),
-        emissiveIntensity: (isLight ? 0.02 : 0.18) * rim * edgeGlow,
+        metalness: isLight ? 0 : 0.15,
+        roughness: isLight ? 0.55 : 0.35 + frost * 0.32,
+        emissive: isLight ? new THREE.Color(0x000000) : glowColor.clone().lerp(color, 0.4),
+        emissiveIntensity: isLight ? 0 : 0.18 * rim * edgeGlow,
         transparent: true,
         opacity: 0,
         depthWrite: false,
@@ -290,19 +292,25 @@ export function mountSpectralTiles(root: HTMLElement, options: SpectralTilesOpti
         });
     });
 
-    scene.add(new THREE.AmbientLight(isLight ? 0xffffff : 0x152040, isLight ? 0.92 : 0.55));
+    scene.add(new THREE.AmbientLight(isLight ? 0xffffff : 0x152040, isLight ? 1.35 : 0.55));
     scene.add(
         new THREE.HemisphereLight(
             isLight ? 0xffffff : glowColor.getHex(),
-            isLight ? 0xf0f2f5 : 0x02040a,
-            isLight ? 0.42 : 0.45,
+            isLight ? 0xeef1f5 : 0x02040a,
+            isLight ? 0.45 : 0.45,
         ),
     );
 
-    // Soft fill from above so tops read as glass slabs
-    const key = new THREE.DirectionalLight(isLight ? 0xffffff : glowColor.getHex(), isLight ? 0.5 : 0.55);
-    key.position.set(-4, 8, 3);
+    // Soft top key — bright white faces like elevated UI cards
+    const key = new THREE.DirectionalLight(isLight ? 0xffffff : glowColor.getHex(), isLight ? 0.95 : 0.55);
+    key.position.set(-3.2, 9, 4.2);
     scene.add(key);
+
+    if (isLight) {
+        const fill = new THREE.DirectionalLight(0xffffff, 0.4);
+        fill.position.set(5, 4, -2);
+        scene.add(fill);
+    }
 
     type DriftLight = {
         light: THREE.PointLight;
@@ -317,7 +325,8 @@ export function mountSpectralTiles(root: HTMLElement, options: SpectralTilesOpti
     for (let i = 0; i < lightCount; i += 1) {
         const light = new THREE.PointLight(
             isLight ? new THREE.Color("#ffffff") : glowColor.clone().lerp(color, 0.15 + i * 0.1),
-            (isLight ? 0.55 : 5.5) * lightIntensity,
+            // Keep drift lights subtle in light mode so tiles stay card-white
+            (isLight ? 0.22 : 5.5) * lightIntensity,
             (isLight ? 3.6 : 5.5) * lightSize,
             1.55,
         );
@@ -344,12 +353,12 @@ export function mountSpectralTiles(root: HTMLElement, options: SpectralTilesOpti
 
     const composer = new EffectComposer(renderer);
     composer.addPass(new RenderPass(scene, camera));
-    // Bloom blows out light tiles — keep it tiny on light grounds.
+    // Bloom off on light grounds — UI-card white shouldn't glow.
     const bloom = new UnrealBloomPass(
         new THREE.Vector2(1, 1),
-        isLight ? 0.08 : 0.7,
+        isLight ? 0 : 0.7,
         isLight ? 0.2 : 0.45,
-        isLight ? 0.92 : 0.55,
+        isLight ? 1 : 0.55,
     );
     composer.addPass(bloom);
     composer.addPass(new OutputPass());
@@ -499,15 +508,20 @@ export function mountSpectralTiles(root: HTMLElement, options: SpectralTilesOpti
             tile.mesh.rotation.z = leanZ * ease;
 
             const mat = tile.mesh.material as THREE.MeshStandardMaterial;
-            const nearLight = driftLights.reduce((acc, d) => {
-                const dd = Math.hypot(tile.baseX - d.light.position.x, tile.baseZ - d.light.position.z);
-                return Math.max(acc, Math.max(0, 1 - dd / (3.2 * lightSize)));
-            }, 0);
-            mat.emissiveIntensity =
-                ((isLight ? 0.05 : 0.12) + nearLight * (isLight ? 0.16 : 0.85) + liftY * (isLight ? 0.28 : 1.4)) *
-                rim *
-                (0.65 + edgeGlow * 0.5) *
-                ease;
+            if (isLight) {
+                // Lock card-white every frame — never let drift/rim tint re-grey the slabs.
+                mat.color.setRGB(1, 1, 1);
+                mat.emissive.setRGB(0, 0, 0);
+                mat.emissiveIntensity = 0;
+                mat.metalness = 0;
+            } else {
+                const nearLight = driftLights.reduce((acc, d) => {
+                    const dd = Math.hypot(tile.baseX - d.light.position.x, tile.baseZ - d.light.position.z);
+                    return Math.max(acc, Math.max(0, 1 - dd / (3.2 * lightSize)));
+                }, 0);
+                mat.emissiveIntensity =
+                    (0.12 + nearLight * 0.85 + liftY * 1.4) * rim * (0.65 + edgeGlow * 0.5) * ease;
+            }
             // Staggered fade-in from opacity 0 — tiles stay invisible until their turn.
             mat.transparent = true;
             mat.opacity = ease;

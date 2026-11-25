@@ -35,12 +35,13 @@
         inset: 0;
         z-index: 1;
         pointer-events: none;
+        // Soft white fade only — grey wash was making tiles look dirty
         background: linear-gradient(
             180deg,
-            rgba(247, 248, 250, 0.18) 0%,
-            transparent 22%,
-            transparent 70%,
-            rgba(247, 248, 250, 0.45) 100%
+            rgba(255, 255, 255, 0.2) 0%,
+            transparent 20%,
+            transparent 72%,
+            rgba(255, 255, 255, 0.35) 100%
         );
     }
 
