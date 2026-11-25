@@ -1,138 +1,185 @@
-// Home — "Estidam in the Media" (lead story + two supporting stories)
-// Card styles live in components/media/_media.scss; this file only lays out the section.
+// Home — Media Coverage
+// Standard section-head above floating cards + scroll-cascade (no pin).
 
 .media_highlights {
     position: relative;
-    padding: 0 0 110px;
+    z-index: 2;
+    padding: 0 0 clamp(72px, 9vh, 110px);
+    background-color: #f7f8fa;
+    overflow: clip;
+}
 
-    .media_highlights_head {
-        padding-bottom: 40px;
+.media_highlights_stage {
+    position: relative;
+}
+
+.media_highlights_head {
+    position: relative;
+    z-index: 2;
+    padding-top: clamp(88px, 11vh, 120px) !important;
+    padding-bottom: clamp(36px, 5vh, 56px) !important;
+    margin-bottom: 0;
+
+    .section-head-badge {
+        background-color: rgba(46, 112, 224, 0.14);
     }
 
-    .media_highlights_head_row {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: flex-end;
-        justify-content: space-between;
-        gap: 20px 40px;
-        margin-top: 0.75rem;
+    .section-head-title-strong {
+        color: var(--dark, #0b1a33);
     }
 
-    .media_highlights_head_copy {
-        max-width: 640px;
+    .section-head-description {
+        color: #4a5560;
+        margin-bottom: 1rem;
+    }
+}
+
+.media_highlights_canvas {
+    position: relative;
+    z-index: 1;
+    margin-top: clamp(8px, 1.5vh, 16px);
+}
+
+.media_highlights_grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(28px, 2.8vw, 40px);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    align-items: start;
+    width: 100%;
+
+    &.has_1 {
+        grid-template-columns: minmax(0, min(520px, 100%));
+        justify-content: center;
     }
 
-    .media_highlights_desc {
-        margin: 14px 0 0;
-        color: #4b5563;
-        font-size: 15px;
-        font-weight: 400;
+    &.has_2 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        max-width: 920px;
+        margin-inline: auto;
+    }
+}
+
+.media_highlights_slot {
+    display: flex;
+    min-width: 0;
+
+    > .media_card {
+        width: 100%;
     }
 
-    .media_highlights_cta {
-        display: inline-flex;
-        flex: none;
-        align-items: center;
-        gap: 10px;
-        min-height: 48px;
-        padding: 12px 22px;
-        border-radius: 12px;
-        background: var(--dark);
-        color: #fff;
-        font-size: 15px;
-        font-weight: 600;
-        text-decoration: none;
-        transition: background-color 0.3s ease;
+    &.is_lead {
+        margin-top: 36px;
+    }
+
+    &.is_sat_1 {
+        margin-top: 8px;
+    }
+
+    &.is_sat_2 {
+        margin-top: 48px;
+    }
+}
+
+.media_highlights {
+    .media_card {
+        border: 0;
+        border-radius: 22px;
+        background: #fff;
+        // Single soft shadow — cheaper than layered/inset during scroll
+        box-shadow: 0 16px 36px -28px rgba(11, 26, 51, 0.4);
+        transition: transform 0.35s cubic-bezier(0.2, 0.7, 0.2, 1);
 
         &:hover {
-            background: var(--blue);
-            color: #fff;
-
-            .media_highlights_cta_arrow {
-                transform: translateX(3px);
-            }
-        }
-
-        &:focus-visible {
-            outline: 2px solid var(--blue);
-            outline-offset: 3px;
+            transform: translateY(-4px);
         }
     }
 
-    .media_highlights_cta_arrow {
-        display: inline-flex;
-        transition: transform 0.3s ease;
+    .media_card_media {
+        border-radius: 16px;
+        overflow: hidden;
+        aspect-ratio: 16 / 10;
     }
 
-    .media_highlights_grid {
-        display: grid;
-        grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
-        grid-template-rows: auto auto;
-        gap: 24px;
-        margin: 0;
-        padding: 0;
-        list-style: none;
-
-        > li {
-            display: flex;
-            min-width: 0;
-        }
-
-        &.has_1 {
-            grid-template-columns: minmax(0, 1fr);
-        }
-
-        &.has_2 .media_highlights_lead {
-            grid-row: auto;
-        }
+    .media_card_excerpt {
+        display: none;
     }
 
-    .media_highlights_lead {
-        grid-row: 1 / 3;
+    .media_card_body {
+        padding: 14px 12px 14px;
     }
 
-    [dir="rtl"] & {
-        .media_highlights_cta_arrow {
-            transform: scaleX(-1);
-        }
+    .media_card_foot {
+        margin-top: 12px;
+    }
 
-        .media_highlights_cta:hover .media_highlights_cta_arrow {
-            transform: scaleX(-1) translateX(3px);
+    .media_card_tags {
+        display: none;
+    }
+
+    .media_card_title {
+        font-size: clamp(0.92rem, 1.1vw, 1.05rem);
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+}
+
+.media_highlights_stage.is-static {
+    [data-media-card] {
+        opacity: 1 !important;
+        visibility: visible !important;
+        transform: none !important;
+    }
+
+    .media_highlights_slot {
+        &.is_lead,
+        &.is_sat_1,
+        &.is_sat_2 {
+            margin-top: 0;
         }
     }
 }
 
 @media screen and (max-width: 991px) {
+    .media_highlights_grid.has_3 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+
+        .media_highlights_slot.is_sat_2 {
+            grid-column: 1 / -1;
+            max-width: 420px;
+            margin-inline: auto;
+            margin-top: 0;
+        }
+    }
+}
+
+@media screen and (max-width: 767px) {
     .media_highlights {
         padding-bottom: 80px;
-
-        .media_highlights_grid {
-            grid-template-columns: 1fr;
-        }
-
-        .media_highlights_lead {
-            grid-row: auto;
-        }
-
-        .media_card.is_lead .media_card_media {
-            flex: none;
-            min-height: 0;
-            aspect-ratio: 16 / 9;
-        }
     }
-}
 
-@media screen and (max-width: 575px) {
-    .media_highlights {
-        .media_highlights_cta {
-            width: 100%;
-            justify-content: center;
-        }
+    .media_highlights_head {
+        padding-top: 72px !important;
+        padding-bottom: 28px !important;
     }
-}
 
-@media (prefers-reduced-motion: reduce) {
-    .media_highlights .media_highlights_cta_arrow {
-        transition: none;
+    .media_highlights_grid,
+    .media_highlights_grid.has_2,
+    .media_highlights_grid.has_3 {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .media_highlights_slot {
+        &.is_lead,
+        &.is_sat_1,
+        &.is_sat_2 {
+            margin-top: 0;
+            max-width: none;
+        }
     }
 }

@@ -6,6 +6,7 @@ import BootstrapClient from "@/components/BootstrapClient";
 import LenisProvider from "@/components/LenisProvider";
 import PageTransition from "@/components/layout/PageTransition";
 import WhatsAppFloat from "@/components/layout/WhatsAppFloat/WhatsAppFloat";
+import ScrollProgressBar from "@/components/layout/ScrollProgressBar/ScrollProgressBar";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import { getMessages, setRequestLocale } from "next-intl/server";
@@ -54,6 +55,7 @@ export default async function RootLayout({
                         <LenisProvider>
                             <PageTransition>{children}</PageTransition>
                             <WhatsAppFloat />
+                            <ScrollProgressBar />
                         </LenisProvider>
                     </MotionProvider>
                 </NextIntlClientProvider>

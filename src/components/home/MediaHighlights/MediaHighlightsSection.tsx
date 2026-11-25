@@ -2,14 +2,13 @@ import { getLocale, getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/routing";
 import MediaCard from "@/components/media/MediaCard";
 import { getHomepageMediaItems, toMediaCardData } from "@/lib/api/media";
+import MediaHighlightsStage from "./MediaHighlightsStage";
 
 import "./_MediaHighlights.scss";
 
 /**
- * Homepage — "Estidam in the Media".
- * Server component: reads the same dataset as /media through
- * getHomepageMediaItems() (homepageFeatured + displayOrder, max 3).
- * Renders nothing when no public coverage exists.
+ * Homepage — Media Coverage.
+ * Standard section-head above floating cards; scroll cascade via MediaHighlightsStage.
  */
 const MediaHighlightsSection = async () => {
     const locale = await getLocale();
@@ -19,9 +18,10 @@ const MediaHighlightsSection = async () => {
 
     if (!records.length) return null;
 
-    const [lead, ...rest] = records.map((item) => toMediaCardData(item, locale));
+    const items = records.map((item) => toMediaCardData(item, locale));
+    const [lead, ...rest] = items;
 
-    const labelsFor = (item: typeof lead) => ({
+    const labelsFor = (item: (typeof items)[number]) => ({
         readArticle: tc("readArticle"),
         opensNewTab: tc("opensNewTab"),
         category: tc(`categories.${item.category}`),
@@ -29,42 +29,63 @@ const MediaHighlightsSection = async () => {
     });
 
     return (
-        <section className="media_highlights" id="media" aria-labelledby="media-highlights-title">
-            <div className="container">
-                <div className="content px-lg-4">
-                    <div className="section-head media_highlights_head">
-                        <span className="section-head-badge">{t("badge")}</span>
-
-                        <div className="media_highlights_head_row">
-                            <div className="media_highlights_head_copy">
-                                <h2 className="section-head-title fsz-40 fw-600 lh-2" id="media-highlights-title">
-                                    <span className="section-head-title-strong">{t("title")}</span>
-                                </h2>
-                                <p className="section-head-description media_highlights_desc">{t("description")}</p>
+        <section className="media_highlights border-top" id="media" aria-labelledby="media-highlights-title">
+            <MediaHighlightsStage>
+                <div className="container">
+                    <div className="content px-lg-4">
+                        <div className="section-head media_highlights_head">
+                            <span className="section-head-badge">{t("badge")}</span>
+                            <div className="row gx-0 justify-content-between align-items-end">
+                                <div className="col-lg-6">
+                                    <div className="section-head-left mt-3">
+                                        <h2
+                                            className="section-head-title fsz-40 fw-600 lh-2"
+                                            id="media-highlights-title"
+                                        >
+                                            <span className="section-head-title-strong">{t("title")}</span>
+                                        </h2>
+                                    </div>
+                                </div>
+                                <div className="col-lg-5">
+                                    <div className="section-head-right mt-3" data-media-cta>
+                                        <p className="section-head-description">{t("description")}</p>
+                                        <Link href="/media" className="butn butn-blue">
+                                            <span>{t("cta")}</span>
+                                            <img
+                                                src="/images/icons/arrow-wh.svg"
+                                                alt=""
+                                                className="butn-icon"
+                                                aria-hidden="true"
+                                            />
+                                        </Link>
+                                    </div>
+                                </div>
                             </div>
+                        </div>
 
-                            <Link href="/media" className="media_highlights_cta">
-                                <span>{t("cta")}</span>
-                                <span className="media_highlights_cta_arrow" aria-hidden="true">
-                                    <svg width="16" height="16" viewBox="0 0 16 16" focusable="false">
-                                        <path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-                                    </svg>
-                                </span>
-                            </Link>
+                        <div className="media_highlights_canvas">
+                            <ul className={`media_highlights_grid has_${items.length}`}>
+                                <li className="media_highlights_slot is_lead" data-media-card>
+                                    <MediaCard item={lead} labels={labelsFor(lead)} variant="default" />
+                                </li>
+                                {rest.map((item, i) => (
+                                    <li
+                                        key={item.id}
+                                        className={`media_highlights_slot is_sat is_sat_${i + 1}`}
+                                        data-media-card
+                                    >
+                                        <MediaCard item={item} labels={labelsFor(item)} variant="default" />
+                                    </li>
+                                ))}
+                            </ul>
                         </div>
                     </div>
-
-                    <ul className={`media_highlights_grid has_${records.length}`}>
-                        <li className="media_highlights_lead">
-                            <MediaCard item={lead} labels={labelsFor(lead)} variant="lead" />
-                        </li>
-                        {rest.map((item) => (
-                            <li key={item.id}>
-                                <MediaCard item={item} labels={labelsFor(item)} variant="row" />
-                            </li>
-                        ))}
-                    </ul>
                 </div>
+            </MediaHighlightsStage>
+
+            <div className="sec-lines" aria-hidden="true">
+                <span></span>
+                <span></span>
             </div>
         </section>
     );
