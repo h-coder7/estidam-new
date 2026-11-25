@@ -156,7 +156,7 @@ export function mountSpectralTiles(root: HTMLElement, options: SpectralTilesOpti
     const scene = new THREE.Scene();
     // Light mode: keep WebGL clear transparent so the CSS identity gradient shows through.
     scene.background = isLight ? null : backgroundColor.clone();
-    scene.fog = new THREE.FogExp2(backgroundColor.getHex(), (isLight ? 0.012 : 0.018) + fogAmt * (isLight ? 0.018 : 0.028));
+    scene.fog = new THREE.FogExp2(backgroundColor.getHex(), (isLight ? 0.006 : 0.018) + fogAmt * (isLight ? 0.01 : 0.028));
 
     const camera = new THREE.PerspectiveCamera(perspective, 1, 0.05, 120);
 
@@ -170,7 +170,7 @@ export function mountSpectralTiles(root: HTMLElement, options: SpectralTilesOpti
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = isLight ? 1.05 : 1.25;
+    renderer.toneMappingExposure = isLight ? 1.22 : 1.25;
 
     const floor = new THREE.Group();
     floor.rotation.y = THREE.MathUtils.degToRad(angleDeg);
@@ -189,16 +189,16 @@ export function mountSpectralTiles(root: HTMLElement, options: SpectralTilesOpti
         Math.min(cornerRadius * tileSize, tileSize * 0.26),
     );
 
-    // Frosted slabs (restored look) — soft white/blue; lights stay restrained so they don't blow out.
+    // Frosted slabs — essentially white in light mode (tiny cool tint only so edges still read).
     const tileColor = isLight
-        ? new THREE.Color("#ffffff").lerp(new THREE.Color("#e8eef8"), 0.55).lerp(color, 0.12)
+        ? new THREE.Color("#ffffff").lerp(new THREE.Color("#f7f8fb"), 0.06)
         : color.clone().multiplyScalar(0.32);
     const baseMat = new THREE.MeshStandardMaterial({
         color: tileColor,
-        metalness: isLight ? 0.06 : 0.15,
-        roughness: (isLight ? 0.28 : 0.35) + frost * 0.32,
-        emissive: glowColor.clone().lerp(color, isLight ? 0.35 : 0.4),
-        emissiveIntensity: (isLight ? 0.08 : 0.18) * rim * edgeGlow,
+        metalness: isLight ? 0.02 : 0.15,
+        roughness: (isLight ? 0.34 : 0.35) + frost * 0.32,
+        emissive: isLight ? new THREE.Color("#ffffff") : glowColor.clone().lerp(color, 0.4),
+        emissiveIntensity: (isLight ? 0.02 : 0.18) * rim * edgeGlow,
         transparent: true,
         opacity: 0,
         depthWrite: false,
@@ -290,17 +290,17 @@ export function mountSpectralTiles(root: HTMLElement, options: SpectralTilesOpti
         });
     });
 
-    scene.add(new THREE.AmbientLight(isLight ? 0xffffff : 0x152040, isLight ? 0.55 : 0.55));
+    scene.add(new THREE.AmbientLight(isLight ? 0xffffff : 0x152040, isLight ? 0.92 : 0.55));
     scene.add(
         new THREE.HemisphereLight(
-            isLight ? 0xf3f5f8 : glowColor.getHex(),
-            isLight ? 0xe8eef8 : 0x02040a,
-            isLight ? 0.35 : 0.45,
+            isLight ? 0xffffff : glowColor.getHex(),
+            isLight ? 0xf0f2f5 : 0x02040a,
+            isLight ? 0.42 : 0.45,
         ),
     );
 
     // Soft fill from above so tops read as glass slabs
-    const key = new THREE.DirectionalLight(isLight ? 0xffffff : glowColor.getHex(), isLight ? 0.28 : 0.55);
+    const key = new THREE.DirectionalLight(isLight ? 0xffffff : glowColor.getHex(), isLight ? 0.5 : 0.55);
     key.position.set(-4, 8, 3);
     scene.add(key);
 
@@ -316,8 +316,8 @@ export function mountSpectralTiles(root: HTMLElement, options: SpectralTilesOpti
     const driftLights: DriftLight[] = [];
     for (let i = 0; i < lightCount; i += 1) {
         const light = new THREE.PointLight(
-            glowColor.clone().lerp(color, 0.15 + i * 0.1),
-            (isLight ? 1.15 : 5.5) * lightIntensity,
+            isLight ? new THREE.Color("#ffffff") : glowColor.clone().lerp(color, 0.15 + i * 0.1),
+            (isLight ? 0.55 : 5.5) * lightIntensity,
             (isLight ? 3.6 : 5.5) * lightSize,
             1.55,
         );
