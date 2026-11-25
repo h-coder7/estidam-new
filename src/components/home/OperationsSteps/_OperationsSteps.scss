@@ -33,28 +33,15 @@
 
         .operations_steps_stage {
             min-height: 0;
-            height: clamp(540px, 64vh, 620px);
-            padding-block: 40px;
-            padding-inline: 8px 36px;
-            overflow-x: visible;
-            overflow-y: hidden;
-            align-items: center;
+            height: clamp(600px, 72vh, 700px);
+            padding-block: 28px 48px;
+            padding-inline: 4px 56px;
+            // Clip only top/bottom; leave room sideways for 3D cards, tips and shadows
+            overflow: visible;
+            clip-path: inset(0 -120px 0 -120px);
+            align-items: flex-start;
+            justify-content: flex-start;
             box-sizing: border-box;
-            // Soft fade on top/bottom only — keep right side clear for tips/shadows
-            -webkit-mask-image: linear-gradient(
-                to bottom,
-                transparent 0,
-                #000 44px,
-                #000 calc(100% - 44px),
-                transparent 100%
-            );
-            mask-image: linear-gradient(
-                to bottom,
-                transparent 0,
-                #000 44px,
-                #000 calc(100% - 44px),
-                transparent 100%
-            );
         }
 
         .operations_steps_perspective {
@@ -62,12 +49,13 @@
             width: 100%;
             max-width: none;
             overflow: visible;
+            perspective-origin: 40% 28%;
         }
 
         .operations_steps_lane {
             gap: 16px;
-            // Less yaw so cards don't get shaved on the right
-            transform: rotateX(10deg) rotateY(-10deg) rotateZ(-2deg);
+            // Milder 3D so cards stay inside the stage on the right
+            transform: rotateX(8deg) rotateY(-6deg) rotateZ(-1.5deg);
         }
 
         .operations_steps_row {
@@ -81,6 +69,13 @@
 
         .operations_steps_card {
             overflow: visible;
+            // Slightly less Z so perspective doesn't shove cards past the right edge
+            transform: translateZ(24px);
+        }
+
+        .operations_steps_row.is-active .operations_steps_card,
+        .operations_steps_row:hover .operations_steps_card {
+            transform: translateZ(36px) translateY(-2px);
         }
 
         .operations_steps_tip {
@@ -408,6 +403,14 @@ html[dir="rtl"] .operations_steps {
 
     .operations_steps_lane {
         transform: rotateX(12deg) rotateY(18deg) rotateZ(3deg);
+    }
+
+    &.is-embedded .operations_steps_lane {
+        transform: rotateX(8deg) rotateY(6deg) rotateZ(1.5deg);
+    }
+
+    &.is-embedded .operations_steps_stage {
+        padding-inline: 56px 4px;
     }
 
     .operations_steps_number {

@@ -65,22 +65,36 @@ export default function OperationsStepsView({
         mm.add(DESKTOP_QUERY, () => {
             section.classList.remove("is-static");
 
+            const stage = section.querySelector<HTMLElement>(".operations_steps_stage");
+
             const distance = () =>
                 embedded ? Math.max(480, rows.length * 130) : Math.max(520, rows.length * 150);
+
+            // How far the lane must rise so the last card ends fully inside the stage
+            const travel = () => {
+                if (!stage) return distance() * 0.4;
+                const cs = getComputedStyle(stage);
+                const inner =
+                    stage.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom);
+                return Math.max(0, lane.offsetHeight - inner + 72);
+            };
 
             const apply = (p: number) => {
                 const climb = p * Math.max(0, count - 1);
                 const index = Math.round(climb);
                 setActive(index);
 
-                // Slightly tighter travel when embedded so cards stay inside the stage
-                const yStart = embedded ? 48 : 90;
-                const yEnd = -distance() * (embedded ? 0.36 : 0.44);
+                const rtl = document.documentElement.getAttribute("dir") === "rtl";
+                // The front card is pulled toward the viewer in 3D, so start lower to keep 01 inside
+                const yStart = embedded ? 72 : 90;
+                const yEnd = embedded ? 12 - travel() : -distance() * 0.44;
+                const yaw0 = embedded ? 6 : 18;
+                const yawDelta = embedded ? 2 : 5;
 
                 gsap.set(lane, {
                     y: gsap.utils.interpolate(yStart, yEnd, p),
-                    rotateX: (embedded ? 10 : 12) - p * 2,
-                    rotateY: (embedded ? -10 : -18) + p * (embedded ? 3 : 5),
+                    rotateX: (embedded ? 8 : 12) - p * 2,
+                    rotateY: (rtl ? 1 : -1) * (yaw0 - p * yawDelta),
                 });
 
                 rows.forEach((row, i) => {
